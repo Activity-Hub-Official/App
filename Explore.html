@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Activity Hub</title>
-  <link rel="icon" href="https://i.imgur.com/xjx5Bg8.png" />
+  <link rel="icon" href="https://i.imgur.com/EsNcDyR.png" />
 
   <!-- TailwindCSS with class-based dark mode (load early to avoid flicker) -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -162,6 +162,14 @@
           <a id="modal-join-btn"
              class="text-white text-sm font-medium px-3 py-1 rounded bg-blue-600 hover:bg-blue-700"
              target="_blank">Join</a>
+
+          <!-- New Share Button -->
+          <button id="share-btn"
+                  class="text-white text-sm font-medium px-3 py-1 rounded bg-indigo-600 hover:bg-indigo-700 transition"
+                  aria-label="Share">
+            Share <i class="fas fa-share-alt ml-1"></i>
+          </button>
+
           <div id="socials-container" class="relative inline-block text-left">
             <button id="socials-btn"
                     class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 text-sm font-medium px-3 py-1 rounded">
@@ -195,6 +203,87 @@
           <p class="flex items-center"><i class="fas fa-comments mr-2 text-gray-600 dark:text-gray-400"></i><span class="details-comments">No comments yet</span></p>
         </div>
         <div id="events" class="tab-content hidden p-4 text-gray-600 dark:text-gray-400">No events yet</div>
+      </div>
+    </div>
+  </template>
+
+  <!-- Share Modal Template -->
+  <template id="share-modal-template">
+    <div class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+         role="dialog" aria-modal="true">
+      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg max-w-md w-full p-6 relative">
+        <button type="button"
+                class="absolute top-3 right-3 text-2xl text-gray-500 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white close-share-modal"
+                aria-label="Close">&times;</button>
+        <h3 class="text-xl font-semibold mb-4">Share</h3>
+        <div class="grid grid-cols-4 gap-6 justify-items-center">
+          <div class="flex flex-col items-center cursor-pointer" data-share="copy" title="Copy Link">
+            <div class="w-16 h-16 flex items-center justify-center rounded-full bg-blue-600 hover:bg-blue-700 transition-shadow shadow-md">
+              <i class="fas fa-link fa-2x text-white"></i>
+            </div>
+            <span class="mt-2 text-sm font-medium">Copy Link</span>
+          </div>
+          <div class="flex flex-col items-center cursor-pointer" data-share="qr" title="QR Code">
+            <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
+              <img src="https://i.imgur.com/nWDcvp1.png" alt="QR Code" class="w-full h-full object-cover"/>
+            </div>
+            <span class="mt-2 text-sm font-medium">QR Code</span>
+          </div>
+          <div class="flex flex-col items-center cursor-pointer" data-share="linkedin" title="LinkedIn">
+            <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
+              <img src="https://i.imgur.com/PEw6T9z.png" alt="LinkedIn" class="w-full h-full object-cover"/>
+            </div>
+            <span class="mt-2 text-sm font-medium">LinkedIn</span>
+          </div>
+          <div class="flex flex-col items-center cursor-pointer" data-share="twitter" title="X (Twitter)">
+            <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
+              <img src="https://i.imgur.com/PLQsGra.png" alt="Twitter" class="w-full h-full object-cover"/>
+            </div>
+            <span class="mt-2 text-sm font-medium">X</span>
+          </div>
+          <div class="flex flex-col items-center cursor-pointer" data-share="whatsapp" title="WhatsApp">
+            <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
+              <img src="https://i.imgur.com/qOttODu.png" alt="WhatsApp" class="w-full h-full object-cover"/>
+            </div>
+            <span class="mt-2 text-sm font-medium">WhatsApp</span>
+          </div>
+          <div class="flex flex-col items-center cursor-pointer" data-share="reddit" title="Reddit">
+            <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
+              <img src="https://i.imgur.com/zELebxD.png" alt="Reddit" class="w-full h-full object-cover"/>
+            </div>
+            <span class="mt-2 text-sm font-medium">Reddit</span>
+          </div>
+          <div class="flex flex-col items-center cursor-pointer" data-share="email" title="Email">
+            <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
+              <img src="https://i.imgur.com/cBOGtrb.png" alt="Email" class="w-full h-full object-cover"/>
+            </div>
+            <span class="mt-2 text-sm font-medium">Email</span>
+          </div>
+          <div class="flex flex-col items-center cursor-pointer" data-share="pinterest" title="Pinterest">
+            <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
+              <img src="https://i.imgur.com/E0yglrg.png" alt="Pinterest" class="w-full h-full object-cover"/>
+            </div>
+            <span class="mt-2 text-sm font-medium">Pinterest</span>
+          </div>
+          <div class="flex flex-col items-center cursor-pointer" data-share="telegram" title="Telegram">
+            <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
+              <img src="https://i.imgur.com/uU1H4xZ.png" alt="Telegram" class="w-full h-full object-cover"/>
+            </div>
+            <span class="mt-2 text-sm font-medium">Telegram</span>
+          </div>
+          <div class="flex flex-col items-center cursor-pointer" data-share="tumblr" title="Tumblr">
+            <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
+              <img src="https://i.imgur.com/cAjCiph.png" alt="Tumblr" class="w-full h-full object-cover"/>
+            </div>
+            <span class="mt-2 text-sm font-medium">Tumblr</span>
+          </div>
+          <div class="flex flex-col items-center cursor-pointer" data-share="groupme" title="GroupMe">
+            <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
+              <img src="https://i.imgur.com/ur6bS6m.png" alt="GroupMe" class="w-full h-full object-cover"/>
+            </div>
+            <span class="mt-2 text-sm font-medium">GroupMe</span>
+          </div>
+        </div>
       </div>
     </div>
   </template>
@@ -298,6 +387,49 @@
     const API      = 'https://sheet2api.com/v1/an4oVvpQR51V/mock-data-new';
     const AUTH_API = 'https://sheet2api.com/v1/rkmbUqHQAC3C/submission-form-responses';
     let linkMap = {};
+    window.itemMap = {};  // map slug -> item
+
+    // Utility: generate URL-friendly slug
+    function generateSlug(text) {
+      return text.toLowerCase()
+                 .replace(/[^a-z0-9]+/g,'-')
+                 .replace(/^-+|-+$/g,'');
+    }
+
+    // Update browser URL without reload
+    function updateHistory(slug) {
+      if (history.pushState) {
+        history.pushState({slug}, '', `#${slug}`);
+      }
+    }
+
+    // Show QR code modal
+    function showQrModal(url) {
+      const tpl = document.createElement('template');
+      tpl.innerHTML = `
+        <div class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 relative flex flex-col items-center">
+            <button type="button" class="absolute top-3 right-3 text-2xl text-gray-500 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white close-qr-modal" aria-label="Close">&times;</button>
+            <h3 class="text-lg font-semibold mb-4">QR Code</h3>
+            <img src="https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=${encodeURIComponent(url)}" alt="QR code" class="mb-4"/>
+            <button data-download-qr class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Download QR</button>
+          </div>
+        </div>
+      `;
+      const el = tpl.content.cloneNode(true);
+      const modal = el.querySelector('.modal-overlay');
+      modal.querySelector('.close-qr-modal').addEventListener('click', () => modal.remove());
+      modal.querySelector('[data-download-qr]').addEventListener('click', () => {
+        const img = modal.querySelector('img');
+        const a = document.createElement('a');
+        a.href = img.src;
+        a.download = 'qr-code.png';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      });
+      document.body.append(modal);
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
       // 1) Theme Setup
@@ -337,6 +469,9 @@
             sec.querySelector('h2').textContent = heading;
             const grid = sec.querySelector('div');
             items.filter(i => i["Project Type"] === ptype).forEach(item => {
+              const slug = generateSlug(item["Project Title"]);
+              window.itemMap[slug] = item;
+
               const card = document.getElementById('card-template').content.cloneNode(true);
               card.querySelector('img').src              = item["Logo URL"];
               card.querySelector('h3').textContent       = item["Project Title"];
@@ -349,12 +484,28 @@
               if (item.Stage) st.textContent = item.Stage; else st.remove();
               card.querySelector('.school').textContent  = item["College or University Name"];
               card.querySelector('.members').textContent = item["Number of participants"];
-              card.querySelector('.card').addEventListener('click', ()=> showDetails(item));
+              const cardEl = card.querySelector('.card');
+              cardEl.setAttribute('data-slug', slug);
+              cardEl.addEventListener('click', () => showDetails(item, slug));
               grid.append(card);
             });
             document.getElementById('content').append(sec);
           });
+
+          // After items rendered, check URL hash
+          const hash = location.hash.slice(1);
+          if (hash && window.itemMap[hash]) {
+            showDetails(window.itemMap[hash], hash);
+          }
         }).catch(console.error);
+    });
+
+    // Handle browser back/forward
+    window.addEventListener('popstate', e => {
+      const hash = location.hash.slice(1);
+      if (hash && window.itemMap[hash]) {
+        showDetails(window.itemMap[hash], hash);
+      }
     });
 
     function applyLinks() {
@@ -560,8 +711,8 @@
       });
     }
 
-    // Details modal
-    function showDetails(item) {
+    // Details modal with deep-link & share
+    function showDetails(item, slug) {
       const tpl   = document.getElementById('details-modal-template').content.cloneNode(true);
       const modal = tpl.querySelector('.modal-overlay');
       modal.querySelector('.details-logo').src            = item["Logo URL"];
@@ -576,6 +727,7 @@
       const ds = modal.querySelector('.details-stage');
       if (item.Stage) ds.textContent=item.Stage; else ds.remove();
 
+      // Socials menu
       const socialMap = {
         website:'Website', instagram:'Instagram', linkedin:'LinkedIn',
         youtube:'YouTube', tiktok:'TikTok', github:'GitHub',
@@ -605,6 +757,7 @@
         cb.classList.add('opacity-50','cursor-not-allowed');
       }
 
+      // Hover for socials dropdown
       [modal.querySelector('#socials-btn'), menu].forEach(el=>{  
         el.addEventListener('mouseenter', ()=>{  
           clearTimeout(window.__to);  
@@ -617,19 +770,62 @@
         });  
       });
 
-      document.body.append(modal);
-      modal.querySelector('.close-modal').onclick = ()=> modal.remove();
+      // Deep-link update
+      updateHistory(slug);
 
+      // Share button logic
+      modal.querySelector('#share-btn').addEventListener('click', () => {
+        const shareTpl = document.getElementById('share-modal-template').content.cloneNode(true);
+        const shareModal = shareTpl.querySelector('.modal-overlay');
+
+        // Copy link
+        shareModal.querySelector('[data-share="copy"]').addEventListener('click', () => {
+          navigator.clipboard.writeText(location.href);
+        });
+        // QR code
+        shareModal.querySelector('[data-share="qr"]').addEventListener('click', () => {
+          shareModal.remove();
+          showQrModal(location.href);
+        });
+
+        // Other platforms
+        const shareUrls = {
+          linkedin: `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(location.href)}`,
+          twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(location.href)}`,
+          whatsapp: `https://api.whatsapp.com/send?text=${encodeURIComponent(location.href)}`,
+          reddit: `https://www.reddit.com/submit?url=${encodeURIComponent(location.href)}`,
+          email: `mailto:?body=${encodeURIComponent(location.href)}`,
+          pinterest: `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(location.href)}`,
+          telegram: `https://t.me/share/url?url=${encodeURIComponent(location.href)}`,
+          tumblr: `https://www.tumblr.com/widgets/share/tool?canonicalUrl=${encodeURIComponent(location.href)}`,
+          groupme: `https://web.groupme.com/share?link=${encodeURIComponent(location.href)}`
+        };
+        Object.entries(shareUrls).forEach(([key, url]) => {
+          const el = shareModal.querySelector(`[data-share="${key}"]`);
+          if (el) el.addEventListener('click', () => window.open(url,'_blank'));
+        });
+
+        shareModal.querySelector('.close-share-modal').addEventListener('click', () => {
+          shareModal.remove();
+        });
+        document.body.append(shareModal);
+      });
+
+      // Close details modal
+      document.body.append(modal);
+      modal.querySelector('.close-modal').onclick = () => modal.remove();
+
+      // Tabs
       const nav=modal.querySelector('#tab-nav'), ul=modal.querySelector('#tab-underline');
       nav.querySelectorAll('.tab-button').forEach(btn=>{  
-        btn.addEventListener('click', ()=>{  
-          nav.querySelectorAll('.tab-button').forEach(b=>b.classList.replace('text-blue-600','text-gray-500'));  
-          btn.classList.replace('text-gray-500','text-blue-600');  
-          ul.style.width=btn.offsetWidth+'px'; ul.style.left=btn.offsetLeft+'px';  
-          modal.querySelectorAll('.tab-content').forEach(c=>c.classList.add('hidden'));  
-          modal.querySelector('#'+btn.dataset.tab).classList.remove('hidden');  
-        });  
-      });  
+        btn.addEventListener('click', ()=>{
+          nav.querySelectorAll('.tab-button').forEach(b=>b.classList.replace('text-blue-600','text-gray-500'));
+          btn.classList.replace('text-gray-500','text-blue-600');
+          ul.style.width=btn.offsetWidth+'px'; ul.style.left=btn.offsetLeft+'px';
+          modal.querySelectorAll('.tab-content').forEach(c=>c.classList.add('hidden'));
+          modal.querySelector('#'+btn.dataset.tab).classList.remove('hidden');
+        });
+      });
       nav.querySelector('.tab-button').click();
     }
 
@@ -646,11 +842,11 @@
         fm.href=item["Contact Form"]; fm.textContent='Open Form';
       }
       document.body.append(cm);
-      cm.querySelector('.close-contact-modal').onclick = ()=> cm.remove();
+      cm.querySelector('.close-contact-modal').onclick = () => cm.remove();
     }
 
     // Profile link click
-    document.addEventListener('click', e=>{
+    document.addEventListener('click', e => {
       if (e.target.matches('[data-key="Profile"]')) {
         e.preventDefault();
         showProfileModal();
