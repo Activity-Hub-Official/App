@@ -6,7 +6,7 @@
   <title>Activity Hub</title>
   <link rel="icon" href="https://i.imgur.com/EsNcDyR.png" />
 
-  <!-- TailwindCSS with class-based dark mode (load early to avoid flicker) -->
+  <!-- TailwindCSS with class-based dark mode -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = { darkMode: 'class' };
@@ -17,32 +17,28 @@
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
   />
-</head>
-<body class="bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100">
 
-  <!-- Navbar -->
-  <header class="fixed top-0 left-0 right-0 h-16 bg-white dark:bg-gray-800 shadow flex items-center px-2 z-50">
-    <button id="toggleBtn" type="button"
-            class="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white mr-4"
-            aria-label="Toggle sidebar" aria-expanded="false">
+  <!-- QRCode Library (used when generating dynamic QR codes) -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
+
+  <!-- ========== NAVBAR ========== -->
+  <header class="fixed top-0 left-0 right-0 h-16 bg-white dark:bg-gray-800 shadow flex items-center px-4 z-50">
+    <button id="toggleBtn" class="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white mr-4" aria-label="Toggle sidebar">
       <i class="fas fa-bars fa-lg"></i>
     </button>
-    <a data-key="Explore" href="#">
-      <img src="https://i.imgur.com/T28QHq2.png"
-           alt="Activity Hub Logo"
-           class="h-14 w-auto"
-           style="height:3.5rem; width:auto;"/>
+    <a data-key="Explore" href="#" class="flex items-center">
+      <img src="https://i.imgur.com/T28QHq2.png" alt="Activity Hub Logo" class="h-12 w-auto"/>
+      <span class="ml-2 text-xl font-bold">Activity Hub</span>
     </a>
     <div id="authContainer" class="ml-auto flex items-center space-x-4">
-      <button id="signInBtn" type="button"
-              class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-        Sign In / Up
-      </button>
+      <button id="signInBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Sign In / Up</button>
     </div>
   </header>
 
   <div class="flex pt-16">
-    <!-- Sidebar -->
+    <!-- ========== SIDEBAR ========== -->
     <aside id="sidebar"
            class="fixed top-16 bottom-0 left-0 bg-white dark:bg-gray-800 shadow-lg w-48 transform -translate-x-full md:translate-x-0 transition-transform duration-300 overflow-hidden z-40"
            aria-label="Main sidebar navigation">
@@ -58,42 +54,40 @@
           <li>
             <a data-key="Clubs" href="#"
                class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
-              <i class="fas fa-users w-6 text-center"></i><span>Clubs</span>
+              <i class="fas fa-users w-6"></i><span>Clubs</span>
             </a>
           </li>
           <li>
             <a data-key="Businesses" href="#"
                class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
-              <i class="fas fa-briefcase w-6 text-center"></i><span>Businesses</span>
+              <i class="fas fa-briefcase w-6"></i><span>Businesses</span>
             </a>
           </li>
           <li>
             <a data-key="Projects" href="#"
                class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
-              <i class="fas fa-project-diagram w-6 text-center"></i><span>Projects</span>
+              <i class="fas fa-project-diagram w-6"></i><span>Projects</span>
             </a>
           </li>
           <li>
             <a data-key="People" href="#"
                class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
-              <i class="fas fa-user-friends w-6 text-center"></i><span>People</span>
+              <i class="fas fa-user-friends w-6"></i><span>People</span>
             </a>
           </li>
           <li>
             <a data-key="Events" href="#"
                class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
-              <i class="fas fa-calendar-alt w-6 text-center"></i><span>Events</span>
+              <i class="fas fa-calendar-alt w-6"></i><span>Events</span>
             </a>
           </li>
         </ul>
       </nav>
       <!-- Dark mode toggle -->
-      <div class="absolute bottom-4 w-full px-4 flex items-center" id="darkToggleContainer">
-        <i id="darkIcon" class="fas fa-moon text-gray-600 dark:text-gray-300 cursor-pointer"
-           aria-label="Toggle dark mode"></i>
+      <div class="absolute bottom-4 w-full px-4 flex items-center">
+        <i id="darkIcon" class="fas fa-moon text-gray-600 dark:text-gray-300 cursor-pointer" aria-label="Toggle dark mode"></i>
         <span id="darkToggleText" class="ml-2 text-sm font-bold">Dark Mode</span>
-        <label id="darkToggleLabel" for="darkToggle"
-               class="ml-auto relative inline-block w-10 h-6 cursor-pointer">
+        <label id="darkToggleLabel" for="darkToggle" class="ml-auto relative inline-block w-10 h-6 cursor-pointer">
           <input id="darkToggle" type="checkbox" class="sr-only peer"/>
           <div class="w-10 h-6 bg-gray-300 rounded-full peer-checked:bg-blue-600 transition-colors"></div>
           <div class="absolute top-1 left-1 w-4 h-4 bg-white rounded-full peer-checked:translate-x-4 transition-transform"></div>
@@ -101,16 +95,16 @@
       </div>
     </aside>
 
-    <!-- Main Content -->
+    <!-- ========== MAIN CONTAINER ========== -->
     <div id="main" role="main" class="flex-1 transition-all duration-300 ml-0 md:ml-48">
       <main id="content" class="max-w-7xl mx-auto px-4 py-6">
         <h1 class="text-3xl font-semibold mb-6">Explore</h1>
-        <!-- Dynamic sections injected here -->
+        <!-- Skeletons or Cards injected by JavaScript -->
       </main>
     </div>
   </div>
 
-  <!-- Section Template -->
+  <!-- ========== SECTION TEMPLATE (used to group cards) ========== -->
   <template id="section-template">
     <section class="mb-12">
       <h2 class="text-2xl font-semibold mb-6"></h2>
@@ -118,420 +112,931 @@
     </section>
   </template>
 
-  <!-- Card Template -->
+  <!-- ========== CARD TEMPLATE ========== -->
   <template id="card-template">
     <div class="card bg-white dark:bg-gray-800 rounded-2xl shadow hover:shadow-lg dark:hover:shadow-xl transition p-4 flex flex-col cursor-pointer">
       <div class="flex items-center mb-2">
-        <img class="h-8 w-8 object-cover rounded mr-2 border border-gray-200 dark:border-gray-700"
+        <img class="h-8 w-8 object-cover rounded-full mr-2 border-2 border-gray-200 dark:border-gray-700"
              src="" alt="Logo"/>
         <h3 class="text-lg font-semibold flex-1"></h3>
       </div>
       <p class="text-sm text-gray-600 dark:text-gray-300 mb-4 line-clamp-2 tagline"></p>
       <div class="flex flex-wrap gap-2 mb-4">
-        <span class="business-type bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-200 text-xs font-medium px-2.5 py-0.5 rounded"></span>
-        <span class="industry bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs font-medium px-2.5 py-0.5 rounded"></span>
-        <span class="stage bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs font-medium px-2.5 py-0.5 rounded"></span>
+        <span class="business-type bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-200 text-xs font-medium px-2.5 py-0.5 rounded-full"></span>
+        <span class="industry bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs font-medium px-2.5 py-0.5 rounded-full"></span>
+        <span class="stage bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs font-medium px-2.5 py-0.5 rounded-full"></span>
       </div>
       <div class="flex items-center text-xs text-gray-500 dark:text-gray-400 mt-auto">
-        <i class="fas fa-map-marker-alt mr-1"></i>
-        <span class="school mr-4"></span>
-        <i class="fas fa-circle text-green-500 dark:text-green-400 text-[0.5rem] mr-1"></i>
-        <span class="members mr-1"></span> Members
+        <i class="fas fa-map-marker-alt mr-1"></i><span class="school mr-4"></span>
+        <i class="fas fa-circle text-green-500 dark:text-green-400 text-[0.5rem] mr-1"></i><span class="members mr-1"></span> Members
       </div>
     </div>
   </template>
 
-  <!-- Details Modal Template -->
-  <template id="details-modal-template">
-    <div class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-         role="dialog" aria-modal="true">
-      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg max-w-lg w-full p-6 relative">
-        <button type="button"
-                class="absolute top-3 right-3 text-2xl text-gray-500 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white close-modal"
-                aria-label="Close">&times;</button>
-        <div class="flex items-center mb-4">
-          <img class="h-16 w-16 object-cover rounded mr-3 border border-gray-200 dark:border-gray-700 details-logo"
-               src="" alt="Logo">
-          <div>
-            <h3 class="text-2xl font-semibold details-title"></h3>
-            <span class="text-sm font-medium text-gray-600 dark:text-gray-400 details-industry"></span>
+  <!-- ========== SKELETON-CARD TEMPLATE (animated placeholder) ========== -->
+  <template id="skeleton-card-template">
+    <div class="animate-pulse bg-white dark:bg-gray-800 rounded-2xl shadow p-4 flex flex-col">
+      <div class="flex items-center mb-2">
+        <div class="h-8 w-8 bg-gray-300 dark:bg-gray-700 rounded-full mr-2"></div>
+        <div class="h-5 bg-gray-300 dark:bg-gray-700 rounded w-3/4"></div>
+      </div>
+      <div class="h-4 bg-gray-300 dark:bg-gray-700 rounded mb-4 w-full"></div>
+      <div class="flex gap-2 mb-4">
+        <div class="h-4 bg-gray-300 dark:bg-gray-700 rounded-full w-16"></div>
+        <div class="h-4 bg-gray-300 dark:bg-gray-700 rounded-full w-12"></div>
+        <div class="h-4 bg-gray-300 dark:bg-gray-700 rounded-full w-10"></div>
+      </div>
+      <div class="flex items-center text-xs text-gray-500 dark:text-gray-400 mt-auto">
+        <div class="h-4 bg-gray-300 dark:bg-gray-700 rounded w-1/3 mr-4"></div>
+        <div class="h-4 bg-gray-300 dark:bg-gray-700 rounded w-1/4"></div>
+      </div>
+    </div>
+  </template>
+
+  <!-- ========== DETAILS/PROFILE PAGE TEMPLATE ========== -->
+  <template id="details-page-template">
+    <div class="max-w-3xl mx-auto px-4 py-6 space-y-6">
+      <!-- Back to Explore Link -->
+      <button id="backBtn" class="flex items-center text-blue-500 hover:underline">
+        <i class="fas fa-arrow-left mr-2"></i>Back to Explore
+      </button>
+
+      <!-- Header Panel with Logo, Title, Verify Icon, University, Members, Join Button -->
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 space-y-4">
+        <div class="flex items-start space-x-4">
+          <!-- Logo (circular) + verify check badge -->
+          <div class="relative">
+            <img class="h-24 w-24 object-cover rounded-full border-2 border-gray-200 dark:border-gray-700 details-logo"
+                 src="" alt="Logo">
+            <div class="absolute bottom-0 right-0 bg-blue-600 rounded-full w-6 h-6 flex items-center justify-center">
+              <i class="fas fa-check text-white text-xs"></i>
+            </div>
           </div>
-        </div>
-        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2 italic details-tagline"></p>
-        <div class="flex space-x-4 mb-4">
-          <a id="modal-join-btn"
-             class="text-white text-sm font-medium px-3 py-1 rounded bg-blue-600 hover:bg-blue-700"
-             target="_blank">Join</a>
 
-          <!-- New Share Button -->
-          <button id="share-btn"
-                  class="text-white text-sm font-medium px-3 py-1 rounded bg-indigo-600 hover:bg-indigo-700 transition"
-                  aria-label="Share">
-            Share <i class="fas fa-share-alt ml-1"></i>
-          </button>
+          <div class="flex-1 space-y-1">
+            <!-- Title + (verify icon already shown above) -->
+            <div class="flex items-center space-x-2">
+              <h1 class="text-3xl font-bold details-title"></h1>
+            </div>
+            <!-- Subtitle: University · Members Count -->
+            <p class="text-gray-600 dark:text-gray-400 mt-1">
+              <span class="details-school font-medium"></span> &middot; 
+              <span class="details-members font-medium"></span> Members
+            </p>
 
-          <div id="socials-container" class="relative inline-block text-left">
-            <button id="socials-btn"
-                    class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 text-sm font-medium px-3 py-1 rounded">
-              Socials <i class="fas fa-caret-down ml-1"></i>
+            <!-- Visit Links as Icons (up to 4) and "+N" button -->
+            <div id="visit-icons-container" class="flex items-center space-x-3 mt-3">
+              <!-- JavaScript will insert up to four colored icons, then a "+N" button if needed -->
+            </div>
+          </div>
+
+          <!-- Share / Flag / Join -->
+          <div class="flex items-center space-x-3">
+            <button id="page-share-btn" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+              <i class="fas fa-share-alt text-2xl text-gray-600 dark:text-gray-300"></i>
             </button>
-            <div id="socials-menu"
-                 class="invisible opacity-0 transition-opacity duration-200 absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded shadow-lg z-50"></div>
+            <a id="page-flag-btn" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+              <i class="fas fa-flag text-2xl text-red-500"></i>
+            </a>
+            <!-- Join button always shown -->
+            <a id="page-join-btn" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-center">
+              Join
+            </a>
           </div>
-          <button id="contact-info-btn" type="button"
-                  class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 text-sm font-medium px-3 py-1 rounded">
-            Contact Info
+        </div>
+
+        <!-- Divider -->
+        <hr class="border-gray-200 dark:border-gray-700">
+
+        <!-- Tags Row (Industry first, then Business Type, then Stage) -->
+        <div class="flex flex-wrap gap-3">
+          <!-- Industry as the first tag -->
+          <span class="details-industry bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs font-medium px-3 py-1 rounded-full"></span>
+          <span class="details-businesstype bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-200 text-xs font-semibold px-3 py-1 rounded-full"></span>
+          <span class="details-stage bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs font-semibold px-3 py-1 rounded-full"></span>
+        </div>
+
+        <!-- Tab Navigation with icons -->
+        <nav class="flex space-x-6 border-b border-gray-200 dark:border-gray-700 pb-2">
+          <button type="button" class="tab-button text-blue-600 dark:text-blue-400 font-medium pb-1" data-tab="overview">
+            <i class="fas fa-info-circle mr-1"></i>Overview
           </button>
+          <button type="button" class="tab-button text-gray-500 dark:text-gray-400 font-medium pb-1" data-tab="events">
+            <i class="fas fa-calendar-alt mr-1"></i>Events
+          </button>
+          <button type="button" class="tab-button text-gray-500 dark:text-gray-400 font-medium pb-1" data-tab="contact">
+            <i class="fas fa-envelope mr-1"></i>Contact Info
+          </button>
+        </nav>
+      </div>
+
+      <!-- ========== Tab Content: Overview ========== -->
+      <div id="overview" class="tab-content bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mt-4 space-y-6">
+        <!-- About Us -->
+        <div>
+          <h2 class="text-xl font-semibold mb-2">About Us</h2>
+          <p class="text-gray-700 dark:text-gray-300 details-desc"></p>
         </div>
-        <div class="border-b border-gray-200 dark:border-gray-700 mb-4 relative">
-          <nav id="tab-nav" class="flex space-x-4">
-            <button type="button" class="tab-button pb-2 px-3 text-sm font-medium text-gray-500 dark:text-gray-400 focus:outline-none" data-tab="overview">Overview</button>
-            <button type="button" class="tab-button pb-2 px-3 text-sm font-medium text-gray-500 dark:text-gray-400 focus:outline-none" data-tab="events">Events</button>
-          </nav>
-          <div id="tab-underline" class="absolute bottom-0 h-0.5 bg-blue-600 transition-all"></div>
-        </div>
-        <div id="overview" class="tab-content">
-          <p class="text-gray-700 dark:text-gray-300 mb-4 details-desc"></p>
-          <div class="flex flex-wrap gap-2 mb-4">
-            <span class="details-businesstype bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-200 text-xs font-medium px-2.5 py-0.5 rounded"></span>
-            <span class="details-stage bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs font-medium px-2.5 py-0.5 rounded"></span>
+
+        <!-- Upcoming Events -->
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <h2 class="text-xl font-semibold">Upcoming Events</h2>
+            <a href="#" id="view-all-events" class="text-blue-500 hover:underline text-sm font-medium">View all</a>
           </div>
-          <div class="space-y-2 mb-4">
-            <p class="flex items-center"><i class="fas fa-map-marker-alt mr-2 text-gray-600 dark:text-gray-400"></i><span class="details-school"></span></p>
-            <p class="flex items-center"><i class="fas fa-users mr-1 text-gray-600 dark:text-gray-400"></i><span class="details-members mr-1"></span> Members</p>
+          <div class="border border-gray-300 dark:border-gray-700 rounded-lg h-40 flex justify-center items-center">
+            <span class="text-gray-500 dark:text-gray-400">
+              No events right now, but check back later—something exciting might be coming!
+            </span>
           </div>
-          <p class="flex items-center"><i class="fas fa-comments mr-2 text-gray-600 dark:text-gray-400"></i><span class="details-comments">No comments yet</span></p>
         </div>
-        <div id="events" class="tab-content hidden p-4 text-gray-600 dark:text-gray-400">No events yet</div>
+
+        <!-- Comments -->
+        <div>
+          <h2 class="text-xl font-semibold mb-2">Comments</h2>
+          <textarea
+            disabled
+            title="Feature coming soon"
+            placeholder="Feature coming soon"
+            class="w-full h-20 bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 resize-none cursor-not-allowed"
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- ========== Tab Content: Events ========== -->
+      <div id="events" class="tab-content hidden bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mt-4 text-gray-700 dark:text-gray-300">
+        <p>No events yet.</p>
+      </div>
+
+      <!-- ========== Tab Content: Contact Info ========== -->
+      <div id="contact" class="tab-content hidden bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mt-4 text-gray-700 dark:text-gray-300 space-y-3">
+        <p><strong>Email:</strong> <a href="#" class="details-contact-email text-blue-600 dark:text-blue-400 hover:underline"></a></p>
+        <p><strong>Form:</strong> <a href="#" class="details-contact-form text-blue-600 dark:text-blue-400 hover:underline" target="_blank"></a></p>
       </div>
     </div>
   </template>
 
-  <!-- Share Modal Template -->
+  <!-- ========== SHARE MODAL TEMPLATE ========== -->
   <template id="share-modal-template">
-    <div class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-         role="dialog" aria-modal="true">
+    <div class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" role="dialog">
       <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg max-w-md w-full p-6 relative">
-        <button type="button"
-                class="absolute top-3 right-3 text-2xl text-gray-500 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white close-share-modal"
-                aria-label="Close">&times;</button>
+        <button type="button" class="absolute top-3 right-3 text-2xl text-gray-500 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white close-share-modal">&times;</button>
         <h3 class="text-xl font-semibold mb-4">Share</h3>
         <div class="grid grid-cols-4 gap-6 justify-items-center">
-          <div class="flex flex-col items-center cursor-pointer" data-share="copy" title="Copy Link">
-            <div class="w-16 h-16 flex items-center justify-center rounded-full bg-blue-600 hover:bg-blue-700 transition-shadow shadow-md">
-              <i class="fas fa-link fa-2x text-white"></i>
+          <!-- Copy Link -->
+          <div class="relative group cursor-pointer p-2" data-share="copy" title="Copy Link">
+            <div class="absolute inset-0 bg-gray-100 dark:bg-gray-700 opacity-50 rounded-xl hidden group-hover:block"></div>
+            <div class="relative flex flex-col items-center">
+              <div class="w-16 h-16 flex items-center justify-center rounded-full bg-blue-600 hover:bg-blue-700 transition-shadow shadow-md">
+                <i class="fas fa-link fa-2x text-white"></i>
+              </div>
+              <span class="mt-2 text-sm font-medium">Copy Link</span>
             </div>
-            <span class="mt-2 text-sm font-medium">Copy Link</span>
           </div>
-          <div class="flex flex-col items-center cursor-pointer" data-share="qr" title="QR Code">
-            <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
-              <img src="https://i.imgur.com/nWDcvp1.png" alt="QR Code" class="w-full h-full object-cover"/>
+          <!-- QR Code -->
+          <div class="relative group cursor-pointer p-2" data-share="qr" title="QR Code">
+            <div class="absolute inset-0 bg-gray-100 dark:bg-gray-700 opacity-50 rounded-xl hidden group-hover:block"></div>
+            <div class="relative flex flex-col items-center">
+              <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
+                <img src="https://i.imgur.com/nWDcvp1.png" alt="QR Code" class="w-full h-full object-cover qr-img"/>
+              </div>
+              <span class="mt-2 text-sm font-medium">QR Code</span>
             </div>
-            <span class="mt-2 text-sm font-medium">QR Code</span>
           </div>
-          <div class="flex flex-col items-center cursor-pointer" data-share="linkedin" title="LinkedIn">
-            <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
-              <img src="https://i.imgur.com/PEw6T9z.png" alt="LinkedIn" class="w-full h-full object-cover"/>
+          <!-- WhatsApp -->
+          <div class="relative group cursor-pointer p-2" data-share="whatsapp" title="WhatsApp">
+            <div class="absolute inset-0 bg-gray-100 dark:bg-gray-700 opacity-50 rounded-xl hidden group-hover:block"></div>
+            <div class="relative flex flex-col items-center">
+              <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
+                <img src="https://i.imgur.com/qOttODu.png" alt="WhatsApp" class="w-full h-full object-cover"/>
+              </div>
+              <span class="mt-2 text-sm font-medium">WhatsApp</span>
             </div>
-            <span class="mt-2 text-sm font-medium">LinkedIn</span>
           </div>
-          <div class="flex flex-col items-center cursor-pointer" data-share="twitter" title="X (Twitter)">
-            <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
-              <img src="https://i.imgur.com/PLQsGra.png" alt="Twitter" class="w-full h-full object-cover"/>
+          <!-- Telegram -->
+          <div class="relative group cursor-pointer p-2" data-share="telegram" title="Telegram">
+            <div class="absolute inset-0 bg-gray-100 dark:bg-gray-700 opacity-50 rounded-xl hidden group-hover:block"></div>
+            <div class="relative flex flex-col items-center">
+              <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
+                <img src="https://i.imgur.com/uU1H4xZ.png" alt="Telegram" class="w-full h-full object-cover"/>
+              </div>
+              <span class="mt-2 text-sm font-medium">Telegram</span>
             </div>
-            <span class="mt-2 text-sm font-medium">X</span>
           </div>
-          <div class="flex flex-col items-center cursor-pointer" data-share="whatsapp" title="WhatsApp">
-            <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
-              <img src="https://i.imgur.com/qOttODu.png" alt="WhatsApp" class="w-full h-full object-cover"/>
+          <!-- Reddit -->
+          <div class="relative group cursor-pointer p-2" data-share="reddit" title="Reddit">
+            <div class="absolute inset-0 bg-gray-100 dark:bg-gray-700 opacity-50 rounded-xl hidden group-hover:block"></div>
+            <div class="relative flex flex-col items-center">
+              <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
+                <img src="https://i.imgur.com/zELebxD.png" alt="Reddit" class="w-full h-full object-cover"/>
+              </div>
+              <span class="mt-2 text-sm font-medium">Reddit</span>
             </div>
-            <span class="mt-2 text-sm font-medium">WhatsApp</span>
           </div>
-          <div class="flex flex-col items-center cursor-pointer" data-share="reddit" title="Reddit">
-            <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
-              <img src="https://i.imgur.com/zELebxD.png" alt="Reddit" class="w-full h-full object-cover"/>
+          <!-- LinkedIn -->
+          <div class="relative group cursor-pointer p-2" data-share="linkedin" title="LinkedIn">
+            <div class="absolute inset-0 bg-gray-100 dark:bg-gray-700 opacity-50 rounded-xl hidden group-hover:block"></div>
+            <div class="relative flex flex-col items-center">
+              <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
+                <img src="https://i.imgur.com/PEw6T9z.png" alt="LinkedIn" class="w-full h-full object-cover"/>
+              </div>
+              <span class="mt-2 text-sm font-medium">LinkedIn</span>
             </div>
-            <span class="mt-2 text-sm font-medium">Reddit</span>
           </div>
-          <div class="flex flex-col items-center cursor-pointer" data-share="email" title="Email">
-            <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
-              <img src="https://i.imgur.com/cBOGtrb.png" alt="Email" class="w-full h-full object-cover"/>
+          <!-- X (formerly Twitter) -->
+          <div class="relative group cursor-pointer p-2" data-share="twitter" title="X">
+            <div class="absolute inset-0 bg-gray-100 dark:bg-gray-700 opacity-50 rounded-xl hidden group-hover:block"></div>
+            <div class="relative flex flex-col items-center">
+              <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
+                <img src="https://i.imgur.com/PLQsGra.png" alt="X" class="w-full h-full object-cover"/>
+              </div>
+              <span class="mt-2 text-sm font-medium">X</span>
             </div>
-            <span class="mt-2 text-sm font-medium">Email</span>
           </div>
-          <div class="flex flex-col items-center cursor-pointer" data-share="pinterest" title="Pinterest">
-            <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
-              <img src="https://i.imgur.com/E0yglrg.png" alt="Pinterest" class="w-full h-full object-cover"/>
+          <!-- Email -->
+          <div class="relative group cursor-pointer p-2" data-share="email" title="Email">
+            <div class="absolute inset-0 bg-gray-100 dark:bg-gray-700 opacity-50 rounded-xl hidden group-hover:block"></div>
+            <div class="relative flex flex-col items-center">
+              <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
+                <img src="https://i.imgur.com/cBOGtrb.png" alt="Email" class="w-full h-full object-cover"/>
+              </div>
+              <span class="mt-2 text-sm font-medium">Email</span>
             </div>
-            <span class="mt-2 text-sm font-medium">Pinterest</span>
-          </div>
-          <div class="flex flex-col items-center cursor-pointer" data-share="telegram" title="Telegram">
-            <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
-              <img src="https://i.imgur.com/uU1H4xZ.png" alt="Telegram" class="w-full h-full object-cover"/>
-            </div>
-            <span class="mt-2 text-sm font-medium">Telegram</span>
-          </div>
-          <div class="flex flex-col items-center cursor-pointer" data-share="tumblr" title="Tumblr">
-            <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
-              <img src="https://i.imgur.com/cAjCiph.png" alt="Tumblr" class="w-full h-full object-cover"/>
-            </div>
-            <span class="mt-2 text-sm font-medium">Tumblr</span>
-          </div>
-          <div class="flex flex-col items-center cursor-pointer" data-share="groupme" title="GroupMe">
-            <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
-              <img src="https://i.imgur.com/ur6bS6m.png" alt="GroupMe" class="w-full h-full object-cover"/>
-            </div>
-            <span class="mt-2 text-sm font-medium">GroupMe</span>
           </div>
         </div>
       </div>
     </div>
   </template>
 
-  <!-- Contact Modal Template -->
-  <template id="contact-modal-template">
-    <div class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" role="dialog" aria-modal="true">
-      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg max-w-sm w-full p-6 relative">
-        <button type="button" class="absolute top-3 right-3 text-2xl text-gray-500 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white close-contact-modal" aria-label="Close">&times;</button>
-        <h3 class="text-xl font-semibold mb-4">Contact Information</h3>
-        <p><strong>Email:</strong> <a href="#" class="contact-email text-blue-600 dark:text-blue-400 hover:underline"></a></p>
-        <p class="mt-2"><strong>Form:</strong> <a href="#" class="contact-form text-blue-600 dark:text-blue-400 hover:underline" target="_blank"></a></p>
+  <!-- ========== VISIT-LINKS MODAL TEMPLATE ========== -->
+  <div id="visitLinksModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg max-w-lg w-full p-6 relative">
+      <button id="close-visit-modal" class="absolute top-3 right-3 text-2xl text-gray-500 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white">&times;</button>
+      <h3 class="text-xl font-semibold mb-4">All Project Links</h3>
+      <div id="visit-links-list" class="space-y-2">
+        <!-- JavaScript will populate this list with all links -->
       </div>
     </div>
-  </template>
+  </div>
 
-  <!-- Sign In Modal Template -->
-  <template id="signin-modal-template">
-    <div class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" role="dialog" aria-modal="true">
-      <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-lg w-80 p-6">
-        <!-- Loading overlay -->
-        <div id="signin-loading" class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 dark:bg-gray-900 dark:bg-opacity-75 hidden">
-          <div class="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-        </div>
-        <button id="close-signin" type="button" class="absolute top-3 right-3 text-2xl text-gray-500 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white" aria-label="Close">&times;</button>
-        <h3 class="text-xl font-semibold mb-4">Sign In</h3>
-        <form id="signin-form" class="space-y-4">
-          <div>
-            <label for="signin-email" class="block text-sm font-medium mb-1">Email</label>
-            <input id="signin-email" type="email" required class="w-full px-3 py-2 border rounded dark:bg-gray-700 dark:border-gray-600 focus:outline-none" placeholder="you@example.com"/>
-          </div>
-          <div>
-            <label for="signin-password" class="block text-sm font-medium mb-1">Password</label>
-            <input id="signin-password" type="password" required class="w-full px-3 py-2 border rounded dark:bg-gray-700 dark:border-gray-600 focus:outline-none" placeholder="••••••••"/>
-          </div>
-          <p id="signin-error" class="text-red-600 text-sm hidden">Invalid email or password.</p>
-          <p id="signin-success" class="text-green-600 text-sm hidden">Login successful!</p>
-          <button type="submit" id="signin-submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50">Sign In</button>
-        </form>
-      </div>
-    </div>
-  </template>
-
-  <!-- Profile Dropdown Template -->
-  <template id="profile-dropdown-template">
-    <div id="profileDropdown" class="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow-lg py-2 z-50 hidden">
-      <a data-key="Profile" href="#" class="block px-4 py-2 text-sm flex items-center hover:bg-gray-100 dark:hover:bg-gray-700">
-        <i class="fas fa-user mr-2"></i>Profile
-      </a>
-      <a data-key="Settings" href="#" class="block px-4 py-2 text-sm flex items-center hover:bg-gray-100 dark:hover:bg-gray-700">
-        <i class="fas fa-cog mr-2"></i>Settings
-      </a>
-      <a data-key="My Activities" href="#" class="block px-4 py-2 text-sm flex items-center hover:bg-gray-100 dark:hover:bg-gray-700">
-        <i class="fas fa-list mr-2"></i>My Activities
-      </a>
-      <a href="#" id="logoutBtn" class="block px-4 py-2 text-sm flex items-center hover:bg-gray-100 dark:hover:bg-gray-700">
-        <i class="fas fa-sign-out-alt mr-2"></i>Logout
-      </a>
-    </div>
-  </template>
-
-  <!-- Profile Modal Template -->
-  <template id="profile-modal-template">
-    <div class="profile-modal-overlay fixed z-30 bg-white dark:bg-gray-800 overflow-auto">
-      <div class="relative h-full w-full p-6">
-        <button type="button" class="close-profile-modal absolute top-4 left-4 bg-blue-600 text-white px-3 py-1 rounded inline-flex items-center hover:bg-blue-700">
-          <i class="fas fa-arrow-left mr-2"></i>Back to Activity Hub
-        </button>
-        <div class="flex flex-col items-center mt-12 space-y-4">
-          <img src="" alt="Profile Picture" class="profile-pic h-24 w-24 rounded-full border-2 border-gray-200 dark:border-gray-700" />
-          <h2 class="profile-name text-2xl font-semibold"></h2>
-          <div class="flex flex-wrap justify-center gap-2">
-            <span class="inline-flex items-center bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 text-xs font-medium px-3 py-1 rounded-full">
-              <i class="fas fa-school mr-1"></i><span class="profile-school"></span>
-            </span>
-            <span class="inline-flex items-center bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs font-medium px-3 py-1 rounded-full">
-              <i class="fas fa-graduation-cap mr-1"></i><span class="profile-major"></span>
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </template>
-
-  <!-- Logout Confirmation Template -->
-  <template id="logout-confirmation-template">
-    <div class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-80">
-        <h3 class="text-lg font-semibold mb-4">Confirm Logout</h3>
-        <p class="text-sm text-gray-700 dark:text-gray-300">Are you sure you want to log out?</p>
-        <div class="mt-6 flex justify-end space-x-2">
-          <button id="logout-confirm-cancel" type="button" class="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200">Cancel</button>
-          <button id="logout-confirm-yes" type="button" class="px-4 py-2 rounded bg-red-600 hover:bg-red-700 text-white">Log Out</button>
-        </div>
-      </div>
-    </div>
-  </template>
-
+  <!-- ========== JAVASCRIPT (placed at the END so all templates/elements exist first) ========== -->
   <script>
+    // ─────── Constants & Globals ───────
     const LINK_API = 'https://sheet2api.com/v1/rhBSJNTTYKgC/hyperlinks';
     const API      = 'https://sheet2api.com/v1/an4oVvpQR51V/mock-data-new';
     const AUTH_API = 'https://sheet2api.com/v1/rkmbUqHQAC3C/submission-form-responses';
-    let linkMap = {};
-    window.itemMap = {};  // map slug -> item
+    let linkMap   = {};
+    let itemMap   = {};
 
-    // Utility: generate URL-friendly slug
+    // Utility: turn a title into a slug (lowercase, hyphens, no leading/trailing hyphens)
     function generateSlug(text) {
-      return text.toLowerCase()
-                 .replace(/[^a-z0-9]+/g,'-')
-                 .replace(/^-+|-+$/g,'');
+      return text
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
     }
 
-    // Update browser URL without reload
+    // Update the browser URL hash without reloading
     function updateHistory(slug) {
       if (history.pushState) {
         history.pushState({slug}, '', `#${slug}`);
       }
     }
 
-    // Show QR code modal
-    function showQrModal(url) {
-      const tpl = document.createElement('template');
-      tpl.innerHTML = `
-        <div class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 relative flex flex-col items-center">
-            <button type="button" class="absolute top-3 right-3 text-2xl text-gray-500 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white close-qr-modal" aria-label="Close">&times;</button>
-            <h3 class="text-lg font-semibold mb-4">QR Code</h3>
-            <img src="https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=${encodeURIComponent(url)}" alt="QR code" class="mb-4"/>
-            <button data-download-qr class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Download QR</button>
-          </div>
-        </div>
-      `;
-      const el = tpl.content.cloneNode(true);
-      const modal = el.querySelector('.modal-overlay');
-      modal.querySelector('.close-qr-modal').addEventListener('click', () => modal.remove());
-      modal.querySelector('[data-download-qr]').addEventListener('click', () => {
-        const img = modal.querySelector('img');
-        const a = document.createElement('a');
-        a.href = img.src;
-        a.download = 'qr-code.png';
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-      });
-      document.body.append(modal);
+    // ─────── Render skeleton placeholders ───────
+    function renderSkeletons() {
+      const content = document.getElementById('content');
+      content.innerHTML = '<h1 class="text-3xl font-semibold mb-6">Explore</h1>';
+      const skeletonContainer = document.createElement('div');
+      skeletonContainer.className = 'grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3';
+      // Show 6 skeleton cards
+      for (let i = 0; i < 6; i++) {
+        const skel = document.getElementById('skeleton-card-template').content.cloneNode(true);
+        skeletonContainer.append(skel);
+      }
+      content.append(skeletonContainer);
     }
 
+    // ─────── Render the “Explore” Grid of Cards ───────
+    function renderListings() {
+      const content = document.getElementById('content');
+      // Clear out anything inside #content
+      content.innerHTML = '<h1 class="text-3xl font-semibold mb-6">Explore</h1>';
+
+      // We expect itemMap to already be populated (slug → itemObject)
+      // We group by “Project Type” (Clubs & Orgs, Business, Other Projects)
+      const titles = {
+        'Clubs & Orgs': 'Clubs',
+        'Business':     'Businesses',
+        'Other Projects':'Projects'
+      };
+
+      Object.entries(titles).forEach(([ptype, heading]) => {
+        // Clone the section template
+        const sec = document.getElementById('section-template').content.cloneNode(true);
+        sec.querySelector('h2').textContent = heading;
+
+        const grid = sec.querySelector('div'); // the <div class="grid …">
+
+        // Filter items by project type
+        Object.values(itemMap)
+          .filter(i => i["Project Type"] === ptype)
+          .forEach(item => {
+            const slug = generateSlug(item["Project Title"]);
+            const card = document.getElementById('card-template').content.cloneNode(true);
+
+            // Populate the card fields
+            card.querySelector('img').src = item["Logo URL"];
+            card.querySelector('h3').textContent = item["Project Title"];
+            card.querySelector('.tagline').textContent = item.Tagline;
+
+            const bt = card.querySelector('.business-type');
+            if (ptype === 'Business' && item["Business Type"]) {
+              bt.textContent = item["Business Type"];
+            } else {
+              bt.remove();
+            }
+
+            card.querySelector('.industry').textContent = item.Industry;
+
+            const st = card.querySelector('.stage');
+            if (item.Stage) {
+              st.textContent = item.Stage;
+            } else {
+              st.remove();
+            }
+
+            card.querySelector('.school').textContent  = item["College or University Name"];
+            card.querySelector('.members').textContent = item["Number of participants"];
+
+            const cardEl = card.querySelector('.card');
+            cardEl.setAttribute('data-slug', slug);
+            cardEl.addEventListener('click', () => showDetails(item, slug));
+            grid.append(card);
+          });
+
+        content.append(sec);
+      });
+    }
+
+    // ─────── Show the “Profile Page” for a single item ───────
+    function showDetails(item, slug) {
+      updateHistory(slug);
+
+      // Grab the <div id="main"> so we can replace its contents
+      const main = document.getElementById('main');
+
+      // Clone the profile template
+      const detailTpl = document.getElementById('details-page-template').content.cloneNode(true);
+
+      // 1) Fill in the Logo, Title, University, Members, Tagline, Description
+      const logoEl = detailTpl.querySelector('.details-logo');
+      if (logoEl) logoEl.src = item["Logo URL"];
+
+      const titleEl = detailTpl.querySelector('.details-title');
+      if (titleEl) titleEl.textContent = item["Project Title"];
+
+      const schoolEl = detailTpl.querySelector('.details-school');
+      if (schoolEl) schoolEl.textContent = item["College or University Name"];
+
+      const membersEl = detailTpl.querySelector('.details-members');
+      if (membersEl) membersEl.textContent = item["Number of participants"];
+
+      const descEl = detailTpl.querySelector('.details-desc');
+      if (descEl) descEl.textContent = item.Description;
+
+      // 2) “Industry” & “Business Type” & “Stage” tags
+      const industryTag = detailTpl.querySelector('.details-industry');
+      if (industryTag) industryTag.textContent = item.Industry;
+
+      const btTag = detailTpl.querySelector('.details-businesstype');
+      if (btTag) {
+        if (item["Business Type"]) {
+          btTag.textContent = item["Business Type"];
+        } else {
+          btTag.remove();
+        }
+      }
+
+      const stageTag = detailTpl.querySelector('.details-stage');
+      if (stageTag) {
+        if (item.Stage) {
+          stageTag.textContent = item.Stage;
+        } else {
+          stageTag.remove();
+        }
+      }
+
+      // 3) Visit Links: populate up to four colored icons, then "+N" if needed
+      const visitMap = {
+        website:   item.Website,
+        instagram: item.Instagram,
+        linkedin:  item.LinkedIn,
+        youtube:   item.YouTube,
+        tiktok:    item.TikTok,
+        github:    item.GitHub,
+        discord:   item.Discord,
+        twitter:   item.Twitter,
+        linktree:  item.LinkTree
+      };
+      // Build an array of existing links
+      const visitEntries = Object.entries(visitMap).filter(([_, url]) => url);
+      const visitIconsContainer = detailTpl.querySelector('#visit-icons-container');
+
+      if (visitIconsContainer) {
+        visitEntries.slice(0, 4).forEach(([key, url]) => {
+          const a = document.createElement('a');
+          a.href = url;
+          a.target = '_blank';
+          let iconHTML = '';
+          if (key === 'website') {
+            iconHTML = '<i class="fa-solid fa-globe fa-lg text-gray-800 dark:text-gray-200"></i>';
+          } else {
+            switch(key) {
+              case 'instagram':
+                iconHTML = '<i class="fa-brands fa-instagram fa-lg text-pink-500"></i>';
+                break;
+              case 'linkedin':
+                iconHTML = '<i class="fa-brands fa-linkedin fa-lg text-blue-700"></i>';
+                break;
+              case 'youtube':
+                iconHTML = '<i class="fa-brands fa-youtube fa-lg text-red-600"></i>';
+                break;
+              case 'tiktok':
+                iconHTML = '<i class="fa-brands fa-tiktok fa-lg text-black"></i>';
+                break;
+              case 'github':
+                iconHTML = '<i class="fa-brands fa-github fa-lg text-black"></i>';
+                break;
+              case 'discord':
+                iconHTML = '<i class="fa-brands fa-discord fa-lg text-indigo-500"></i>';
+                break;
+              case 'twitter':
+                iconHTML = '<i class="fa-brands fa-twitter fa-lg text-blue-400"></i>';
+                break;
+              case 'linktree':
+                iconHTML = '<i class="fa-solid fa-link fa-lg text-green-500"></i>';
+                break;
+              default:
+                iconHTML = '<i class="fa-solid fa-link fa-lg text-gray-800 dark:text-gray-200"></i>';
+                break;
+            }
+          }
+          a.className = 'hover:opacity-80';
+          a.innerHTML = iconHTML;
+          visitIconsContainer.append(a);
+        });
+
+        if (visitEntries.length > 4) {
+          const remaining = visitEntries.length - 4;
+          const moreBtn = document.createElement('button');
+          moreBtn.textContent = `+${remaining}`;
+          moreBtn.className = 'text-gray-600 dark:text-gray-300 font-medium hover:text-gray-800 dark:hover:text-white';
+          moreBtn.addEventListener('click', () => {
+            openVisitLinksModal(visitEntries);
+          });
+          visitIconsContainer.append(moreBtn);
+        }
+      }
+
+      // 4) Join button (always present)
+      const joinBtn = detailTpl.querySelector('#page-join-btn');
+      if (joinBtn) {
+        if (item["Join Link"]) {
+          joinBtn.href = item["Join Link"];
+        } else {
+          joinBtn.href = "#";
+        }
+      }
+
+      // 5) Flag icon hyperlink via linkMap["Report"]
+      const flagLink = detailTpl.querySelector('#page-flag-btn');
+      if (flagLink) {
+        if (linkMap["Report"]) {
+          flagLink.href = linkMap["Report"];
+        } else {
+          flagLink.href = "#";
+        }
+      }
+
+      // 6) “View all” should switch to Events tab
+      const viewAll = detailTpl.querySelector('#view-all-events');
+      if (viewAll) {
+        viewAll.addEventListener('click', e => {
+          e.preventDefault();
+          const eventsTab = main.querySelector('.tab-button[data-tab="events"]');
+          if (eventsTab) eventsTab.click();
+        });
+      }
+
+      // 7) Contact Info tab
+      const emailEl = detailTpl.querySelector('.details-contact-email');
+      if (emailEl) {
+        if (item["Project Contact Email"]) {
+          emailEl.href = `mailto:${item["Project Contact Email"]}`;
+          emailEl.textContent = item["Project Contact Email"];
+        } else {
+          emailEl.parentElement.classList.add('hidden');
+        }
+      }
+      const formEl = detailTpl.querySelector('.details-contact-form');
+      if (formEl) {
+        if (item["Contact Form"]) {
+          formEl.href = item["Contact Form"];
+          formEl.textContent = 'Open Form';
+        } else {
+          formEl.parentElement.classList.add('hidden');
+        }
+      }
+
+      // 8) “Back to Explore” button
+      const backBtn = detailTpl.querySelector('#backBtn');
+      if (backBtn) {
+        backBtn.addEventListener('click', () => {
+          history.pushState({}, '', window.location.pathname);
+          document.getElementById('main').innerHTML = '<main id="content" class="max-w-7xl mx-auto px-4 py-6"></main>';
+          renderSkeletons();
+          fetchAndRenderItems();
+        });
+      }
+
+      // Finally, replace #main’s contents with this profile fragment
+      main.innerHTML = '';
+      main.append(detailTpl);
+
+      // 9) Wire up the Share modal to show on click, and make all share options functional
+      const shareBtn = main.querySelector('#page-share-btn');
+      if (shareBtn) {
+        shareBtn.addEventListener('click', () => {
+          // Clone the share modal template
+          const fragment = document.getElementById('share-modal-template').content.cloneNode(true);
+          document.body.append(fragment);
+
+          // The newly appended overlay is the last .modal-overlay in the body
+          const modalOverlay = document.querySelector('body > .modal-overlay:last-child');
+
+          // Attach click listeners to each [data-share] element
+          modalOverlay.querySelectorAll('[data-share]').forEach(el => {
+            const type = el.getAttribute('data-share');
+            el.addEventListener('click', () => {
+              const url = window.location.href;
+              switch(type) {
+                case 'copy':
+                  navigator.clipboard.writeText(url).then(() => {
+                    alert('Link copied to clipboard');
+                  });
+                  break;
+                case 'qr':
+                  // Generate a QR code and replace the <img> inside this tile
+                  const img = el.querySelector('.qr-img');
+                  QRCode.toDataURL(url, { width: 128 }, (err, dataUrl) => {
+                    if (!err && img) {
+                      img.src = dataUrl;
+                    }
+                  });
+                  break;
+                case 'whatsapp':
+                  window.open(`https://wa.me/?text=${encodeURIComponent(url)}`, '_blank');
+                  break;
+                case 'telegram':
+                  window.open(`https://t.me/share/url?url=${encodeURIComponent(url)}`, '_blank');
+                  break;
+                case 'reddit':
+                  window.open(`https://www.reddit.com/submit?url=${encodeURIComponent(url)}`, '_blank');
+                  break;
+                case 'linkedin':
+                  window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`, '_blank');
+                  break;
+                case 'twitter':
+                  window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}`, '_blank');
+                  break;
+                case 'email':
+                  window.location.href = `mailto:?subject=${encodeURIComponent(document.title)}&body=${encodeURIComponent(url)}`;
+                  break;
+              }
+            });
+          });
+
+          // Attach close handler
+          modalOverlay.querySelectorAll('.close-share-modal').forEach(btn => {
+            btn.addEventListener('click', () => modalOverlay.remove());
+          });
+        });
+      }
+
+      // Activate the first tab (Overview) by default
+      const navButtons = main.querySelectorAll('.tab-button');
+      navButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          navButtons.forEach(b => {
+            b.classList.remove('text-blue-600','dark:text-blue-400');
+            b.classList.add('text-gray-500','dark:text-gray-400');
+          });
+          btn.classList.remove('text-gray-500','dark:text-gray-400');
+          btn.classList.add('text-blue-600','dark:text-blue-400');
+          const tabId = btn.dataset.tab;
+          main.querySelectorAll('.tab-content').forEach(panel => {
+            panel.classList.add('hidden');
+          });
+          main.querySelector('#' + tabId).classList.remove('hidden');
+        });
+      });
+      // Trigger “Overview” tab
+      if (navButtons.length) navButtons[0].click();
+    }
+
+    // ─────── Fetch items and render skeletons first ───────
+    function fetchAndRenderItems() {
+      renderSkeletons();
+      fetch(API)
+        .then(r => r.json())
+        .then(items => {
+          items.forEach(item => {
+            const slug = generateSlug(item["Project Title"]);
+            itemMap[slug] = item;
+          });
+          // If a hash is present in the URL, deep-link to that profile immediately:
+          const initialSlug = location.hash.slice(1);
+          if (initialSlug && itemMap[initialSlug]) {
+            showDetails(itemMap[initialSlug], initialSlug);
+          } else {
+            renderListings();
+          }
+        })
+        .catch(console.error);
+    }
+
+    // ─────── Open the Visit Links Modal, showing all links ───────
+    function openVisitLinksModal(entries) {
+      const modal = document.getElementById('visitLinksModal');
+      const listContainer = document.getElementById('visit-links-list');
+      if (!modal || !listContainer) return;
+      listContainer.innerHTML = '';
+
+      entries.forEach(([key, url]) => {
+        const div = document.createElement('div');
+        div.className = 'flex items-center space-x-2';
+        let iconHTML = '';
+        if (key === 'website') {
+          iconHTML = '<i class="fa-solid fa-globe fa-lg text-gray-800 dark:text-gray-200"></i>';
+        } else {
+          switch(key) {
+            case 'instagram':
+              iconHTML = '<i class="fa-brands fa-instagram fa-lg text-pink-500"></i>';
+              break;
+            case 'linkedin':
+              iconHTML = '<i class="fa-brands fa-linkedin fa-lg text-blue-700"></i>';
+              break;
+            case 'youtube':
+              iconHTML = '<i class="fa-brands fa-youtube fa-lg text-red-600"></i>';
+              break;
+            case 'tiktok':
+              iconHTML = '<i class="fa-brands fa-tiktok fa-lg text-black"></i>';
+              break;
+            case 'github':
+              iconHTML = '<i class="fa-brands fa-github fa-lg text-black"></i>';
+              break;
+            case 'discord':
+              iconHTML = '<i class="fa-brands fa-discord fa-lg text-indigo-500"></i>';
+              break;
+            case 'twitter':
+              iconHTML = '<i class="fa-brands fa-twitter fa-lg text-blue-400"></i>';
+              break;
+            case 'linktree':
+              iconHTML = '<i class="fa-solid fa-link fa-lg text-green-500"></i>';
+              break;
+            default:
+              iconHTML = '<i class="fa-solid fa-link fa-lg text-gray-800 dark:text-gray-200"></i>';
+              break;
+          }
+        }
+        div.innerHTML = `
+          ${iconHTML}
+          <a href="${url}" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline break-all">${key.charAt(0).toUpperCase() + key.slice(1)}</a>
+        `;
+        listContainer.append(div);
+      });
+
+      modal.classList.remove('hidden');
+      const closeBtn = document.getElementById('close-visit-modal');
+      if (closeBtn) {
+        closeBtn.onclick = () => {
+          modal.classList.add('hidden');
+        };
+      }
+    }
+
+    // ─────── DOMContentLoaded ───────
     document.addEventListener('DOMContentLoaded', () => {
       // 1) Theme Setup
       const htmlEl     = document.documentElement;
       const themeToggle = document.getElementById('darkToggle');
       const themeIcon   = document.getElementById('darkIcon');
       const storedTheme = localStorage.getItem('theme');
-      if (storedTheme === 'dark') {
-        htmlEl.classList.add('dark');
-        themeToggle.checked = true;
-        themeIcon.classList.replace('fa-moon','fa-sun');
-      } else {
-        htmlEl.classList.remove('dark');
-        themeToggle.checked = false;
-        themeIcon.classList.replace('fa-sun','fa-moon');
+      if (themeToggle && themeIcon) {
+        if (storedTheme === 'dark') {
+          htmlEl.classList.add('dark');
+          themeToggle.checked = true;
+          themeIcon.classList.replace('fa-moon','fa-sun');
+        } else {
+          htmlEl.classList.remove('dark');
+          themeToggle.checked = false;
+          themeIcon.classList.replace('fa-sun','fa-moon');
+        }
+
+        // Dark mode toggle (icon + checkbox)
+        themeToggle.addEventListener('change', e => {
+          if (e.target.checked) {
+            htmlEl.classList.add('dark');
+            themeIcon.classList.replace('fa-moon','fa-sun');
+            localStorage.setItem('theme','dark');
+          } else {
+            htmlEl.classList.remove('dark');
+            themeIcon.classList.replace('fa-sun','fa-moon');
+            localStorage.setItem('theme','light');
+          }
+        });
+        themeIcon.addEventListener('click', () => {
+          themeToggle.checked = !themeToggle.checked;
+          themeToggle.dispatchEvent(new Event('change'));
+        });
       }
 
-      // 2) Load Nav Links
+      // 2) Load “nav links” from LINK_API and apply
       fetch(LINK_API)
         .then(r => r.json())
-        .then(arr => { linkMap = arr[0]; applyLinks(); })
+        .then(arr => {
+          linkMap = arr[0];
+          Object.entries(linkMap).forEach(([key, url]) => {
+            document.querySelectorAll(`a[data-key="${key}"]`).forEach(a => a.href = url);
+          });
+        })
         .catch(console.error);
 
-      // 3) Restore Session
+      // 3) Restore any logged-in session
       const stored = localStorage.getItem('currentUser');
       if (stored) {
-        try { initAuth(JSON.parse(stored)); } catch { localStorage.removeItem('currentUser'); }
+        try {
+          initAuth(JSON.parse(stored));
+        } catch {
+          localStorage.removeItem('currentUser');
+        }
       }
 
-      // 4) Fetch & Render Listings
-      fetch(API)
-        .then(r => r.json())
-        .then(items => {
-          const titles = { 'Clubs & Orgs':'Clubs','Business':'Businesses','Other Projects':'Projects' };
-          Object.entries(titles).forEach(([ptype, heading]) => {
-            const sec  = document.getElementById('section-template').content.cloneNode(true);
-            sec.querySelector('h2').textContent = heading;
-            const grid = sec.querySelector('div');
-            items.filter(i => i["Project Type"] === ptype).forEach(item => {
-              const slug = generateSlug(item["Project Title"]);
-              window.itemMap[slug] = item;
+      // 4) Fetch items and render skeletons first
+      fetchAndRenderItems();
 
-              const card = document.getElementById('card-template').content.cloneNode(true);
-              card.querySelector('img').src              = item["Logo URL"];
-              card.querySelector('h3').textContent       = item["Project Title"];
-              card.querySelector('.tagline').textContent = item.Tagline;
-              const bt = card.querySelector('.business-type');
-              if (ptype==='Business' && item["Business Type"]) bt.textContent = item["Business Type"];
-              else bt.remove();
-              card.querySelector('.industry').textContent = item.Industry;
-              const st = card.querySelector('.stage');
-              if (item.Stage) st.textContent = item.Stage; else st.remove();
-              card.querySelector('.school').textContent  = item["College or University Name"];
-              card.querySelector('.members').textContent = item["Number of participants"];
-              const cardEl = card.querySelector('.card');
-              cardEl.setAttribute('data-slug', slug);
-              cardEl.addEventListener('click', () => showDetails(item, slug));
-              grid.append(card);
-            });
-            document.getElementById('content').append(sec);
+      // 5) Sidebar toggle (mobile vs. desktop)
+      const toggleBtn = document.getElementById('toggleBtn');
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          const sb       = document.getElementById('sidebar');
+          const mn       = document.getElementById('main');
+          const isMobile = window.innerWidth < 768;
+          if (sb && mn) {
+            if (isMobile) {
+              const hidden = sb.classList.contains('-translate-x-full');
+              sb.classList.toggle('translate-x-0', hidden);
+              sb.classList.toggle('-translate-x-full', !hidden);
+            } else {
+              if (sb.classList.contains('w-48')) {
+                sb.classList.replace('w-48','w-16');
+                mn.classList.replace('md:ml-48','md:ml-16');
+                document.querySelectorAll('#sidebar span').forEach(s => s.classList.add('hidden'));
+                document.getElementById('darkToggleLabel')?.classList.add('hidden');
+                document.getElementById('darkToggleText')?.classList.add('hidden');
+              } else {
+                sb.classList.replace('w-16','w-48');
+                mn.classList.replace('md:ml-16','md:ml-48');
+                document.querySelectorAll('#sidebar span').forEach(s => s.classList.remove('hidden'));
+                document.getElementById('darkToggleLabel')?.classList.remove('hidden');
+                document.getElementById('darkToggleText')?.classList.remove('hidden');
+              }
+            }
+          }
+        });
+      }
+
+      // 6) Sign-In modal logic
+      const signInBtn = document.getElementById('signInBtn');
+      if (signInBtn) {
+        signInBtn.addEventListener('click', () => {
+          const tpl = document.createElement('template');
+          tpl.innerHTML = `
+          <div class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" role="dialog">
+            <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-lg w-80 p-6">
+              <div id="signin-loading" class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 dark:bg-gray-900 dark:bg-opacity-75 hidden">
+                <div class="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+              </div>
+              <button id="close-signin" class="absolute top-3 right-3 text-2xl text-gray-500 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white">&times;</button>
+              <h3 class="text-xl font-semibold mb-4">Sign In</h3>
+              <form id="signin-form" class="space-y-4">
+                <div>
+                  <label for="signin-email" class="block text-sm font-medium mb-1">Email</label>
+                  <input id="signin-email" type="email" required class="w-full px-3 py-2 border rounded dark:bg-gray-700 dark:border-gray-600 focus:outline-none" placeholder="you@example.com"/>
+                </div>
+                <div>
+                  <label for="signin-password" class="block text-sm font-medium mb-1">Password</label>
+                  <input id="signin-password" type="password" required class="w-full px-3 py-2 border rounded dark:bg-gray-700 dark:border-gray-600 focus:outline-none" placeholder="••••••••"/>
+                </div>
+                <p id="signin-error" class="text-red-600 text-sm hidden">Invalid email or password.</p>
+                <p id="signin-success" class="text-green-600 text-sm hidden">Login successful!</p>
+                <button id="signin-submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50">Sign In</button>
+              </form>
+            </div>
+          </div>`;
+
+          const m = tpl.content.cloneNode(true);
+          document.body.append(m);
+
+          const form    = document.getElementById('signin-form');
+          const emailIn = document.getElementById('signin-email');
+          const passIn  = document.getElementById('signin-password');
+          const err     = document.getElementById('signin-error');
+          const ok      = document.getElementById('signin-success');
+          const submit  = document.getElementById('signin-submit');
+          const loader  = document.getElementById('signin-loading');
+
+          document.getElementById('close-signin')?.addEventListener('click', () => m.children[0].remove());
+          m.children[0].addEventListener('click', e => {
+            if (e.target === m.children[0]) m.children[0].remove();
           });
 
-          // After items rendered, check URL hash
-          const hash = location.hash.slice(1);
-          if (hash && window.itemMap[hash]) {
-            showDetails(window.itemMap[hash], hash);
-          }
-        }).catch(console.error);
-    });
+          if (form) {
+            form.addEventListener('submit', e => {
+              e.preventDefault();
+              err.classList.add('hidden');
+              ok.classList.add('hidden');
+              submit.disabled = true;
+              loader.classList.remove('hidden');
 
-    // Handle browser back/forward
-    window.addEventListener('popstate', e => {
-      const hash = location.hash.slice(1);
-      if (hash && window.itemMap[hash]) {
-        showDetails(window.itemMap[hash], hash);
+              fetch(AUTH_API)
+                .then(r => r.json())
+                .then(users => {
+                  const u = users.find(u =>
+                    u.Email === emailIn.value.trim() && u.Password === passIn.value
+                  );
+                  if (!u) {
+                    err.classList.remove('hidden');
+                    submit.disabled = false;
+                    loader.classList.add('hidden');
+                    return;
+                  }
+                  ok.classList.remove('hidden');
+                  setTimeout(() => {
+                    m.children[0].remove();
+                    initAuth(u);
+                  }, 500);
+                })
+                .catch(() => {
+                  err.textContent = 'Network error';
+                  err.classList.remove('hidden');
+                })
+                .finally(() => {
+                  submit.disabled = false;
+                  loader.classList.add('hidden');
+                });
+            });
+          }
+        });
+      }
+    }); // end DOMContentLoaded
+
+    // ─────── Respond to Back/Forward browser navigation ───────
+    window.addEventListener('popstate', () => {
+      const slug = location.hash.slice(1);
+      if (slug && itemMap[slug]) {
+        showDetails(itemMap[slug], slug);
+      } else {
+        document.getElementById('main').innerHTML = '<main id="content" class="max-w-7xl mx-auto px-4 py-6"></main>';
+        fetchAndRenderItems();
       }
     });
 
+    // ─────── Apply any hrefs we loaded from LINK_API ───────
     function applyLinks() {
       Object.entries(linkMap).forEach(([key, url]) => {
         document.querySelectorAll(`a[data-key="${key}"]`).forEach(a => a.href = url);
       });
     }
 
-    // initAuth with placeholder avatar
+    // ─────── After a successful sign-in, swap in the user’s profile picture, etc. ───────
     function initAuth(u) {
       window.currentUser = u;
       localStorage.setItem('currentUser', JSON.stringify(u));
-
       const ac = document.getElementById('authContainer');
-      ac.innerHTML = `
-        <a data-key="Upload Activity" href="#" class="text-gray-600 dark:text-gray-300 mr-4 cursor-pointer">
-          <i class="fas fa-plus-circle fa-lg"></i>
-        </a>
-        <i class="fas fa-bell text-gray-600 dark:text-gray-300 mr-4 cursor-pointer"></i>
-        <span class="font-medium mr-2">${u["First Name"]}</span>
-      `;
-
+      if (ac) {
+        ac.innerHTML = `
+          <a data-key="Upload Activity" href="#" class="text-gray-600 dark:text-gray-300 mr-4 cursor-pointer">
+            <i class="fas fa-plus-circle fa-lg"></i>
+          </a>
+          <i class="fas fa-bell text-gray-600 dark:text-gray-300 mr-4 cursor-pointer"></i>
+          <span class="font-medium mr-2">${u["First Name"]}</span>
+        `;
+      }
       const pfc = document.createElement('div');
       pfc.id = 'pfpContainer';
       pfc.className = 'relative';
-
       let pfpBtn;
       if (u["Profile Picture"]) {
         pfpBtn = document.createElement('img');
@@ -548,7 +1053,7 @@
         pfpBtn.textContent = initials.toUpperCase();
       }
       pfc.appendChild(pfpBtn);
-      ac.appendChild(pfc);
+      ac?.appendChild(pfc);
 
       applyLinks();
 
@@ -556,302 +1061,59 @@
       pfc.append(ddClone);
 
       const dd = document.getElementById('profileDropdown');
-      document.getElementById('pfpBtn').addEventListener('click', e => {
+      document.getElementById('pfpBtn')?.addEventListener('click', e => {
         e.stopPropagation();
         dd.classList.toggle('hidden');
       });
       document.addEventListener('click', () => dd.classList.add('hidden'));
 
-      document.getElementById('logoutBtn').addEventListener('click', e => {
+      document.getElementById('logoutBtn')?.addEventListener('click', e => {
         e.preventDefault();
         showLogoutConfirmation();
       });
     }
 
-    // showProfileModal with placeholder
-    function showProfileModal() {
-      const tpl     = document.getElementById('profile-modal-template').content.cloneNode(true);
-      const modal   = tpl.querySelector('.profile-modal-overlay');
-      const header  = document.querySelector('header');
-      const sidebar = document.getElementById('sidebar');
-      modal.style.top    = header.offsetHeight + 'px';
-      modal.style.left   = sidebar.offsetWidth + 'px';
-      modal.style.right  = '0';
-      modal.style.bottom = '0';
-
-      const picEl = modal.querySelector('.profile-pic');
-      if (currentUser["Profile Picture"]) {
-        picEl.src = currentUser["Profile Picture"];
-      } else {
-        const placeholder = document.createElement('div');
-        placeholder.className = 'h-24 w-24 rounded-full border-2 border-gray-200 dark:border-gray-700 flex items-center justify-center text-white font-medium';
-        const hue = Math.floor(Math.random() * 360);
-        placeholder.style.backgroundColor = `hsl(${hue}, 70%, 40%)`;
-        const initials = ((currentUser["First Name"]||'')[0]||'') + ((currentUser["Last Name"]||'')[0]||'');
-        placeholder.textContent = initials.toUpperCase();
-        picEl.replaceWith(placeholder);
-      }
-
-      modal.querySelector('.profile-name').textContent   = `${currentUser["First Name"]} ${currentUser["Last Name"]}`;
-      modal.querySelector('.profile-school').textContent = currentUser["College or University Name"];
-      modal.querySelector('.profile-major').textContent  = currentUser.Major;
-      modal.querySelector('.close-profile-modal')
-           .addEventListener('click', () => modal.remove());
-
-      document.body.append(modal);
-    }
-
-    // Sidebar toggle
-    document.getElementById('toggleBtn').addEventListener('click', () => {
-      const sb       = document.getElementById('sidebar');
-      const mn       = document.getElementById('main');
-      const isMobile = window.innerWidth < 768;
-      if (isMobile) {
-        const hidden = sb.classList.contains('-translate-x-full');
-        sb.classList.toggle('translate-x-0', hidden);
-        sb.classList.toggle('-translate-x-full', !hidden);
-      } else {
-        const lbl = document.getElementById('darkToggleLabel');
-        const txt = document.getElementById('darkToggleText');
-        if (sb.classList.contains('w-48')) {
-          sb.classList.replace('w-48','w-16');
-          mn.classList.replace('md:ml-48','md:ml-16');
-          document.querySelectorAll('#sidebar span').forEach(s => s.classList.add('hidden'));
-          lbl.classList.add('hidden'); txt.classList.add('hidden');
-        } else {
-          sb.classList.replace('w-16','w-48');
-          mn.classList.replace('md:ml-16','md:ml-48');
-          document.querySelectorAll('#sidebar span').forEach(s => s.classList.remove('hidden'));
-          lbl.classList.remove('hidden'); txt.classList.remove('hidden');
-        }
-      }
-    });
-
-    // Dark mode toggle
-    document.getElementById('darkToggle').addEventListener('change', e => {
-      const htmlEl = document.documentElement;
-      const di     = document.getElementById('darkIcon');
-      if (e.target.checked) {
-        htmlEl.classList.add('dark');
-        di.classList.replace('fa-moon','fa-sun');
-        localStorage.setItem('theme','dark');
-      } else {
-        htmlEl.classList.remove('dark');
-        di.classList.replace('fa-sun','fa-moon');
-        localStorage.setItem('theme','light');
-      }
-    });
-    document.getElementById('darkIcon').addEventListener('click', () => {
-      const inp = document.getElementById('darkToggle');
-      inp.checked = !inp.checked;
-      inp.dispatchEvent(new Event('change'));
-    });
-
-    // Sign-in logic with loading animation
-    document.getElementById('signInBtn').addEventListener('click', () => {
-      const tpl = document.getElementById('signin-modal-template').content.cloneNode(true);
-      const m   = tpl.querySelector('.modal-overlay');
-      document.body.append(m);
-
-      const form    = m.querySelector('#signin-form');
-      const emailIn = m.querySelector('#signin-email');
-      const passIn  = m.querySelector('#signin-password');
-      const err     = m.querySelector('#signin-error');
-      const ok      = m.querySelector('#signin-success');
-      const submit  = m.querySelector('#signin-submit');
-      const loader  = m.querySelector('#signin-loading');
-
-      m.querySelector('#close-signin').onclick = () => m.remove();
-      m.addEventListener('click', e => e.target === m && m.remove());
-
-      form.addEventListener('submit', e => {
-        e.preventDefault();
-        err.classList.add('hidden');
-        ok.classList.add('hidden');
-        submit.disabled = true;
-        loader.classList.remove('hidden');
-
-        fetch(AUTH_API)
-          .then(r => r.json())
-          .then(users => {
-            const u = users.find(u =>
-              u.Email === emailIn.value.trim() && u.Password === passIn.value
-            );
-            if (!u) {
-              err.classList.remove('hidden');
-              return;
-            }
-            ok.classList.remove('hidden');
-            setTimeout(() => {
-              m.remove();
-              initAuth(u);
-            }, 500);
-          })
-          .catch(() => {
-            err.textContent = 'Network error';
-            err.classList.remove('hidden');
-          })
-          .finally(() => {
-            submit.disabled = false;
-            loader.classList.add('hidden');
-          });
-      });
-    });
-
-    // Logout confirmation
+    // ─────── Show a “confirm logout” modal ───────
     function showLogoutConfirmation() {
-      const tpl   = document.getElementById('logout-confirmation-template').content.cloneNode(true);
-      const modal = tpl.querySelector('.modal-overlay');
+      const tpl = document.createElement('template');
+      tpl.innerHTML = `
+      <div class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-80">
+          <h3 class="text-lg font-semibold mb-4">Confirm Logout</h3>
+          <p class="text-sm text-gray-700 dark:text-gray-300">Are you sure you want to log out?</p>
+          <div class="mt-6 flex justify-end space-x-2">
+            <button id="logout-confirm-cancel" class="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200">Cancel</button>
+            <button id="logout-confirm-yes" class="px-4 py-2 rounded bg-red-600 hover:bg-red-700 text-white">Log Out</button>
+          </div>
+        </div>
+      </div>`;
+      const modal = tpl.content.cloneNode(true);
       document.body.append(modal);
 
-      modal.querySelector('#logout-confirm-cancel').addEventListener('click', () => modal.remove());
-      modal.querySelector('#logout-confirm-yes').addEventListener('click', () => {
+      document.getElementById('logout-confirm-cancel')?.addEventListener('click', () => modal.children[0].remove());
+      document.getElementById('logout-confirm-yes')?.addEventListener('click', () => {
         localStorage.removeItem('currentUser');
         location.reload();
       });
     }
-
-    // Details modal with deep-link & share
-    function showDetails(item, slug) {
-      const tpl   = document.getElementById('details-modal-template').content.cloneNode(true);
-      const modal = tpl.querySelector('.modal-overlay');
-      modal.querySelector('.details-logo').src            = item["Logo URL"];
-      modal.querySelector('.details-title').textContent   = item["Project Title"];
-      modal.querySelector('.details-industry').textContent= item.Industry;
-      modal.querySelector('.details-tagline').textContent = item.Tagline;
-      modal.querySelector('.details-desc').textContent    = item.Description;
-      modal.querySelector('.details-school').textContent  = item["College or University Name"];
-      modal.querySelector('.details-members').textContent = item["Number of participants"];
-      const bt = modal.querySelector('.details-businesstype');
-      if (item["Business Type"]) bt.textContent=item["Business Type"]; else bt.remove();
-      const ds = modal.querySelector('.details-stage');
-      if (item.Stage) ds.textContent=item.Stage; else ds.remove();
-
-      // Socials menu
-      const socialMap = {
-        website:'Website', instagram:'Instagram', linkedin:'LinkedIn',
-        youtube:'YouTube', tiktok:'TikTok', github:'GitHub',
-        discord:'Discord', groupme:'GroupMe', twitter:'Twitter',
-        linktree:'LinkTree'
-      };
-      const menu = modal.querySelector('#socials-menu');
-      let count = 0;
-      Object.values(socialMap).forEach(label => {
-        const url = item[label];
-        if (url) {
-          const a = document.createElement('a');
-          a.className='block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-sm';
-          a.href=url; a.target='_blank'; a.textContent=label;
-          menu.append(a); count++;
-        }
-      });
-      if (!count) modal.querySelector('#socials-container').style.display='none';
-
-      const jb = modal.querySelector('#modal-join-btn');
-      if (!item["Join Form"]) jb.classList.add('bg-gray-400','cursor-not-allowed');
-
-      const cb = modal.querySelector('#contact-info-btn');
-      if (item["Project Contact Email"]||item["Contact Form"]) {
-        cb.addEventListener('click', e=>{ e.stopPropagation(); showContact(item); });
-      } else {
-        cb.classList.add('opacity-50','cursor-not-allowed');
-      }
-
-      // Hover for socials dropdown
-      [modal.querySelector('#socials-btn'), menu].forEach(el=>{  
-        el.addEventListener('mouseenter', ()=>{  
-          clearTimeout(window.__to);  
-          menu.classList.remove('invisible','opacity-0');  
-        });  
-        el.addEventListener('mouseleave', ()=>{  
-          window.__to = setTimeout(()=>{  
-            menu.classList.add('invisible','opacity-0');  
-          }, 300);  
-        });  
-      });
-
-      // Deep-link update
-      updateHistory(slug);
-
-      // Share button logic
-      modal.querySelector('#share-btn').addEventListener('click', () => {
-        const shareTpl = document.getElementById('share-modal-template').content.cloneNode(true);
-        const shareModal = shareTpl.querySelector('.modal-overlay');
-
-        // Copy link
-        shareModal.querySelector('[data-share="copy"]').addEventListener('click', () => {
-          navigator.clipboard.writeText(location.href);
-        });
-        // QR code
-        shareModal.querySelector('[data-share="qr"]').addEventListener('click', () => {
-          shareModal.remove();
-          showQrModal(location.href);
-        });
-
-        // Other platforms
-        const shareUrls = {
-          linkedin: `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(location.href)}`,
-          twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(location.href)}`,
-          whatsapp: `https://api.whatsapp.com/send?text=${encodeURIComponent(location.href)}`,
-          reddit: `https://www.reddit.com/submit?url=${encodeURIComponent(location.href)}`,
-          email: `mailto:?body=${encodeURIComponent(location.href)}`,
-          pinterest: `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(location.href)}`,
-          telegram: `https://t.me/share/url?url=${encodeURIComponent(location.href)}`,
-          tumblr: `https://www.tumblr.com/widgets/share/tool?canonicalUrl=${encodeURIComponent(location.href)}`,
-          groupme: `https://web.groupme.com/share?link=${encodeURIComponent(location.href)}`
-        };
-        Object.entries(shareUrls).forEach(([key, url]) => {
-          const el = shareModal.querySelector(`[data-share="${key}"]`);
-          if (el) el.addEventListener('click', () => window.open(url,'_blank'));
-        });
-
-        shareModal.querySelector('.close-share-modal').addEventListener('click', () => {
-          shareModal.remove();
-        });
-        document.body.append(shareModal);
-      });
-
-      // Close details modal
-      document.body.append(modal);
-      modal.querySelector('.close-modal').onclick = () => modal.remove();
-
-      // Tabs
-      const nav=modal.querySelector('#tab-nav'), ul=modal.querySelector('#tab-underline');
-      nav.querySelectorAll('.tab-button').forEach(btn=>{  
-        btn.addEventListener('click', ()=>{
-          nav.querySelectorAll('.tab-button').forEach(b=>b.classList.replace('text-blue-600','text-gray-500'));
-          btn.classList.replace('text-gray-500','text-blue-600');
-          ul.style.width=btn.offsetWidth+'px'; ul.style.left=btn.offsetLeft+'px';
-          modal.querySelectorAll('.tab-content').forEach(c=>c.classList.add('hidden'));
-          modal.querySelector('#'+btn.dataset.tab).classList.remove('hidden');
-        });
-      });
-      nav.querySelector('.tab-button').click();
-    }
-
-    // Contact modal
-    function showContact(item) {
-      const tpl = document.getElementById('contact-modal-template').content.cloneNode(true);
-      const cm  = tpl.querySelector('.modal-overlay');
-      const em  = cm.querySelector('.contact-email');
-      const fm  = cm.querySelector('.contact-form');
-      if (item["Project Contact Email"]) {
-        em.href=`mailto:${item["Project Contact Email"]}`; em.textContent=item["Project Contact Email"];
-      }
-      if (item["Contact Form"]) {
-        fm.href=item["Contact Form"]; fm.textContent='Open Form';
-      }
-      document.body.append(cm);
-      cm.querySelector('.close-contact-modal').onclick = () => cm.remove();
-    }
-
-    // Profile link click
-    document.addEventListener('click', e => {
-      if (e.target.matches('[data-key="Profile"]')) {
-        e.preventDefault();
-        showProfileModal();
-      }
-    });
   </script>
+
+  <!-- ========== PROFILE-DROPDOWN TEMPLATE ========== -->
+  <template id="profile-dropdown-template">
+    <div id="profileDropdown" class="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow-lg py-2 z-50 hidden">
+      <a data-key="Profile" href="#" class="block px-4 py-2 text-sm flex items-center hover:bg-gray-100 dark:hover:bg-gray-700">
+        <i class="fas fa-user mr-2"></i>Profile
+      </a>
+      <a data-key="Settings" href="#" class="block px-4 py-2 text-sm flex items-center hover:bg-gray-100 dark:hover:bg-gray-700">
+        <i class="fas fa-cog mr-2"></i>Settings
+      </a>
+      <a data-key="My Activities" href="#" class="block px-4 py-2 text-sm flex items-center hover:bg-gray-100 dark:hover:bg-gray-700">
+        <i class="fas fa-list mr-2"></i>My Activities
+      </a>
+      <a id="logoutBtn" href="#" class="block px-4 py-2 text-sm flex items-center hover:bg-gray-100 dark:hover:bg-gray-700">
+        <i class="fas fa-sign-out-alt mr-2"></i>Logout
+      </a>
+    </div>
+  </template>
 </body>
 </html>
