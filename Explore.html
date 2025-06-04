@@ -40,14 +40,25 @@
         type="text"
         placeholder="Search..."
         class="w-full pl-10 pr-3 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-100"
+        autocomplete="off"
       />
       <div id="search-autocomplete" class="absolute mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md shadow-lg hidden z-50">
-        <ul>
-          <li class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">Search Clubs</li>
-          <li class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">Search Businesses</li>
-          <li class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">Search Projects</li>
-          <li class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">Search People</li>
-          <li class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">Search Events</li>
+        <ul id="autocomplete-list">
+          <li data-page="Clubs" class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
+            <a href="#" class="block">Search Clubs</a>
+          </li>
+          <li data-page="Businesses" class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
+            <a href="#" class="block">Search Businesses</a>
+          </li>
+          <li data-page="Projects" class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
+            <a href="#" class="block">Search Projects</a>
+          </li>
+          <li data-page="People" class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
+            <a href="#" class="block">Search People</a>
+          </li>
+          <li data-page="Events" class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
+            <a href="#" class="block">Search Events</a>
+          </li>
         </ul>
       </div>
     </div>
@@ -71,27 +82,27 @@
           </li>
           <li><hr class="border-gray-300 dark:border-gray-600 my-2"></li>
           <li>
-            <a data-key="Clubs" href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
+            <a data-key="Clubs" href="Clubs.html" class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
               <i class="fas fa-users w-6"></i><span>Clubs</span>
             </a>
           </li>
           <li>
-            <a data-key="Businesses" href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
+            <a data-key="Businesses" href="Businesses.html" class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
               <i class="fas fa-briefcase w-6"></i><span>Businesses</span>
             </a>
           </li>
           <li>
-            <a data-key="Projects" href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
+            <a data-key="Projects" href="Projects.html" class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
               <i class="fas fa-project-diagram w-6"></i><span>Projects</span>
             </a>
           </li>
           <li>
-            <a data-key="People" href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
+            <a data-key="People" href="People.html" class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
               <i class="fas fa-user-friends w-6"></i><span>People</span>
             </a>
           </li>
           <li>
-            <a data-key="Events" href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
+            <a data-key="Events" href="Events.html" class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
               <i class="fas fa-calendar-alt w-6"></i><span>Events</span>
             </a>
           </li>
@@ -417,13 +428,15 @@
     </div>
   </div>
 
-  <!-- JAVASCRIPT (unchanged) -->
+  <!-- JAVASCRIPT -->
   <script>
     const LINK_API = 'https://sheet2api.com/v1/rhBSJNTTYKgC/hyperlinks';
     const API      = 'https://sheet2api.com/v1/an4oVvpQR51V/mock-data-new';
     const AUTH_API = 'https://sheet2api.com/v1/rkmbUqHQAC3C/submission-form-responses';
     let linkMap   = {};
     let itemMap   = {};
+    // Autocomplete state
+    let currentFocus = -1;
 
     function generateSlug(text) {
       return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
@@ -459,7 +472,7 @@
         const sec = document.getElementById('section-template').content.cloneNode(true);
         sec.querySelector('h2').textContent = heading;
         const seeAllLink = sec.querySelector('.see-all-link');
-        seeAllLink.href = linkMap[heading] || '#';
+        seeAllLink.href = linkMap[heading] || `${heading}.html`;
         const grid = sec.querySelector('div.grid');
         const filtered = Object.values(itemMap).filter(i => i["Project Type"] === ptype);
         filtered.slice(0,6).forEach(item => {
@@ -935,20 +948,84 @@
         });
       }
 
+      // AUTOCOMPLETE LOGIC
       const searchInput = document.getElementById('navbar-search');
       const autocomplete = document.getElementById('search-autocomplete');
-      if (searchInput && autocomplete) {
-        searchInput.addEventListener('input', () => {
-          if (searchInput.value.trim().length > 0) autocomplete.classList.remove('hidden');
-          else autocomplete.classList.add('hidden');
-        });
-        searchInput.addEventListener('focus', () => {
-          if (searchInput.value.trim().length > 0) autocomplete.classList.remove('hidden');
-        });
-        searchInput.addEventListener('blur', () => {
-          setTimeout(() => autocomplete.classList.add('hidden'), 150);
+      const listEl = document.getElementById('autocomplete-list');
+      const items = Array.from(listEl.querySelectorAll('li'));
+
+      function closeAllLists() {
+        items.forEach(li => li.classList.remove('bg-gray-100','dark:bg-gray-700'));
+        autocomplete.classList.add('hidden');
+        currentFocus = -1;
+      }
+
+      function updateLinks() {
+        const query = encodeURIComponent(searchInput.value.trim());
+        items.forEach(li => {
+          const page = li.getAttribute('data-page');
+          const a = li.querySelector('a');
+          const base = `${page}.html`;
+          a.href = query ? `${base}?q=${query}` : base;
         });
       }
+
+      searchInput.addEventListener('input', () => {
+        updateLinks();
+        if (searchInput.value.trim().length > 0) {
+          autocomplete.classList.remove('hidden');
+        } else {
+          closeAllLists();
+        }
+      });
+
+      searchInput.addEventListener('keydown', e => {
+        if (autocomplete.classList.contains('hidden')) return;
+        const visibleItems = items.filter(li => !li.classList.contains('hidden'));
+        if (e.key === 'ArrowDown') {
+          currentFocus++;
+          if (currentFocus >= visibleItems.length) currentFocus = 0;
+          visibleItems.forEach(li => li.classList.remove('bg-blue-100','dark:bg-blue-700','text-white'));
+          visibleItems[currentFocus].classList.add('bg-blue-100','dark:bg-blue-700','text-white');
+          e.preventDefault();
+        } else if (e.key === 'ArrowUp') {
+          currentFocus--;
+          if (currentFocus < 0) currentFocus = visibleItems.length - 1;
+          visibleItems.forEach(li => li.classList.remove('bg-blue-100','dark:bg-blue-700','text-white'));
+          visibleItems[currentFocus].classList.add('bg-blue-100','dark:bg-blue-700','text-white');
+          e.preventDefault();
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          if (currentFocus > -1) {
+            const a = visibleItems[currentFocus].querySelector('a');
+            if (a) window.location.href = a.href;
+          } else {
+            // If no selection, navigate to first item
+            const a = items[0].querySelector('a');
+            if (a) window.location.href = a.href;
+          }
+          closeAllLists();
+        }
+      });
+
+      items.forEach(li => {
+        li.addEventListener('click', () => {
+          const a = li.querySelector('a');
+          if (a) window.location.href = a.href;
+        });
+      });
+
+      document.addEventListener('click', e => {
+        if (e.target !== searchInput) {
+          closeAllLists();
+        }
+      });
+
+      // When input is blurred, close after short delay to allow click
+      searchInput.addEventListener('blur', () => {
+        setTimeout(closeAllLists, 150);
+      });
+
     });
 
     window.addEventListener('popstate', () => {
