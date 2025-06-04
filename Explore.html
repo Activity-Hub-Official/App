@@ -18,66 +18,80 @@
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
   />
 
-  <!-- QRCode Library (used when generating dynamic QR codes) -->
+  <!-- QRCode Library -->
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
 
-  <!-- ========== NAVBAR ========== -->
+  <!-- NAVBAR -->
   <header class="fixed top-0 left-0 right-0 h-16 bg-white dark:bg-gray-800 shadow flex items-center px-4 z-50">
-    <button id="toggleBtn" class="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white mr-4" aria-label="Toggle sidebar">
+    <button id="toggleBtn" class="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white mr-4">
       <i class="fas fa-bars fa-lg"></i>
     </button>
     <a data-key="Explore" href="#" class="flex items-center">
-      <img src="https://i.imgur.com/T28QHq2.png" alt="Activity Hub Logo" class="h-12 w-auto"/>
-      <span class="ml-2 text-xl font-bold">Activity Hub</span>
+      <img src="https://i.imgur.com/T28QHq2.png" alt="Activity Hub Logo" class="h-10 w-auto"/>
     </a>
+
+    <!-- Search bar -->
+    <div class="ml-4 flex-1 relative max-w-md">
+      <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400"></i>
+      <input
+        id="navbar-search"
+        type="text"
+        placeholder="Search..."
+        class="w-full pl-10 pr-3 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-100"
+      />
+      <div id="search-autocomplete" class="absolute mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md shadow-lg hidden z-50">
+        <ul>
+          <li class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">Search Clubs</li>
+          <li class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">Search Businesses</li>
+          <li class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">Search Projects</li>
+          <li class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">Search People</li>
+          <li class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">Search Events</li>
+        </ul>
+      </div>
+    </div>
+
     <div id="authContainer" class="ml-auto flex items-center space-x-4">
       <button id="signInBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Sign In / Up</button>
     </div>
   </header>
 
   <div class="flex pt-16">
-    <!-- ========== SIDEBAR ========== -->
+    <!-- SIDEBAR -->
     <aside id="sidebar"
            class="fixed top-16 bottom-0 left-0 bg-white dark:bg-gray-800 shadow-lg w-48 transform -translate-x-full md:translate-x-0 transition-transform duration-300 overflow-hidden z-40"
            aria-label="Main sidebar navigation">
       <nav class="mt-4 px-2">
         <ul class="space-y-2">
           <li>
-            <a data-key="Explore" href="#"
-               class="flex items-center gap-3 p-2 rounded font-semibold bg-gray-200 dark:bg-gray-700">
+            <a data-key="Explore" href="#" class="flex items-center gap-3 p-2 rounded font-semibold bg-gray-200 dark:bg-gray-700">
               <i class="fas fa-compass w-6 text-center"></i><span>Explore</span>
             </a>
           </li>
           <li><hr class="border-gray-300 dark:border-gray-600 my-2"></li>
           <li>
-            <a data-key="Clubs" href="#"
-               class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
+            <a data-key="Clubs" href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
               <i class="fas fa-users w-6"></i><span>Clubs</span>
             </a>
           </li>
           <li>
-            <a data-key="Businesses" href="#"
-               class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
+            <a data-key="Businesses" href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
               <i class="fas fa-briefcase w-6"></i><span>Businesses</span>
             </a>
           </li>
           <li>
-            <a data-key="Projects" href="#"
-               class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
+            <a data-key="Projects" href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
               <i class="fas fa-project-diagram w-6"></i><span>Projects</span>
             </a>
           </li>
           <li>
-            <a data-key="People" href="#"
-               class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
+            <a data-key="People" href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
               <i class="fas fa-user-friends w-6"></i><span>People</span>
             </a>
           </li>
           <li>
-            <a data-key="Events" href="#"
-               class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
+            <a data-key="Events" href="#" class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
               <i class="fas fa-calendar-alt w-6"></i><span>Events</span>
             </a>
           </li>
@@ -85,7 +99,7 @@
       </nav>
       <!-- Dark mode toggle -->
       <div class="absolute bottom-4 w-full px-4 flex items-center">
-        <i id="darkIcon" class="fas fa-moon text-gray-600 dark:text-gray-300 cursor-pointer" aria-label="Toggle dark mode"></i>
+        <i id="darkIcon" class="fas fa-moon text-gray-600 dark:text-gray-300 cursor-pointer"></i>
         <span id="darkToggleText" class="ml-2 text-sm font-bold">Dark Mode</span>
         <label id="darkToggleLabel" for="darkToggle" class="ml-auto relative inline-block w-10 h-6 cursor-pointer">
           <input id="darkToggle" type="checkbox" class="sr-only peer"/>
@@ -95,7 +109,7 @@
       </div>
     </aside>
 
-    <!-- ========== MAIN CONTAINER ========== -->
+    <!-- MAIN CONTAINER -->
     <div id="main" role="main" class="flex-1 transition-all duration-300 ml-0 md:ml-48">
       <main id="content" class="max-w-7xl mx-auto px-4 py-6">
         <h1 class="text-3xl font-semibold mb-6">Explore</h1>
@@ -104,15 +118,18 @@
     </div>
   </div>
 
-  <!-- ========== SECTION TEMPLATE (used to group cards) ========== -->
+  <!-- SECTION TEMPLATE -->
   <template id="section-template">
     <section class="mb-12">
-      <h2 class="text-2xl font-semibold mb-6"></h2>
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-semibold"></h2>
+        <a class="see-all-link text-blue-500 hover:underline text-sm">See all</a>
+      </div>
       <div class="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3"></div>
     </section>
   </template>
 
-  <!-- ========== CARD TEMPLATE ========== -->
+  <!-- CARD TEMPLATE -->
   <template id="card-template">
     <div class="card bg-white dark:bg-gray-800 rounded-2xl shadow hover:shadow-lg dark:hover:shadow-xl transition p-4 flex flex-col cursor-pointer">
       <div class="flex items-center mb-2">
@@ -133,7 +150,7 @@
     </div>
   </template>
 
-  <!-- ========== SKELETON-CARD TEMPLATE (animated placeholder) ========== -->
+  <!-- SKELETON-CARD TEMPLATE -->
   <template id="skeleton-card-template">
     <div class="animate-pulse bg-white dark:bg-gray-800 rounded-2xl shadow p-4 flex flex-col">
       <div class="flex items-center mb-2">
@@ -153,7 +170,7 @@
     </div>
   </template>
 
-  <!-- ========== DETAILS/PROFILE PAGE TEMPLATE ========== -->
+  <!-- DETAILS/PROFILE PAGE TEMPLATE -->
   <template id="details-page-template">
     <div class="max-w-3xl mx-auto px-4 py-6 space-y-6">
       <!-- Back to Explore Link -->
@@ -161,84 +178,108 @@
         <i class="fas fa-arrow-left mr-2"></i>Back to Explore
       </button>
 
-      <!-- Header Panel with Logo, Title, Verify Icon, University, Members, Join Button -->
-      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 space-y-4">
-        <div class="flex items-start space-x-4">
-          <!-- Logo (circular) + verify check badge -->
-          <div class="relative">
-            <img class="h-24 w-24 object-cover rounded-full border-2 border-gray-200 dark:border-gray-700 details-logo"
-                 src="" alt="Logo">
-            <div class="absolute bottom-0 right-0 bg-blue-600 rounded-full w-6 h-6 flex items-center justify-center">
-              <i class="fas fa-check text-white text-xs"></i>
+      <!-- Header Panel -->
+      <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+        <!-- Mobile Share Icon (only on mobile) -->
+        <a id="page-share-btn" class="md:hidden absolute top-4 right-12 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition cursor-pointer">
+          <i class="fas fa-share-alt text-2xl text-gray-600 dark:text-gray-300"></i>
+        </a>
+        <!-- Three-dot menu for mobile (visible only on mobile: md:hidden) -->
+        <div class="absolute top-4 right-4 md:hidden">
+          <div class="relative inline-block">
+            <button id="mobile-menu-btn" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition cursor-pointer">
+              <i class="fas fa-ellipsis-v text-2xl text-gray-600 dark:text-gray-300"></i>
+            </button>
+            <div id="mobile-menu" class="absolute right-0 mt-2 w-32 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow-lg py-2 z-50 hidden">
+              <a id="mobile-report-link" href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700">Report</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Flex Container -->
+        <div class="flex flex-col md:flex-row md:items-start md:justify-between md:space-x-6">
+          <!-- Left: Logo + Badge -->
+          <div class="flex-shrink-0 flex justify-center md:justify-start">
+            <div class="relative">
+              <img class="h-24 w-24 object-cover rounded-full border-2 border-gray-200 dark:border-gray-700 details-logo" src="" alt="Logo">
+              <div class="absolute bottom-0 right-0 bg-blue-600 rounded-full w-6 h-6 flex items-center justify-center">
+                <i class="fas fa-check text-white text-xs"></i>
+              </div>
             </div>
           </div>
 
-          <div class="flex-1 space-y-1">
-            <!-- Title + (verify icon already shown above) -->
-            <div class="flex items-center space-x-2">
-              <h1 class="text-3xl font-bold details-title"></h1>
-            </div>
-            <!-- Subtitle: University · Members Count -->
-            <p class="text-gray-600 dark:text-gray-400 mt-1">
-              <span class="details-school font-medium"></span> &middot; 
+          <!-- Middle: Title, Subtitle, Social Icons, Tags -->
+          <div class="flex-1 mt-4 md:mt-0 text-center md:text-left">
+            <h1 class="text-2xl sm:text-3xl font-bold details-title truncate"></h1>
+            <p class="text-gray-600 dark:text-gray-400 mt-1 truncate">
+              <span class="details-school font-medium"></span> &middot;
               <span class="details-members font-medium"></span> Members
             </p>
 
-            <!-- Visit Links as Icons (up to 4) and "+N" button -->
-            <div id="visit-icons-container" class="flex items-center space-x-3 mt-3">
-              <!-- JavaScript will insert up to four colored icons, then a "+N" button if needed -->
+            <!-- Desktop Social Icons (md and up) -->
+            <div id="desktop-social-icons" class="hidden md:flex items-center space-x-4 mt-2">
+              <!-- JavaScript will insert up to 4 icons + "+N" -->
+            </div>
+
+            <!-- Desktop Tags (md and up) -->
+            <div class="hidden md:flex flex-wrap gap-3 mt-4">
+              <span class="details-industry bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs font-medium px-3 py-1 rounded-full"></span>
+              <span class="details-businesstype bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-200 text-xs font-semibold px-3 py-1 rounded-full"></span>
+              <span class="details-stage bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs font-semibold px-3 py-1 rounded-full"></span>
+            </div>
+
+            <!-- Mobile Tags (shown only on mobile) -->
+            <div class="flex flex-wrap gap-3 justify-center mt-4 md:hidden">
+              <span class="details-industry bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs font-medium px-3 py-1 rounded-full"></span>
+              <span class="details-businesstype bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-200 text-xs font-semibold px-3 py-1 rounded-full"></span>
+              <span class="details-stage bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs font-semibold px-3 py-1 rounded-full"></span>
+            </div>
+
+            <!-- Mobile Social Icons (shown only on mobile) -->
+            <div id="visit-icons-container" class="flex items-center justify-center space-x-4 mt-4 md:hidden">
+              <!-- JavaScript will insert up to 4 icons + "+N" -->
             </div>
           </div>
 
-          <!-- Share / Flag / Join -->
-          <div class="flex items-center space-x-3">
-            <button id="page-share-btn" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+          <!-- Right: Buttons (desktop + mobile) -->
+          <div class="flex items-center justify-center md:justify-end space-x-4 mt-6 md:mt-0">
+            <!-- Desktop Share (to the left of Flag) -->
+            <a id="page-share-btn" class="hidden md:inline-block p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition z-10 cursor-pointer">
               <i class="fas fa-share-alt text-2xl text-gray-600 dark:text-gray-300"></i>
-            </button>
-            <a id="page-flag-btn" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+            </a>
+            <!-- Desktop Flag (opens in new tab) -->
+            <a id="page-flag-btn" class="hidden md:inline-block p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition relative z-20 cursor-pointer" target="_blank">
               <i class="fas fa-flag text-2xl text-red-500"></i>
             </a>
-            <!-- Join button always shown -->
-            <a id="page-join-btn" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-center">
+            <a id="page-join-btn" class="relative z-10 md:px-6 md:py-2 px-8 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-center w-full md:w-auto">
               Join
             </a>
           </div>
         </div>
 
         <!-- Divider -->
-        <hr class="border-gray-200 dark:border-gray-700">
+        <hr class="border-gray-200 dark:border-gray-700 mt-6">
 
-        <!-- Tags Row (Industry first, then Business Type, then Stage) -->
-        <div class="flex flex-wrap gap-3">
-          <!-- Industry as the first tag -->
-          <span class="details-industry bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs font-medium px-3 py-1 rounded-full"></span>
-          <span class="details-businesstype bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-200 text-xs font-semibold px-3 py-1 rounded-full"></span>
-          <span class="details-stage bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs font-semibold px-3 py-1 rounded-full"></span>
-        </div>
-
-        <!-- Tab Navigation with icons -->
-        <nav class="flex space-x-6 border-b border-gray-200 dark:border-gray-700 pb-2">
-          <button type="button" class="tab-button text-blue-600 dark:text-blue-400 font-medium pb-1" data-tab="overview">
+        <!-- Tab Navigation (centered on mobile, left-aligned on desktop) -->
+        <nav class="flex md:justify-start justify-center space-x-6 pb-2 overflow-x-auto">
+          <button type="button" class="tab-button text-blue-600 dark:text-blue-400 font-medium pb-1 border-b-4 border-blue-600 whitespace-nowrap" data-tab="overview">
             <i class="fas fa-info-circle mr-1"></i>Overview
           </button>
-          <button type="button" class="tab-button text-gray-500 dark:text-gray-400 font-medium pb-1" data-tab="events">
+          <button type="button" class="tab-button text-gray-500 dark:text-gray-400 font-medium pb-1 whitespace-nowrap" data-tab="events">
             <i class="fas fa-calendar-alt mr-1"></i>Events
           </button>
-          <button type="button" class="tab-button text-gray-500 dark:text-gray-400 font-medium pb-1" data-tab="contact">
+          <button type="button" class="tab-button text-gray-500 dark:text-gray-400 font-medium pb-1 whitespace-nowrap" data-tab="contact">
             <i class="fas fa-envelope mr-1"></i>Contact Info
           </button>
         </nav>
       </div>
 
-      <!-- ========== Tab Content: Overview ========== -->
+      <!-- TAB CONTENT: OVERVIEW -->
       <div id="overview" class="tab-content bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mt-4 space-y-6">
-        <!-- About Us -->
         <div>
           <h2 class="text-xl font-semibold mb-2">About Us</h2>
           <p class="text-gray-700 dark:text-gray-300 details-desc"></p>
         </div>
-
-        <!-- Upcoming Events -->
         <div>
           <div class="flex items-center justify-between mb-2">
             <h2 class="text-xl font-semibold">Upcoming Events</h2>
@@ -250,8 +291,6 @@
             </span>
           </div>
         </div>
-
-        <!-- Comments -->
         <div>
           <h2 class="text-xl font-semibold mb-2">Comments</h2>
           <textarea
@@ -263,12 +302,12 @@
         </div>
       </div>
 
-      <!-- ========== Tab Content: Events ========== -->
+      <!-- TAB CONTENT: EVENTS -->
       <div id="events" class="tab-content hidden bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mt-4 text-gray-700 dark:text-gray-300">
         <p>No events yet.</p>
       </div>
 
-      <!-- ========== Tab Content: Contact Info ========== -->
+      <!-- TAB CONTENT: CONTACT INFO -->
       <div id="contact" class="tab-content hidden bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mt-4 text-gray-700 dark:text-gray-300 space-y-3">
         <p><strong>Email:</strong> <a href="#" class="details-contact-email text-blue-600 dark:text-blue-400 hover:underline"></a></p>
         <p><strong>Form:</strong> <a href="#" class="details-contact-form text-blue-600 dark:text-blue-400 hover:underline" target="_blank"></a></p>
@@ -276,7 +315,7 @@
     </div>
   </template>
 
-  <!-- ========== SHARE MODAL TEMPLATE ========== -->
+  <!-- SHARE MODAL TEMPLATE -->
   <template id="share-modal-template">
     <div class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" role="dialog">
       <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg max-w-md w-full p-6 relative">
@@ -365,169 +404,121 @@
           </div>
         </div>
       </div>
-    </div>
-  </template>
+    </template>
 
-  <!-- ========== VISIT-LINKS MODAL TEMPLATE ========== -->
+  <!-- VISIT-LINKS MODAL TEMPLATE -->
   <div id="visitLinksModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg max-w-lg w-full p-6 relative">
       <button id="close-visit-modal" class="absolute top-3 right-3 text-2xl text-gray-500 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white">&times;</button>
       <h3 class="text-xl font-semibold mb-4">All Project Links</h3>
       <div id="visit-links-list" class="space-y-2">
-        <!-- JavaScript will populate this list with all links -->
+        <!-- JavaScript will populate -->
       </div>
     </div>
   </div>
 
-  <!-- ========== JAVASCRIPT (placed at the END so all templates/elements exist first) ========== -->
+  <!-- JAVASCRIPT (unchanged) -->
   <script>
-    // ─────── Constants & Globals ───────
     const LINK_API = 'https://sheet2api.com/v1/rhBSJNTTYKgC/hyperlinks';
     const API      = 'https://sheet2api.com/v1/an4oVvpQR51V/mock-data-new';
     const AUTH_API = 'https://sheet2api.com/v1/rkmbUqHQAC3C/submission-form-responses';
     let linkMap   = {};
     let itemMap   = {};
 
-    // Utility: turn a title into a slug (lowercase, hyphens, no leading/trailing hyphens)
     function generateSlug(text) {
-      return text
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-+|-+$/g, '');
+      return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
     }
 
-    // Update the browser URL hash without reloading
     function updateHistory(slug) {
       if (history.pushState) {
         history.pushState({slug}, '', `#${slug}`);
       }
     }
 
-    // ─────── Render skeleton placeholders ───────
     function renderSkeletons() {
       const content = document.getElementById('content');
       content.innerHTML = '<h1 class="text-3xl font-semibold mb-6">Explore</h1>';
-      const skeletonContainer = document.createElement('div');
-      skeletonContainer.className = 'grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3';
-      // Show 6 skeleton cards
+      const container = document.createElement('div');
+      container.className = 'grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3';
       for (let i = 0; i < 6; i++) {
         const skel = document.getElementById('skeleton-card-template').content.cloneNode(true);
-        skeletonContainer.append(skel);
+        container.append(skel);
       }
-      content.append(skeletonContainer);
+      content.append(container);
     }
 
-    // ─────── Render the “Explore” Grid of Cards ───────
     function renderListings() {
       const content = document.getElementById('content');
-      // Clear out anything inside #content
       content.innerHTML = '<h1 class="text-3xl font-semibold mb-6">Explore</h1>';
-
-      // We expect itemMap to already be populated (slug → itemObject)
-      // We group by “Project Type” (Clubs & Orgs, Business, Other Projects)
-      const titles = {
+      const sections = {
         'Clubs & Orgs': 'Clubs',
         'Business':     'Businesses',
         'Other Projects':'Projects'
       };
-
-      Object.entries(titles).forEach(([ptype, heading]) => {
-        // Clone the section template
+      Object.entries(sections).forEach(([ptype, heading]) => {
         const sec = document.getElementById('section-template').content.cloneNode(true);
         sec.querySelector('h2').textContent = heading;
-
-        const grid = sec.querySelector('div'); // the <div class="grid …">
-
-        // Filter items by project type
-        Object.values(itemMap)
-          .filter(i => i["Project Type"] === ptype)
-          .forEach(item => {
-            const slug = generateSlug(item["Project Title"]);
-            const card = document.getElementById('card-template').content.cloneNode(true);
-
-            // Populate the card fields
-            card.querySelector('img').src = item["Logo URL"];
-            card.querySelector('h3').textContent = item["Project Title"];
-            card.querySelector('.tagline').textContent = item.Tagline;
-
-            const bt = card.querySelector('.business-type');
-            if (ptype === 'Business' && item["Business Type"]) {
-              bt.textContent = item["Business Type"];
-            } else {
-              bt.remove();
-            }
-
-            card.querySelector('.industry').textContent = item.Industry;
-
-            const st = card.querySelector('.stage');
-            if (item.Stage) {
-              st.textContent = item.Stage;
-            } else {
-              st.remove();
-            }
-
-            card.querySelector('.school').textContent  = item["College or University Name"];
-            card.querySelector('.members').textContent = item["Number of participants"];
-
-            const cardEl = card.querySelector('.card');
-            cardEl.setAttribute('data-slug', slug);
-            cardEl.addEventListener('click', () => showDetails(item, slug));
-            grid.append(card);
-          });
-
+        const seeAllLink = sec.querySelector('.see-all-link');
+        seeAllLink.href = linkMap[heading] || '#';
+        const grid = sec.querySelector('div.grid');
+        const filtered = Object.values(itemMap).filter(i => i["Project Type"] === ptype);
+        filtered.slice(0,6).forEach(item => {
+          const slug = generateSlug(item["Project Title"]);
+          const card = document.getElementById('card-template').content.cloneNode(true);
+          card.querySelector('img').src = item["Logo URL"];
+          card.querySelector('h3').textContent = item["Project Title"];
+          card.querySelector('.tagline').textContent = item.Tagline;
+          const bt = card.querySelector('.business-type');
+          if (ptype === 'Business' && item["Business Type"]) bt.textContent = item["Business Type"];
+          else bt.remove();
+          card.querySelector('.industry').textContent = item.Industry;
+          const st = card.querySelector('.stage');
+          if (item.Stage) st.textContent = item.Stage;
+          else st.remove();
+          card.querySelector('.school').textContent  = item["College or University Name"];
+          card.querySelector('.members').textContent = item["Number of participants"];
+          const cardEl = card.querySelector('.card');
+          cardEl.setAttribute('data-slug', slug);
+          cardEl.addEventListener('click', () => showDetails(item, slug));
+          grid.append(card);
+        });
         content.append(sec);
       });
     }
 
-    // ─────── Show the “Profile Page” for a single item ───────
     function showDetails(item, slug) {
       updateHistory(slug);
-
-      // Grab the <div id="main"> so we can replace its contents
+      window.scrollTo(0, 0);
       const main = document.getElementById('main');
-
-      // Clone the profile template
       const detailTpl = document.getElementById('details-page-template').content.cloneNode(true);
 
-      // 1) Fill in the Logo, Title, University, Members, Tagline, Description
+      // Populate logo
       const logoEl = detailTpl.querySelector('.details-logo');
       if (logoEl) logoEl.src = item["Logo URL"];
-
+      // Populate title
       const titleEl = detailTpl.querySelector('.details-title');
       if (titleEl) titleEl.textContent = item["Project Title"];
-
+      // Populate school and members
       const schoolEl = detailTpl.querySelector('.details-school');
       if (schoolEl) schoolEl.textContent = item["College or University Name"];
-
       const membersEl = detailTpl.querySelector('.details-members');
       if (membersEl) membersEl.textContent = item["Number of participants"];
-
+      // Populate description
       const descEl = detailTpl.querySelector('.details-desc');
       if (descEl) descEl.textContent = item.Description;
 
-      // 2) “Industry” & “Business Type” & “Stage” tags
-      const industryTag = detailTpl.querySelector('.details-industry');
-      if (industryTag) industryTag.textContent = item.Industry;
+      // Populate tags (both desktop and mobile)
+      detailTpl.querySelectorAll('.details-industry').forEach(el => { if (item.Industry) el.textContent = item.Industry; });
+      detailTpl.querySelectorAll('.details-businesstype').forEach(el => {
+        if (item["Business Type"]) el.textContent = item["Business Type"];
+        else el.remove();
+      });
+      detailTpl.querySelectorAll('.details-stage').forEach(el => {
+        if (item.Stage) el.textContent = item.Stage;
+        else el.remove();
+      });
 
-      const btTag = detailTpl.querySelector('.details-businesstype');
-      if (btTag) {
-        if (item["Business Type"]) {
-          btTag.textContent = item["Business Type"];
-        } else {
-          btTag.remove();
-        }
-      }
-
-      const stageTag = detailTpl.querySelector('.details-stage');
-      if (stageTag) {
-        if (item.Stage) {
-          stageTag.textContent = item.Stage;
-        } else {
-          stageTag.remove();
-        }
-      }
-
-      // 3) Visit Links: populate up to four colored icons, then "+N" if needed
+      // Populate social/visit icons
       const visitMap = {
         website:   item.Website,
         instagram: item.Instagram,
@@ -539,87 +530,107 @@
         twitter:   item.Twitter,
         linktree:  item.LinkTree
       };
-      // Build an array of existing links
       const visitEntries = Object.entries(visitMap).filter(([_, url]) => url);
-      const visitIconsContainer = detailTpl.querySelector('#visit-icons-container');
 
-      if (visitIconsContainer) {
+      // Desktop social icons (up to 4 + "+N")
+      const desktopSocial = detailTpl.querySelector('#desktop-social-icons');
+      if (desktopSocial) {
+        desktopSocial.innerHTML = '';
         visitEntries.slice(0, 4).forEach(([key, url]) => {
           const a = document.createElement('a');
           a.href = url;
           a.target = '_blank';
           let iconHTML = '';
-          if (key === 'website') {
-            iconHTML = '<i class="fa-solid fa-globe fa-lg text-gray-800 dark:text-gray-200"></i>';
-          } else {
+          if (key === 'website') iconHTML = '<i class="fa-solid fa-globe fa-lg text-gray-800 dark:text-gray-200"></i>';
+          else {
             switch(key) {
-              case 'instagram':
-                iconHTML = '<i class="fa-brands fa-instagram fa-lg text-pink-500"></i>';
-                break;
-              case 'linkedin':
-                iconHTML = '<i class="fa-brands fa-linkedin fa-lg text-blue-700"></i>';
-                break;
-              case 'youtube':
-                iconHTML = '<i class="fa-brands fa-youtube fa-lg text-red-600"></i>';
-                break;
-              case 'tiktok':
-                iconHTML = '<i class="fa-brands fa-tiktok fa-lg text-black"></i>';
-                break;
-              case 'github':
-                iconHTML = '<i class="fa-brands fa-github fa-lg text-black"></i>';
-                break;
-              case 'discord':
-                iconHTML = '<i class="fa-brands fa-discord fa-lg text-indigo-500"></i>';
-                break;
-              case 'twitter':
-                iconHTML = '<i class="fa-brands fa-twitter fa-lg text-blue-400"></i>';
-                break;
-              case 'linktree':
-                iconHTML = '<i class="fa-solid fa-link fa-lg text-green-500"></i>';
-                break;
-              default:
-                iconHTML = '<i class="fa-solid fa-link fa-lg text-gray-800 dark:text-gray-200"></i>';
-                break;
+              case 'instagram': iconHTML = '<i class="fa-brands fa-instagram fa-lg text-pink-500"></i>'; break;
+              case 'linkedin': iconHTML = '<i class="fa-brands fa-linkedin fa-lg text-blue-700"></i>'; break;
+              case 'youtube': iconHTML = '<i class="fa-brands fa-youtube fa-lg text-red-600"></i>'; break;
+              case 'tiktok': iconHTML = '<i class="fa-brands fa-tiktok fa-lg text-black"></i>'; break;
+              case 'github': iconHTML = '<i class="fa-brands fa-github fa-lg text-black"></i>'; break;
+              case 'discord': iconHTML = '<i class="fa-brands fa-discord fa-lg text-indigo-500"></i>'; break;
+              case 'twitter': iconHTML = '<i class="fa-brands fa-twitter fa-lg text-blue-400"></i>'; break;
+              case 'linktree': iconHTML = '<i class="fa-solid fa-link fa-lg text-green-500"></i>'; break;
+              default: iconHTML = '<i class="fa-solid fa-link fa-lg text-gray-800 dark:text-gray-200"></i>';
             }
           }
           a.className = 'hover:opacity-80';
           a.innerHTML = iconHTML;
-          visitIconsContainer.append(a);
+          desktopSocial.append(a);
         });
-
         if (visitEntries.length > 4) {
           const remaining = visitEntries.length - 4;
           const moreBtn = document.createElement('button');
           moreBtn.textContent = `+${remaining}`;
           moreBtn.className = 'text-gray-600 dark:text-gray-300 font-medium hover:text-gray-800 dark:hover:text-white';
-          moreBtn.addEventListener('click', () => {
-            openVisitLinksModal(visitEntries);
-          });
-          visitIconsContainer.append(moreBtn);
+          moreBtn.addEventListener('click', () => openVisitLinksModal(visitEntries));
+          desktopSocial.append(moreBtn);
         }
       }
 
-      // 4) Join button (always present)
+      // Mobile social icons (up to 4 + "+N")
+      const mobileSocial = detailTpl.querySelector('#visit-icons-container');
+      if (mobileSocial) {
+        mobileSocial.innerHTML = '';
+        visitEntries.slice(0, 4).forEach(([key, url]) => {
+          const a = document.createElement('a');
+          a.href = url;
+          a.target = '_blank';
+          let iconHTML = '';
+          if (key === 'website') iconHTML = '<i class="fa-solid fa-globe fa-2x text-gray-800 dark:text-gray-200"></i>';
+          else {
+            switch(key) {
+              case 'instagram': iconHTML = '<i class="fa-brands fa-instagram fa-2x text-pink-500"></i>'; break;
+              case 'linkedin': iconHTML = '<i class="fa-brands fa-linkedin fa-2x text-blue-700"></i>'; break;
+              case 'youtube': iconHTML = '<i class="fa-brands fa-youtube fa-2x text-red-600"></i>'; break;
+              case 'tiktok': iconHTML = '<i class="fa-brands fa-tiktok fa-2x text-black"></i>'; break;
+              case 'github': iconHTML = '<i class="fa-brands fa-github fa-2x text-black"></i>'; break;
+              case 'discord': iconHTML = '<i class="fa-brands fa-discord fa-2x text-indigo-500"></i>'; break;
+              case 'twitter': iconHTML = '<i class="fa-brands fa-twitter fa-2x text-blue-400"></i>'; break;
+              case 'linktree': iconHTML = '<i class="fa-solid fa-link fa-2x text-green-500"></i>'; break;
+              default: iconHTML = '<i class="fa-solid fa-link fa-2x text-gray-800 dark:text-gray-200"></i>';
+            }
+          }
+          a.className = 'hover:opacity-80';
+          a.innerHTML = iconHTML;
+          mobileSocial.append(a);
+        });
+        if (visitEntries.length > 4) {
+          const remaining = visitEntries.length - 4;
+          const moreMobile = document.createElement('button');
+          moreMobile.textContent = `+${remaining}`;
+          moreMobile.className = 'text-2xl text-gray-600 dark:text-gray-300 font-medium hover:text-gray-800 dark:hover:text-white';
+          moreMobile.addEventListener('click', () => openVisitLinksModal(visitEntries));
+          mobileSocial.append(moreMobile);
+        }
+      }
+
+      // Join button (mobile text centered)
       const joinBtn = detailTpl.querySelector('#page-join-btn');
-      if (joinBtn) {
-        if (item["Join Link"]) {
-          joinBtn.href = item["Join Link"];
-        } else {
-          joinBtn.href = "#";
-        }
+      if (joinBtn) joinBtn.href = item["Join Link"] || '#';
+
+      // Desktop Flag link
+      const desktopFlag = detailTpl.querySelector('#page-flag-btn');
+      if (desktopFlag) {
+        desktopFlag.href = linkMap["Report"] || '#';
       }
 
-      // 5) Flag icon hyperlink via linkMap["Report"]
-      const flagLink = detailTpl.querySelector('#page-flag-btn');
-      if (flagLink) {
-        if (linkMap["Report"]) {
-          flagLink.href = linkMap["Report"];
-        } else {
-          flagLink.href = "#";
-        }
+      // Set up mobile report link
+      const mobileReport = detailTpl.querySelector('#mobile-report-link');
+      if (mobileReport) mobileReport.href = linkMap["Report"] || '#';
+      // Toggle mobile menu
+      const mobileMenuBtn = detailTpl.querySelector('#mobile-menu-btn');
+      const mobileMenu = detailTpl.querySelector('#mobile-menu');
+      if (mobileMenuBtn && mobileMenu) {
+        mobileMenuBtn.addEventListener('click', e => {
+          e.stopPropagation();
+          mobileMenu.classList.toggle('hidden');
+        });
+        document.addEventListener('click', () => mobileMenu.classList.add('hidden'));
       }
 
-      // 6) “View all” should switch to Events tab
+      // View all events
       const viewAll = detailTpl.querySelector('#view-all-events');
       if (viewAll) {
         viewAll.addEventListener('click', e => {
@@ -629,27 +640,23 @@
         });
       }
 
-      // 7) Contact Info tab
+      // Contact info
       const emailEl = detailTpl.querySelector('.details-contact-email');
       if (emailEl) {
         if (item["Project Contact Email"]) {
           emailEl.href = `mailto:${item["Project Contact Email"]}`;
           emailEl.textContent = item["Project Contact Email"];
-        } else {
-          emailEl.parentElement.classList.add('hidden');
-        }
+        } else emailEl.parentElement.classList.add('hidden');
       }
       const formEl = detailTpl.querySelector('.details-contact-form');
       if (formEl) {
         if (item["Contact Form"]) {
           formEl.href = item["Contact Form"];
           formEl.textContent = 'Open Form';
-        } else {
-          formEl.parentElement.classList.add('hidden');
-        }
+        } else formEl.parentElement.classList.add('hidden');
       }
 
-      // 8) “Back to Explore” button
+      // Back button
       const backBtn = detailTpl.querySelector('#backBtn');
       if (backBtn) {
         backBtn.addEventListener('click', () => {
@@ -660,92 +667,62 @@
         });
       }
 
-      // Finally, replace #main’s contents with this profile fragment
+      // Inject into DOM
       main.innerHTML = '';
       main.append(detailTpl);
 
-      // 9) Wire up the Share modal to show on click, and make all share options functional
+      // Share modal logic
       const shareBtn = main.querySelector('#page-share-btn');
       if (shareBtn) {
         shareBtn.addEventListener('click', () => {
-          // Clone the share modal template
           const fragment = document.getElementById('share-modal-template').content.cloneNode(true);
           document.body.append(fragment);
-
-          // The newly appended overlay is the last .modal-overlay in the body
           const modalOverlay = document.querySelector('body > .modal-overlay:last-child');
-
-          // Attach click listeners to each [data-share] element
           modalOverlay.querySelectorAll('[data-share]').forEach(el => {
             const type = el.getAttribute('data-share');
             el.addEventListener('click', () => {
               const url = window.location.href;
               switch(type) {
                 case 'copy':
-                  navigator.clipboard.writeText(url).then(() => {
-                    alert('Link copied to clipboard');
-                  });
+                  navigator.clipboard.writeText(url).then(() => alert('Link copied to clipboard'));
                   break;
                 case 'qr':
-                  // Generate a QR code and replace the <img> inside this tile
                   const img = el.querySelector('.qr-img');
-                  QRCode.toDataURL(url, { width: 128 }, (err, dataUrl) => {
-                    if (!err && img) {
-                      img.src = dataUrl;
-                    }
-                  });
+                  QRCode.toDataURL(url, { width: 128 }, (err, dataUrl) => { if (!err && img) img.src = dataUrl; });
                   break;
-                case 'whatsapp':
-                  window.open(`https://wa.me/?text=${encodeURIComponent(url)}`, '_blank');
-                  break;
-                case 'telegram':
-                  window.open(`https://t.me/share/url?url=${encodeURIComponent(url)}`, '_blank');
-                  break;
-                case 'reddit':
-                  window.open(`https://www.reddit.com/submit?url=${encodeURIComponent(url)}`, '_blank');
-                  break;
-                case 'linkedin':
-                  window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`, '_blank');
-                  break;
-                case 'twitter':
-                  window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}`, '_blank');
-                  break;
-                case 'email':
-                  window.location.href = `mailto:?subject=${encodeURIComponent(document.title)}&body=${encodeURIComponent(url)}`;
-                  break;
+                case 'whatsapp': window.open(`https://wa.me/?text=${encodeURIComponent(url)}`, '_blank'); break;
+                case 'telegram': window.open(`https://t.me/share/url?url=${encodeURIComponent(url)}`, '_blank'); break;
+                case 'reddit': window.open(`https://www.reddit.com/submit?url=${encodeURIComponent(url)}`, '_blank'); break;
+                case 'linkedin': window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`, '_blank'); break;
+                case 'twitter': window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}`, '_blank'); break;
+                case 'email': window.location.href = `mailto:?subject=${encodeURIComponent(document.title)}&body=${encodeURIComponent(url)}`; break;
               }
             });
           });
-
-          // Attach close handler
           modalOverlay.querySelectorAll('.close-share-modal').forEach(btn => {
             btn.addEventListener('click', () => modalOverlay.remove());
           });
         });
       }
 
-      // Activate the first tab (Overview) by default
+      // Tab navigation
       const navButtons = main.querySelectorAll('.tab-button');
       navButtons.forEach(btn => {
         btn.addEventListener('click', () => {
           navButtons.forEach(b => {
-            b.classList.remove('text-blue-600','dark:text-blue-400');
+            b.classList.remove('text-blue-600','dark:text-blue-400','border-b-4','border-blue-600');
             b.classList.add('text-gray-500','dark:text-gray-400');
           });
           btn.classList.remove('text-gray-500','dark:text-gray-400');
-          btn.classList.add('text-blue-600','dark:text-blue-400');
+          btn.classList.add('text-blue-600','dark:text-blue-400','border-b-4','border-blue-600');
           const tabId = btn.dataset.tab;
-          main.querySelectorAll('.tab-content').forEach(panel => {
-            panel.classList.add('hidden');
-          });
+          main.querySelectorAll('.tab-content').forEach(panel => panel.classList.add('hidden'));
           main.querySelector('#' + tabId).classList.remove('hidden');
         });
       });
-      // Trigger “Overview” tab
       if (navButtons.length) navButtons[0].click();
     }
 
-    // ─────── Fetch items and render skeletons first ───────
     function fetchAndRenderItems() {
       renderSkeletons();
       fetch(API)
@@ -755,7 +732,6 @@
             const slug = generateSlug(item["Project Title"]);
             itemMap[slug] = item;
           });
-          // If a hash is present in the URL, deep-link to that profile immediately:
           const initialSlug = location.hash.slice(1);
           if (initialSlug && itemMap[initialSlug]) {
             showDetails(itemMap[initialSlug], initialSlug);
@@ -766,48 +742,27 @@
         .catch(console.error);
     }
 
-    // ─────── Open the Visit Links Modal, showing all links ───────
     function openVisitLinksModal(entries) {
       const modal = document.getElementById('visitLinksModal');
       const listContainer = document.getElementById('visit-links-list');
       if (!modal || !listContainer) return;
       listContainer.innerHTML = '';
-
       entries.forEach(([key, url]) => {
         const div = document.createElement('div');
         div.className = 'flex items-center space-x-2';
         let iconHTML = '';
-        if (key === 'website') {
-          iconHTML = '<i class="fa-solid fa-globe fa-lg text-gray-800 dark:text-gray-200"></i>';
-        } else {
+        if (key === 'website') iconHTML = '<i class="fa-solid fa-globe fa-lg text-gray-800 dark:text-gray-200"></i>';
+        else {
           switch(key) {
-            case 'instagram':
-              iconHTML = '<i class="fa-brands fa-instagram fa-lg text-pink-500"></i>';
-              break;
-            case 'linkedin':
-              iconHTML = '<i class="fa-brands fa-linkedin fa-lg text-blue-700"></i>';
-              break;
-            case 'youtube':
-              iconHTML = '<i class="fa-brands fa-youtube fa-lg text-red-600"></i>';
-              break;
-            case 'tiktok':
-              iconHTML = '<i class="fa-brands fa-tiktok fa-lg text-black"></i>';
-              break;
-            case 'github':
-              iconHTML = '<i class="fa-brands fa-github fa-lg text-black"></i>';
-              break;
-            case 'discord':
-              iconHTML = '<i class="fa-brands fa-discord fa-lg text-indigo-500"></i>';
-              break;
-            case 'twitter':
-              iconHTML = '<i class="fa-brands fa-twitter fa-lg text-blue-400"></i>';
-              break;
-            case 'linktree':
-              iconHTML = '<i class="fa-solid fa-link fa-lg text-green-500"></i>';
-              break;
-            default:
-              iconHTML = '<i class="fa-solid fa-link fa-lg text-gray-800 dark:text-gray-200"></i>';
-              break;
+            case 'instagram': iconHTML = '<i class="fa-brands fa-instagram fa-lg text-pink-500"></i>'; break;
+            case 'linkedin': iconHTML = '<i class="fa-brands fa-linkedin fa-lg text-blue-700"></i>'; break;
+            case 'youtube': iconHTML = '<i class="fa-brands fa-youtube fa-lg text-red-600"></i>'; break;
+            case 'tiktok': iconHTML = '<i class="fa-brands fa-tiktok fa-lg text-black"></i>'; break;
+            case 'github': iconHTML = '<i class="fa-brands fa-github fa-lg text-black"></i>'; break;
+            case 'discord': iconHTML = '<i class="fa-brands fa-discord fa-lg text-indigo-500"></i>'; break;
+            case 'twitter': iconHTML = '<i class="fa-brands fa-twitter fa-lg text-blue-400"></i>'; break;
+            case 'linktree': iconHTML = '<i class="fa-solid fa-link fa-lg text-green-500"></i>'; break;
+            default: iconHTML = '<i class="fa-solid fa-link fa-lg text-gray-800 dark:text-gray-200"></i>';
           }
         }
         div.innerHTML = `
@@ -816,19 +771,11 @@
         `;
         listContainer.append(div);
       });
-
       modal.classList.remove('hidden');
-      const closeBtn = document.getElementById('close-visit-modal');
-      if (closeBtn) {
-        closeBtn.onclick = () => {
-          modal.classList.add('hidden');
-        };
-      }
+      document.getElementById('close-visit-modal').onclick = () => modal.classList.add('hidden');
     }
 
-    // ─────── DOMContentLoaded ───────
     document.addEventListener('DOMContentLoaded', () => {
-      // 1) Theme Setup
       const htmlEl     = document.documentElement;
       const themeToggle = document.getElementById('darkToggle');
       const themeIcon   = document.getElementById('darkIcon');
@@ -843,8 +790,6 @@
           themeToggle.checked = false;
           themeIcon.classList.replace('fa-sun','fa-moon');
         }
-
-        // Dark mode toggle (icon + checkbox)
         themeToggle.addEventListener('change', e => {
           if (e.target.checked) {
             htmlEl.classList.add('dark');
@@ -862,7 +807,6 @@
         });
       }
 
-      // 2) Load “nav links” from LINK_API and apply
       fetch(LINK_API)
         .then(r => r.json())
         .then(arr => {
@@ -873,25 +817,19 @@
         })
         .catch(console.error);
 
-      // 3) Restore any logged-in session
       const stored = localStorage.getItem('currentUser');
       if (stored) {
-        try {
-          initAuth(JSON.parse(stored));
-        } catch {
-          localStorage.removeItem('currentUser');
-        }
+        try { initAuth(JSON.parse(stored)); }
+        catch { localStorage.removeItem('currentUser'); }
       }
 
-      // 4) Fetch items and render skeletons first
       fetchAndRenderItems();
 
-      // 5) Sidebar toggle (mobile vs. desktop)
       const toggleBtn = document.getElementById('toggleBtn');
       if (toggleBtn) {
         toggleBtn.addEventListener('click', () => {
-          const sb       = document.getElementById('sidebar');
-          const mn       = document.getElementById('main');
+          const sb = document.getElementById('sidebar');
+          const mn = document.getElementById('main');
           const isMobile = window.innerWidth < 768;
           if (sb && mn) {
             if (isMobile) {
@@ -917,7 +855,6 @@
         });
       }
 
-      // 6) Sign-In modal logic
       const signInBtn = document.getElementById('signInBtn');
       if (signInBtn) {
         signInBtn.addEventListener('click', () => {
@@ -945,10 +882,8 @@
               </form>
             </div>
           </div>`;
-
           const m = tpl.content.cloneNode(true);
           document.body.append(m);
-
           const form    = document.getElementById('signin-form');
           const emailIn = document.getElementById('signin-email');
           const passIn  = document.getElementById('signin-password');
@@ -969,7 +904,6 @@
               ok.classList.add('hidden');
               submit.disabled = true;
               loader.classList.remove('hidden');
-
               fetch(AUTH_API)
                 .then(r => r.json())
                 .then(users => {
@@ -1000,27 +934,38 @@
           }
         });
       }
-    }); // end DOMContentLoaded
 
-    // ─────── Respond to Back/Forward browser navigation ───────
+      const searchInput = document.getElementById('navbar-search');
+      const autocomplete = document.getElementById('search-autocomplete');
+      if (searchInput && autocomplete) {
+        searchInput.addEventListener('input', () => {
+          if (searchInput.value.trim().length > 0) autocomplete.classList.remove('hidden');
+          else autocomplete.classList.add('hidden');
+        });
+        searchInput.addEventListener('focus', () => {
+          if (searchInput.value.trim().length > 0) autocomplete.classList.remove('hidden');
+        });
+        searchInput.addEventListener('blur', () => {
+          setTimeout(() => autocomplete.classList.add('hidden'), 150);
+        });
+      }
+    });
+
     window.addEventListener('popstate', () => {
       const slug = location.hash.slice(1);
-      if (slug && itemMap[slug]) {
-        showDetails(itemMap[slug], slug);
-      } else {
+      if (slug && itemMap[slug]) showDetails(itemMap[slug], slug);
+      else {
         document.getElementById('main').innerHTML = '<main id="content" class="max-w-7xl mx-auto px-4 py-6"></main>';
         fetchAndRenderItems();
       }
     });
 
-    // ─────── Apply any hrefs we loaded from LINK_API ───────
     function applyLinks() {
       Object.entries(linkMap).forEach(([key, url]) => {
         document.querySelectorAll(`a[data-key="${key}"]`).forEach(a => a.href = url);
       });
     }
 
-    // ─────── After a successful sign-in, swap in the user’s profile picture, etc. ───────
     function initAuth(u) {
       window.currentUser = u;
       localStorage.setItem('currentUser', JSON.stringify(u));
@@ -1073,7 +1018,6 @@
       });
     }
 
-    // ─────── Show a “confirm logout” modal ───────
     function showLogoutConfirmation() {
       const tpl = document.createElement('template');
       tpl.innerHTML = `
@@ -1098,7 +1042,7 @@
     }
   </script>
 
-  <!-- ========== PROFILE-DROPDOWN TEMPLATE ========== -->
+  <!-- PROFILE-DROPDOWN TEMPLATE -->
   <template id="profile-dropdown-template">
     <div id="profileDropdown" class="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow-lg py-2 z-50 hidden">
       <a data-key="Profile" href="#" class="block px-4 py-2 text-sm flex items-center hover:bg-gray-100 dark:hover:bg-gray-700">
