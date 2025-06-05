@@ -6,6 +6,9 @@
   <title>Activity Hub</title>
   <link rel="icon" href="https://i.imgur.com/EsNcDyR.png" />
 
+  <!-- Open Graph Image for Social Previews -->
+  <meta property="og:image" content="https://i.imgur.com/34hmlAn.png" />
+
   <!-- TailwindCSS with class-based dark mode -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -21,7 +24,13 @@
   <!-- QRCode Library -->
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
 </head>
-<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100 relative">
+
+  <!-- Custom UI Copy Confirmation Banner -->
+  <div id="copy-success-banner"
+       class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded shadow-lg hidden z-50">
+    Link copied successfully!
+  </div>
 
   <!-- NAVBAR -->
   <header class="fixed top-0 left-0 right-0 h-16 bg-white dark:bg-gray-800 shadow flex items-center px-4 z-50">
@@ -42,7 +51,8 @@
         class="w-full pl-10 pr-3 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-100"
         autocomplete="off"
       />
-      <div id="search-autocomplete" class="absolute mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md shadow-lg hidden z-50">
+      <div id="search-autocomplete"
+           class="absolute mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md shadow-lg hidden z-50">
         <ul id="autocomplete-list">
           <li data-page="Clubs" class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
             <a href="#" class="block">Search Clubs</a>
@@ -150,9 +160,9 @@
       </div>
       <p class="text-sm text-gray-600 dark:text-gray-300 mb-4 line-clamp-2 tagline"></p>
       <div class="flex flex-wrap gap-2 mb-4">
-        <span class="business-type bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-200 text-xs font-medium px-2.5 py-0.5 rounded-full"></span>
-        <span class="industry bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs font-medium px-2.5 py-0.5 rounded-full"></span>
-        <span class="stage bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs font-medium px-2.5 py-0.5 rounded-full"></span>
+        <span class="industry flex items-center bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs font-medium px-2.5 py-0.5 rounded-full"></span>
+        <span class="business-type flex items-center bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-200 text-xs font-medium px-2.5 py-0.5 rounded-full"></span>
+        <span class="stage flex items-center bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs font-medium px-2.5 py-0.5 rounded-full"></span>
       </div>
       <div class="flex items-center text-xs text-gray-500 dark:text-gray-400 mt-auto">
         <i class="fas fa-map-marker-alt mr-1"></i><span class="school mr-4"></span>
@@ -192,7 +202,7 @@
       <!-- Header Panel -->
       <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
         <!-- Mobile Share Icon (only on mobile) -->
-        <a id="page-share-btn" class="md:hidden absolute top-4 right-12 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition cursor-pointer">
+        <a class="page-share-btn md:hidden absolute top-4 right-12 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition cursor-pointer">
           <i class="fas fa-share-alt text-2xl text-gray-600 dark:text-gray-300"></i>
         </a>
         <!-- Three-dot menu for mobile (visible only on mobile: md:hidden) -->
@@ -234,16 +244,16 @@
 
             <!-- Desktop Tags (md and up) -->
             <div class="hidden md:flex flex-wrap gap-3 mt-4">
-              <span class="details-industry bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs font-medium px-3 py-1 rounded-full"></span>
-              <span class="details-businesstype bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-200 text-xs font-semibold px-3 py-1 rounded-full"></span>
-              <span class="details-stage bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs font-semibold px-3 py-1 rounded-full"></span>
+              <span class="details-industry flex items-center bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs font-medium px-3 py-1 rounded-full"></span>
+              <span class="details-businesstype flex items-center bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-200 text-xs font-semibold px-3 py-1 rounded-full"></span>
+              <span class="details-stage flex items-center bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs font-semibold px-3 py-1 rounded-full"></span>
             </div>
 
             <!-- Mobile Tags (shown only on mobile) -->
             <div class="flex flex-wrap gap-3 justify-center mt-4 md:hidden">
-              <span class="details-industry bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs font-medium px-3 py-1 rounded-full"></span>
-              <span class="details-businesstype bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-200 text-xs font-semibold px-3 py-1 rounded-full"></span>
-              <span class="details-stage bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs font-semibold px-3 py-1 rounded-full"></span>
+              <span class="details-industry flex items-center bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs font-medium px-3 py-1 rounded-full"></span>
+              <span class="details-businesstype flex items-center bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-200 text-xs font-semibold px-3 py-1 rounded-full"></span>
+              <span class="details-stage flex items-center bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs font-semibold px-3 py-1 rounded-full"></span>
             </div>
 
             <!-- Mobile Social Icons (shown only on mobile) -->
@@ -255,7 +265,7 @@
           <!-- Right: Buttons (desktop + mobile) -->
           <div class="flex items-center justify-center md:justify-end space-x-4 mt-6 md:mt-0">
             <!-- Desktop Share (to the left of Flag) -->
-            <a id="page-share-btn" class="hidden md:inline-block p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition z-10 cursor-pointer">
+            <a class="page-share-btn hidden md:inline-block p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition z-10 cursor-pointer">
               <i class="fas fa-share-alt text-2xl text-gray-600 dark:text-gray-300"></i>
             </a>
             <!-- Desktop Flag (opens in new tab) -->
@@ -334,17 +344,18 @@
         <h3 class="text-xl font-semibold mb-4">Share</h3>
         <div class="grid grid-cols-4 gap-6 justify-items-center">
           <!-- Copy Link -->
-          <div class="relative group cursor-pointer p-2" data-share="copy" title="Copy Link">
+          <div class="relative group cursor-pointer p-2 copy-link-btn" data-share="copy" title="Copy Link">
             <div class="absolute inset-0 bg-gray-100 dark:bg-gray-700 opacity-50 rounded-xl hidden group-hover:block"></div>
             <div class="relative flex flex-col items-center">
-              <div class="w-16 h-16 flex items-center justify-center rounded-full bg-blue-600 hover:bg-blue-700 transition-shadow shadow-md">
-                <i class="fas fa-link fa-2x text-white"></i>
+              <div id="copy-icon-wrapper"
+                   class="w-16 h-16 flex items-center justify-center rounded-full bg-blue-600 hover:bg-blue-700 transition-shadow shadow-md">
+                <i id="copy-icon" class="fas fa-link fa-2x text-white"></i>
               </div>
               <span class="mt-2 text-sm font-medium">Copy Link</span>
             </div>
           </div>
           <!-- QR Code -->
-          <div class="relative group cursor-pointer p-2" data-share="qr" title="QR Code">
+          <div class="relative group cursor-pointer p-2 qr-code-btn" data-share="qr" title="QR Code">
             <div class="absolute inset-0 bg-gray-100 dark:bg-gray-700 opacity-50 rounded-xl hidden group-hover:block"></div>
             <div class="relative flex flex-col items-center">
               <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
@@ -415,7 +426,27 @@
           </div>
         </div>
       </div>
-    </template>
+    </div>
+  </template>
+
+  <!-- QR MODAL TEMPLATE -->
+  <div id="qrModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg max-w-sm w-full p-6 relative">
+      <button id="close-qr-modal" class="absolute top-3 right-3 text-2xl text-gray-500 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white">&times;</button>
+      <h3 class="text-xl font-semibold mb-4">QR Code</h3>
+      <div class="flex flex-col items-center space-y-4">
+        <canvas id="qrCanvas" class="border border-gray-300 dark:border-gray-700 rounded-md"></canvas>
+        <div class="flex space-x-4">
+          <button id="copy-qr-btn" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">
+            Copy QR
+          </button>
+          <a id="download-qr-link" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition" download="qr-code.png">
+            Download QR
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- VISIT-LINKS MODAL TEMPLATE -->
   <div id="visitLinksModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -435,6 +466,50 @@
     const AUTH_API = 'https://sheet2api.com/v1/rkmbUqHQAC3C/submission-form-responses';
     let linkMap   = {};
     let itemMap   = {};
+
+    // Hardcoded Font Awesome icon mapping
+    const iconMap = {
+      "Academic": "fa-graduation-cap",
+      "Professional Development": "fa-briefcase",
+      "Cultural": "fa-globe",
+      "Special Interest": "fa-star",
+      "Arts & Music": "fa-music",
+      "Sports": "fa-basketball-ball",
+      "Service": "fa-hands-helping",
+      "Religion & Faith": "fa-praying-hands",
+      "Media & Publications": "fa-newspaper",
+      "Idea Stage": "fa-lightbulb",
+      "Beta": "fa-flask",
+      "Launched": "fa-rocket",
+      "Prototype": "fa-cogs",
+      "Scaling": "fa-chart-line",
+      "Tech": "fa-laptop-code",
+      "Healthcare": "fa-heartbeat",
+      "Education": "fa-chalkboard-teacher",
+      "Sustainability": "fa-leaf",
+      "Media": "fa-video",
+      "Gaming": "fa-gamepad",
+      "Finance": "fa-dollar-sign",
+      "Marketing": "fa-bullhorn",
+      "Design": "fa-paint-brush",
+      "Food": "fa-utensils",
+      "STEM": "fa-microscope",
+      "Research": "fa-search",
+      "Social Impact": "fa-hand-holding-heart",
+      "Product Development": "fa-tools",
+      "Passion Project": "fa-fire",
+      "Agency": "fa-building",
+      "Creator Brand": "fa-tag",
+      "Freelance": "fa-pen-nib",
+      "Nonprofit": "fa-handshake",
+      "Side Hustle": "fa-bolt",
+      "Startup": "fa-play",
+      /* Newly added terms */
+      "Health": "fa-heart",
+      "Fashion": "fa-tshirt",
+      "Idea": "fa-lightbulb"
+    };
+
     // Autocomplete state
     let currentFocus = -1;
 
@@ -481,13 +556,50 @@
           card.querySelector('img').src = item["Logo URL"];
           card.querySelector('h3').textContent = item["Project Title"];
           card.querySelector('.tagline').textContent = item.Tagline;
+
+          // Industry tag
+          const ind = card.querySelector('.industry');
+          if (item.Industry) {
+            const iconClass = iconMap[item.Industry];
+            if (iconClass) {
+              const iEl = document.createElement('i');
+              // Use "fa-solid"
+              iEl.className = `fa-solid ${iconClass} mr-1`;
+              ind.append(iEl);
+            }
+            ind.append(document.createTextNode(item.Industry));
+          } else {
+            ind.remove();
+          }
+
+          // Business Type tag if present
           const bt = card.querySelector('.business-type');
-          if (ptype === 'Business' && item["Business Type"]) bt.textContent = item["Business Type"];
-          else bt.remove();
-          card.querySelector('.industry').textContent = item.Industry;
+          if (item["Business Type"]) {
+            const iconClass = iconMap[item["Business Type"]];
+            if (iconClass) {
+              const iEl = document.createElement('i');
+              iEl.className = `fa-solid ${iconClass} mr-1`;
+              bt.append(iEl);
+            }
+            bt.append(document.createTextNode(item["Business Type"]));
+          } else {
+            bt.remove();
+          }
+
+          // Stage tag if present
           const st = card.querySelector('.stage');
-          if (item.Stage) st.textContent = item.Stage;
-          else st.remove();
+          if (item.Stage) {
+            const iconClass = iconMap[item.Stage];
+            if (iconClass) {
+              const iEl = document.createElement('i');
+              iEl.className = `fa-solid ${iconClass} mr-1`;
+              st.append(iEl);
+            }
+            st.append(document.createTextNode(item.Stage));
+          } else {
+            st.remove();
+          }
+
           card.querySelector('.school').textContent  = item["College or University Name"];
           card.querySelector('.members').textContent = item["Number of participants"];
           const cardEl = card.querySelector('.card');
@@ -521,14 +633,44 @@
       if (descEl) descEl.textContent = item.Description;
 
       // Populate tags (both desktop and mobile)
-      detailTpl.querySelectorAll('.details-industry').forEach(el => { if (item.Industry) el.textContent = item.Industry; });
+      detailTpl.querySelectorAll('.details-industry').forEach(el => {
+        if (item.Industry) {
+          const iconClass = iconMap[item.Industry];
+          if (iconClass) {
+            const iEl = document.createElement('i');
+            iEl.className = `fa-solid ${iconClass} mr-1`;
+            el.append(iEl);
+          }
+          el.append(document.createTextNode(item.Industry));
+        } else {
+          el.remove();
+        }
+      });
       detailTpl.querySelectorAll('.details-businesstype').forEach(el => {
-        if (item["Business Type"]) el.textContent = item["Business Type"];
-        else el.remove();
+        if (item["Business Type"]) {
+          const iconClass = iconMap[item["Business Type"]];
+          if (iconClass) {
+            const iEl = document.createElement('i');
+            iEl.className = `fa-solid ${iconClass} mr-1`;
+            el.append(iEl);
+          }
+          el.append(document.createTextNode(item["Business Type"]));
+        } else {
+          el.remove();
+        }
       });
       detailTpl.querySelectorAll('.details-stage').forEach(el => {
-        if (item.Stage) el.textContent = item.Stage;
-        else el.remove();
+        if (item.Stage) {
+          const iconClass = iconMap[item.Stage];
+          if (iconClass) {
+            const iEl = document.createElement('i');
+            iEl.className = `fa-solid ${iconClass} mr-1`;
+            el.append(iEl);
+          }
+          el.append(document.createTextNode(item.Stage));
+        } else {
+          el.remove();
+        }
       });
 
       // Populate social/visit icons
@@ -619,7 +761,7 @@
         }
       }
 
-      // Join button (mobile text centered)
+      // Join button
       const joinBtn = detailTpl.querySelector('#page-join-btn');
       if (joinBtn) joinBtn.href = item["Join Link"] || '#';
 
@@ -629,12 +771,13 @@
         desktopFlag.href = linkMap["Report"] || '#';
       }
 
-      // Set up mobile report link
+      // Mobile report link
       const mobileReport = detailTpl.querySelector('#mobile-report-link');
       if (mobileReport) mobileReport.href = linkMap["Report"] || '#';
+
       // Toggle mobile menu
       const mobileMenuBtn = detailTpl.querySelector('#mobile-menu-btn');
-      const mobileMenu = detailTpl.querySelector('#mobile-menu');
+      const mobileMenu    = detailTpl.querySelector('#mobile-menu');
       if (mobileMenuBtn && mobileMenu) {
         mobileMenuBtn.addEventListener('click', e => {
           e.stopPropagation();
@@ -684,39 +827,115 @@
       main.innerHTML = '';
       main.append(detailTpl);
 
-      // Share modal logic
-      const shareBtn = main.querySelector('#page-share-btn');
-      if (shareBtn) {
-        shareBtn.addEventListener('click', () => {
+      // Share modal logic: bind to every element with class "page-share-btn"
+      const shareButtons = main.querySelectorAll('.page-share-btn');
+      shareButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
           const fragment = document.getElementById('share-modal-template').content.cloneNode(true);
           document.body.append(fragment);
           const modalOverlay = document.querySelector('body > .modal-overlay:last-child');
-          modalOverlay.querySelectorAll('[data-share]').forEach(el => {
-            const type = el.getAttribute('data-share');
-            el.addEventListener('click', () => {
-              const url = window.location.href;
-              switch(type) {
-                case 'copy':
-                  navigator.clipboard.writeText(url).then(() => alert('Link copied to clipboard'));
-                  break;
-                case 'qr':
-                  const img = el.querySelector('.qr-img');
-                  QRCode.toDataURL(url, { width: 128 }, (err, dataUrl) => { if (!err && img) img.src = dataUrl; });
-                  break;
-                case 'whatsapp': window.open(`https://wa.me/?text=${encodeURIComponent(url)}`, '_blank'); break;
-                case 'telegram': window.open(`https://t.me/share/url?url=${encodeURIComponent(url)}`, '_blank'); break;
-                case 'reddit': window.open(`https://www.reddit.com/submit?url=${encodeURIComponent(url)}`, '_blank'); break;
-                case 'linkedin': window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`, '_blank'); break;
-                case 'twitter': window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}`, '_blank'); break;
-                case 'email': window.location.href = `mailto:?subject=${encodeURIComponent(document.title)}&body=${encodeURIComponent(url)}`; break;
-              }
+
+          // Bind copy link behavior with revert
+          const copyWrapper      = modalOverlay.querySelector('.copy-link-btn');
+          const copyIconWrapper  = modalOverlay.querySelector('#copy-icon-wrapper');
+          const copyIcon         = modalOverlay.querySelector('#copy-icon');
+          const banner           = document.getElementById('copy-success-banner');
+
+          copyWrapper.addEventListener('click', () => {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+              // 1) Show banner immediately
+              banner.classList.remove('hidden');
+
+              // 2) Switch wrapper to green + checkmark
+              copyIconWrapper.classList.remove('bg-blue-600','hover:bg-blue-700');
+              copyIconWrapper.classList.add('bg-green-500');
+              copyIcon.classList.replace('fa-link','fa-check');
+
+              // 3) After 2s hide banner
+              setTimeout(() => {
+                banner.classList.add('hidden');
+              }, 2000);
+
+              // 4) After 1.5s revert icon-wrapper
+              setTimeout(() => {
+                copyIconWrapper.classList.remove('bg-green-500');
+                copyIconWrapper.classList.add('bg-blue-600','hover:bg-blue-700');
+                copyIcon.classList.replace('fa-check','fa-link');
+              }, 1500);
             });
           });
-          modalOverlay.querySelectorAll('.close-share-modal').forEach(btn => {
-            btn.addEventListener('click', () => modalOverlay.remove());
+
+          // Bind QR code behavior
+          const qrBtn = modalOverlay.querySelector('.qr-code-btn');
+          qrBtn.addEventListener('click', () => {
+            // Remove share modal overlay
+            modalOverlay.remove();
+
+            // Show QR modal
+            const qrModal = document.getElementById('qrModal');
+            qrModal.classList.remove('hidden');
+
+            // Generate QR code in canvas
+            const canvas = document.getElementById('qrCanvas');
+            canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+            QRCode.toCanvas(canvas, window.location.href, { width: 200 }, err => {
+              if (err) console.error(err);
+              else {
+                // Set up download link
+                const downloadLink = document.getElementById('download-qr-link');
+                downloadLink.href = canvas.toDataURL('image/png');
+              }
+            });
+
+            // Bind copy QR button
+            const copyQrBtn = document.getElementById('copy-qr-btn');
+            copyQrBtn.addEventListener('click', () => {
+              canvas.toBlob(blob => {
+                const item = new ClipboardItem({ 'image/png': blob });
+                navigator.clipboard.write([item]).then(() => {
+                  const banner2 = document.getElementById('copy-success-banner');
+                  banner2.textContent = 'QR code copied!';
+                  banner2.classList.remove('hidden');
+                  setTimeout(() => {
+                    banner2.classList.add('hidden');
+                    banner2.textContent = 'Link copied successfully!';
+                  }, 2000);
+                });
+              });
+            });
+
+            // Bind close QR modal
+            document.getElementById('close-qr-modal').addEventListener('click', () => {
+              qrModal.classList.add('hidden');
+              canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+            });
+          });
+
+          // Bind all other share options
+          modalOverlay.querySelectorAll('[data-share]').forEach(el => {
+            const type = el.getAttribute('data-share');
+            if (type !== 'copy' && type !== 'qr') {
+              el.addEventListener('click', () => {
+                const url = window.location.href;
+                switch(type) {
+                  case 'whatsapp': window.open(`https://wa.me/?text=${encodeURIComponent(url)}`, '_blank'); break;
+                  case 'telegram': window.open(`https://t.me/share/url?url=${encodeURIComponent(url)}`, '_blank'); break;
+                  case 'reddit': window.open(`https://www.reddit.com/submit?url=${encodeURIComponent(url)}`, '_blank'); break;
+                  case 'linkedin': window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`, '_blank'); break;
+                  case 'twitter': window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}`, '_blank'); break;
+                  case 'email': window.location.href = `mailto:?subject=${encodeURIComponent(document.title)}&body=${encodeURIComponent(url)}`; break;
+                }
+              });
+            }
+          });
+
+          // Close share modal on ×
+          modalOverlay.querySelectorAll('.close-share-modal').forEach(btnClose => {
+            btnClose.addEventListener('click', () => modalOverlay.remove());
           });
         });
-      }
+      });
 
       // Tab navigation
       const navButtons = main.querySelectorAll('.tab-button');
@@ -820,13 +1039,21 @@
         });
       }
 
+      // First: fetch linkMap, then fetch items
       fetch(LINK_API)
         .then(r => r.json())
         .then(arr => {
           linkMap = arr[0];
+
+          // Apply other links from linkMap
           Object.entries(linkMap).forEach(([key, url]) => {
-            document.querySelectorAll(`a[data-key="${key}"]`).forEach(a => a.href = url);
+            if (key !== "Font Awesome") {
+              document.querySelectorAll(`a[data-key="${key}"]`).forEach(a => a.href = url);
+            }
           });
+
+          // Now fetch items and render
+          fetchAndRenderItems();
         })
         .catch(console.error);
 
@@ -835,8 +1062,6 @@
         try { initAuth(JSON.parse(stored)); }
         catch { localStorage.removeItem('currentUser'); }
       }
-
-      fetchAndRenderItems();
 
       const toggleBtn = document.getElementById('toggleBtn');
       if (toggleBtn) {
@@ -871,9 +1096,10 @@
       const signInBtn = document.getElementById('signInBtn');
       if (signInBtn) {
         signInBtn.addEventListener('click', () => {
+          // Create a unique “signin-overlay” class so we can remove exactly this modal later
           const tpl = document.createElement('template');
           tpl.innerHTML = `
-          <div class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" role="dialog">
+          <div class="signin-overlay modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" role="dialog">
             <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-lg w-80 p-6">
               <div id="signin-loading" class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 dark:bg-gray-900 dark:bg-opacity-75 hidden">
                 <div class="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
@@ -895,56 +1121,64 @@
               </form>
             </div>
           </div>`;
-          const m = tpl.content.cloneNode(true);
-          document.body.append(m);
-          const form    = document.getElementById('signin-form');
-          const emailIn = document.getElementById('signin-email');
-          const passIn  = document.getElementById('signin-password');
-          const err     = document.getElementById('signin-error');
-          const ok      = document.getElementById('signin-success');
-          const submit  = document.getElementById('signin-submit');
-          const loader  = document.getElementById('signin-loading');
+          const fragment = tpl.content.cloneNode(true);
+          document.body.append(fragment);
 
-          document.getElementById('close-signin')?.addEventListener('click', () => m.children[0].remove());
-          m.children[0].addEventListener('click', e => {
-            if (e.target === m.children[0]) m.children[0].remove();
+          // Reference to this specific overlay
+          const overlay = document.querySelector('.signin-overlay');
+          if (!overlay) return;
+
+          const form    = overlay.querySelector('#signin-form');
+          const emailIn = overlay.querySelector('#signin-email');
+          const passIn  = overlay.querySelector('#signin-password');
+          const err     = overlay.querySelector('#signin-error');
+          const ok      = overlay.querySelector('#signin-success');
+          const submit  = overlay.querySelector('#signin-submit');
+          const loader  = overlay.querySelector('#signin-loading');
+          const closeBtn = overlay.querySelector('#close-signin');
+
+          // Close on "×"
+          closeBtn.addEventListener('click', () => {
+            overlay.remove();
+          });
+          // Close if clicking outside form
+          overlay.addEventListener('click', e => {
+            if (e.target === overlay) overlay.remove();
           });
 
-          if (form) {
-            form.addEventListener('submit', e => {
-              e.preventDefault();
-              err.classList.add('hidden');
-              ok.classList.add('hidden');
-              submit.disabled = true;
-              loader.classList.remove('hidden');
-              fetch(AUTH_API)
-                .then(r => r.json())
-                .then(users => {
-                  const u = users.find(u =>
-                    u.Email === emailIn.value.trim() && u.Password === passIn.value
-                  );
-                  if (!u) {
-                    err.classList.remove('hidden');
-                    submit.disabled = false;
-                    loader.classList.add('hidden');
-                    return;
-                  }
-                  ok.classList.remove('hidden');
-                  setTimeout(() => {
-                    m.children[0].remove();
-                    initAuth(u);
-                  }, 500);
-                })
-                .catch(() => {
-                  err.textContent = 'Network error';
+          form.addEventListener('submit', e => {
+            e.preventDefault();
+            err.classList.add('hidden');
+            ok.classList.add('hidden');
+            submit.disabled = true;
+            loader.classList.remove('hidden');
+
+            fetch(AUTH_API)
+              .then(r => r.json())
+              .then(users => {
+                const matched = users.find(u =>
+                  u.Email === emailIn.value.trim() && u.Password === passIn.value
+                );
+                if (!matched) {
+                  err.textContent = 'Invalid email or password.';
                   err.classList.remove('hidden');
-                })
-                .finally(() => {
                   submit.disabled = false;
                   loader.classList.add('hidden');
-                });
-            });
-          }
+                  return;
+                }
+                ok.classList.remove('hidden');
+                setTimeout(() => {
+                  overlay.remove();
+                  initAuth(matched);
+                }, 500);
+              })
+              .catch(() => {
+                err.textContent = 'Network error';
+                err.classList.remove('hidden');
+                submit.disabled = false;
+                loader.classList.add('hidden');
+              });
+          });
         });
       }
 
@@ -955,7 +1189,7 @@
       const items = Array.from(listEl.querySelectorAll('li'));
 
       function closeAllLists() {
-        items.forEach(li => li.classList.remove('bg-gray-100','dark:bg-gray-700'));
+        items.forEach(li => li.classList.remove('bg-gray-100','dark:bg-gray-700','bg-blue-100','dark:bg-blue-700','text-white'));
         autocomplete.classList.add('hidden');
         currentFocus = -1;
       }
@@ -1000,7 +1234,6 @@
             const a = visibleItems[currentFocus].querySelector('a');
             if (a) window.location.href = a.href;
           } else {
-            // If no selection, navigate to first item
             const a = items[0].querySelector('a');
             if (a) window.location.href = a.href;
           }
@@ -1039,7 +1272,9 @@
 
     function applyLinks() {
       Object.entries(linkMap).forEach(([key, url]) => {
-        document.querySelectorAll(`a[data-key="${key}"]`).forEach(a => a.href = url);
+        if (key !== "Font Awesome") {
+          document.querySelectorAll(`a[data-key="${key}"]`).forEach(a => a.href = url);
+        }
       });
     }
 
@@ -1067,7 +1302,7 @@
         pfpBtn.className = 'h-10 w-10 rounded-full border-2 border-gray-200 dark:border-gray-700 cursor-pointer';
       } else {
         pfpBtn = document.createElement('div');
-        pfpBtn.id = 'pfpBtn';
+        pfpBtn.id = 'pfp-btn';
         pfpBtn.className = 'h-10 w-10 rounded-full border-2 border-gray-200 dark:border-gray-700 cursor-pointer flex items-center justify-center text-white font-medium';
         const hue = Math.floor(Math.random() * 360);
         pfpBtn.style.backgroundColor = `hsl(${hue}, 70%, 40%)`;
