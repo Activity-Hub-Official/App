@@ -1333,22 +1333,34 @@
     function showLogoutConfirmation() {
       const tpl = document.createElement('template');
       tpl.innerHTML = `
-      <div class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-80">
-          <h3 class="text-lg font-semibold mb-4">Confirm Logout</h3>
-          <p class="text-sm text-gray-700 dark:text-gray-300">Are you sure you want to log out?</p>
-          <div class="mt-6 flex justify-end space-x-2">
-            <button id="logout-confirm-cancel" class="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200">Cancel</button>
-            <button id="logout-confirm-yes" class="px-4 py-2 rounded bg-red-600 hover:bg-red-700 text-white">Log Out</button>
+        <div class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-80">
+            <h3 class="text-lg font-semibold mb-4">Confirm Logout</h3>
+            <p class="text-sm text-gray-700 dark:text-gray-300">Are you sure you want to log out?</p>
+            <div class="mt-6 flex justify-end space-x-2">
+              <button id="logout-confirm-cancel"
+                      class="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200">
+                Cancel
+              </button>
+              <button id="logout-confirm-yes"
+                      class="px-4 py-2 rounded bg-red-600 hover:bg-red-700 text-white">
+                Log Out
+              </button>
+            </div>
           </div>
         </div>
-      </div>`;
-      const modal = tpl.content.cloneNode(true);
-      document.body.append(modal);
+      `;
+      const fragment = tpl.content.cloneNode(true);
+      const overlay = fragment.querySelector('.modal-overlay');
+      document.body.append(overlay);
 
-      document.getElementById('logout-confirm-cancel')?.addEventListener('click', () => modal.children[0].remove());
-      document.getElementById('logout-confirm-yes')?.addEventListener('click', () => {
+      // “Cancel” removes only this overlay
+      document.getElementById('logout-confirm-cancel').addEventListener('click', () => {
+        overlay.remove();
+      });
+      document.getElementById('logout-confirm-yes').addEventListener('click', () => {
         localStorage.removeItem('currentUser');
+        overlay.remove();
         location.reload();
       });
     }
