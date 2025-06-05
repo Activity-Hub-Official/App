@@ -3,10 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Activity Hub</title>
-  <link rel="icon" href="https://i.imgur.com/xjx5Bg8.png" />
+  <title>Businesses – Activity Hub</title>
+  <link rel="icon" href="https://i.imgur.com/EsNcDyR.png" />
 
-  <!-- TailwindCSS with class-based dark mode (load early to avoid flicker) -->
+  <!-- Open Graph Image for Social Previews -->
+  <meta property="og:image" content="https://i.imgur.com/34hmlAn.png" />
+
+  <!-- TailwindCSS with class-based dark mode -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = { darkMode: 'class' };
@@ -17,83 +20,122 @@
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
   />
-</head>
-<body class="bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100">
 
-  <!-- Navbar -->
-  <header class="fixed top-0 left-0 right-0 h-16 bg-white dark:bg-gray-800 shadow flex items-center px-2 z-50">
-    <button id="toggleBtn" type="button"
-            class="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white mr-4"
-            aria-label="Toggle sidebar" aria-expanded="false">
+  <!-- QRCode Library -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
+
+  <!-- Custom CSS for autocomplete highlight -->
+  <style>
+    .autocomplete-active {
+      background-color: rgba(209, 213, 219, 1); /* gray-300 */
+    }
+    .dark .autocomplete-active {
+      background-color: rgba(55, 65, 81, 1); /* gray-700 */
+    }
+  </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100 relative">
+
+  <!-- Custom UI Copy Confirmation Banner -->
+  <div id="copy-success-banner"
+       class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded shadow-lg hidden z-50">
+    Link copied successfully!
+  </div>
+
+  <!-- ========== NAVBAR ========== -->
+  <header class="fixed top-0 left-0 right-0 h-16 bg-white dark:bg-gray-800 shadow flex items-center px-4 z-50">
+    <button id="toggleBtn" class="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white mr-4">
       <i class="fas fa-bars fa-lg"></i>
     </button>
-    <a data-key="Explore" href="#">
-      <img src="https://i.imgur.com/T28QHq2.png"
-           alt="Activity Hub Logo"
-           class="h-14 w-auto"
-           style="height:3.5rem; width:auto;"/>
+    <!-- Logo only -->
+    <a data-key="Businesses" href="Businesses.html" class="flex items-center">
+      <img src="https://i.imgur.com/T28QHq2.png" alt="Activity Hub Logo" class="h-10 w-auto"/>
     </a>
+
+    <!-- Search bar -->
+    <div class="ml-4 flex-1 relative max-w-md">
+      <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400"></i>
+      <input
+        id="navbar-search"
+        type="text"
+        placeholder="Search Businesses..."
+        class="w-full pl-10 pr-3 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-100"
+        autocomplete="off"
+      />
+      <div id="search-autocomplete"
+           class="absolute mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md shadow-lg hidden z-50">
+        <ul id="autocomplete-list">
+          <li data-page="Businesses"
+              class="px-4 py-2 bg-blue-100 dark:bg-blue-700 text-white cursor-pointer">
+            <a href="#" class="block">Search Businesses</a>
+          </li>
+          <li data-page="Clubs" class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
+            <a href="Clubs.html" class="block">Search Clubs</a>
+          </li>
+          <li data-page="Projects" class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
+            <a href="Projects.html" class="block">Search Projects</a>
+          </li>
+          <li data-page="People" class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
+            <a href="People.html" class="block">Search People</a>
+          </li>
+          <li data-page="Events" class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
+            <a href="Events.html" class="block">Search Events</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
     <div id="authContainer" class="ml-auto flex items-center space-x-4">
-      <button id="signInBtn" type="button"
-              class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-        Sign In / Up
-      </button>
+      <button id="signInBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Sign In / Up</button>
     </div>
   </header>
 
   <div class="flex pt-16">
-    <!-- Sidebar -->
+    <!-- ========== SIDEBAR ========== -->
     <aside id="sidebar"
            class="fixed top-16 bottom-0 left-0 bg-white dark:bg-gray-800 shadow-lg w-48 transform -translate-x-full md:translate-x-0 transition-transform duration-300 overflow-hidden z-40"
            aria-label="Main sidebar navigation">
       <nav class="mt-4 px-2">
         <ul class="space-y-2">
           <li>
-            <a data-key="Explore" href="#"
-               class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
+            <a data-key="Explore" href="Explore.html" class="flex items-center gap-3 p-2 font-semibold hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
               <i class="fas fa-compass w-6 text-center"></i><span>Explore</span>
             </a>
           </li>
           <li><hr class="border-gray-300 dark:border-gray-600 my-2"></li>
           <li>
-            <a data-key="Clubs" href="#"
-               class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
-              <i class="fas fa-users w-6 text-center"></i><span>Clubs</span>
+            <a data-key="Clubs" href="Clubs.html" class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
+              <i class="fas fa-users w-6"></i><span>Clubs</span>
             </a>
           </li>
           <li>
-            <a data-key="Businesses" href="#"
-               class="flex items-center gap-3 p-2 rounded font-semibold bg-gray-200 dark:bg-gray-700">
-              <i class="fas fa-briefcase w-6 text-center"></i><span>Businesses</span>
+            <!-- Businesses is selected -->
+            <a data-key="Businesses" href="#" class="flex items-center gap-3 p-2 rounded font-semibold bg-gray-200 dark:bg-gray-700">
+              <i class="fas fa-briefcase w-6"></i><span>Businesses</span>
             </a>
           </li>
           <li>
-            <a data-key="Projects" href="#"
-               class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
-              <i class="fas fa-project-diagram w-6 text-center"></i><span>Projects</span>
+            <a data-key="Projects" href="Projects.html" class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
+              <i class="fas fa-project-diagram w-6"></i><span>Projects</span>
             </a>
           </li>
           <li>
-            <a data-key="People" href="#"
-               class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
-              <i class="fas fa-user-friends w-6 text-center"></i><span>People</span>
+            <a data-key="People" href="People.html" class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
+              <i class="fas fa-user-friends w-6"></i><span>People</span>
             </a>
           </li>
           <li>
-            <a data-key="Events" href="#"
-               class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
-              <i class="fas fa-calendar-alt w-6 text-center"></i><span>Events</span>
+            <a data-key="Events" href="Events.html" class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
+              <i class="fas fa-calendar-alt w-6"></i><span>Events</span>
             </a>
           </li>
         </ul>
       </nav>
       <!-- Dark mode toggle -->
-      <div class="absolute bottom-4 w-full px-4 flex items-center" id="darkToggleContainer">
-        <i id="darkIcon" class="fas fa-moon text-gray-600 dark:text-gray-300 cursor-pointer"
-           aria-label="Toggle dark mode"></i>
+      <div class="absolute bottom-4 w-full px-4 flex items-center">
+        <i id="darkIcon" class="fas fa-moon text-gray-600 dark:text-gray-300 cursor-pointer"></i>
         <span id="darkToggleText" class="ml-2 text-sm font-bold">Dark Mode</span>
-        <label id="darkToggleLabel" for="darkToggle"
-               class="ml-auto relative inline-block w-10 h-6 cursor-pointer">
+        <label id="darkToggleLabel" for="darkToggle" class="ml-auto relative inline-block w-10 h-6 cursor-pointer">
           <input id="darkToggle" type="checkbox" class="sr-only peer"/>
           <div class="w-10 h-6 bg-gray-300 rounded-full peer-checked:bg-blue-600 transition-colors"></div>
           <div class="absolute top-1 left-1 w-4 h-4 bg-white rounded-full peer-checked:translate-x-4 transition-transform"></div>
@@ -101,376 +143,1120 @@
       </div>
     </aside>
 
-    <!-- Main Content -->
+    <!-- ========== MAIN CONTAINER ========== -->
     <div id="main" role="main" class="flex-1 transition-all duration-300 ml-0 md:ml-48">
       <main id="content" class="max-w-7xl mx-auto px-4 py-6">
-        <!-- Page Title -->
-        <h1 class="text-3xl font-semibold mb-4">Businesses</h1>
-        <!-- Search Bar (one-third width) -->
-        <div class="relative mb-6">
-          <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400"></i>
-          <input id="businessSearch"
-                 type="text"
-                 placeholder="Search businesses..."
-                 class="w-1/3 pl-10 pr-4 py-2 border rounded bg-white dark:bg-gray-800 dark:border-gray-700 focus:outline-none focus:ring focus:border-blue-300 dark:focus:border-blue-600 text-gray-800 dark:text-gray-100" />
-        </div>
-        <!-- Business cards will be injected here -->
+        <h1 id="page-title" class="text-3xl font-semibold mb-6">Businesses</h1>
+        <!-- Skeletons or Cards injected by JavaScript -->
       </main>
     </div>
   </div>
 
-  <!-- Section Template: only grid, no heading -->
-  <template id="section-template">
-    <section class="mb-12">
-      <div class="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3"></div>
-    </section>
-  </template>
-
-  <!-- Card Template -->
+  <!-- ========== CARD TEMPLATE ========== -->
   <template id="card-template">
     <div class="card bg-white dark:bg-gray-800 rounded-2xl shadow hover:shadow-lg dark:hover:shadow-xl transition p-4 flex flex-col cursor-pointer">
       <div class="flex items-center mb-2">
-        <img class="h-8 w-8 object-cover rounded mr-2 border border-gray-200 dark:border-gray-700"
+        <img class="h-8 w-8 object-cover rounded-full mr-2 border-2 border-gray-200 dark:border-gray-700"
              src="" alt="Logo"/>
         <h3 class="text-lg font-semibold flex-1"></h3>
       </div>
       <p class="text-sm text-gray-600 dark:text-gray-300 mb-4 line-clamp-2 tagline"></p>
+      <div class="flex flex-wrap gap-2 mb-4">
+        <span class="industry flex items-center bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs font-medium px-2.5 py-0.5 rounded-full"></span>
+        <span class="business-type flex items-center bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-200 text-xs font-medium px-2.5 py-0.5 rounded-full"></span>
+        <span class="stage flex items-center bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs font-medium px-2.5 py-0.5 rounded-full"></span>
+      </div>
       <div class="flex items-center text-xs text-gray-500 dark:text-gray-400 mt-auto">
-        <i class="fas fa-map-marker-alt mr-1"></i>
-        <span class="school mr-4"></span>
-        <i class="fas fa-circle text-green-500 dark:text-green-400 text-[0.5rem] mr-1"></i>
-        <span class="members mr-1"></span> Members
+        <i class="fas fa-map-marker-alt mr-1"></i><span class="school mr-4"></span>
+        <i class="fas fa-circle text-green-500 dark:text-green-400 text-[0.5rem] mr-1"></i><span class="members mr-1"></span> Members
       </div>
     </div>
   </template>
 
-  <!-- Details Modal Template -->
-  <template id="details-modal-template">
-    <div class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-         role="dialog" aria-modal="true">
-      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg max-w-lg w-full p-6 relative">
-        <button type="button"
-                class="absolute top-3 right-3 text-2xl text-gray-500 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white close-modal"
-                aria-label="Close">&times;</button>
-        <div class="flex items-center mb-4">
-          <img class="h-16 w-16 object-cover rounded mr-3 border border-gray-200 dark:border-gray-700 details-logo"
-               src="" alt="Logo">
-          <div>
-            <h3 class="text-2xl font-semibold details-title"></h3>
-            <span class="text-sm font-medium text-gray-600 dark:text-gray-400 details-industry"></span>
-          </div>
-        </div>
-        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2 italic details-tagline"></p>
-        <div class="flex space-x-4 mb-4">
-          <a id="modal-join-btn"
-             class="text-white text-sm font-medium px-3 py-1 rounded bg-blue-600 hover:bg-blue-700"
-             target="_blank">Join</a>
-          <div id="socials-container" class="relative inline-block text-left">
-            <button id="socials-btn"
-                    class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 text-sm font-medium px-3 py-1 rounded">
-              Socials <i class="fas fa-caret-down ml-1"></i>
+  <!-- ========== SKELETON-CARD TEMPLATE ========== -->
+  <template id="skeleton-card-template">
+    <div class="animate-pulse bg-white dark:bg-gray-800 rounded-2xl shadow p-4 flex flex-col">
+      <div class="flex items-center mb-2">
+        <div class="h-8 w-8 bg-gray-300 dark:bg-gray-700 rounded-full mr-2"></div>
+        <div class="h-5 bg-gray-300 dark:bg-gray-700 rounded w-3/4"></div>
+      </div>
+      <div class="h-4 bg-gray-300 dark:bg-gray-700 rounded mb-4 w-full"></div>
+      <div class="flex gap-2 mb-4">
+        <div class="h-4 bg-gray-300 dark:bg-gray-700 rounded-full w-16"></div>
+        <div class="h-4 bg-gray-300 dark:bg-gray-700 rounded-full w-12"></div>
+        <div class="h-4 bg-gray-300 dark:bg-gray-700 rounded-full w-10"></div>
+      </div>
+      <div class="flex items-center text-xs text-gray-500 dark:text-gray-400 mt-auto">
+        <div class="h-4 bg-gray-300 dark:bg-gray-700 rounded w-1/3 mr-4"></div>
+        <div class="h-4 bg-gray-300 dark:bg-gray-700 rounded w-1/4"></div>
+      </div>
+    </div>
+  </template>
+
+  <!-- ========== DETAILS/PROFILE PAGE TEMPLATE ========== -->
+  <template id="details-page-template">
+    <div class="max-w-3xl mx-auto px-4 py-6 space-y-6">
+      <!-- Back to Businesses Link -->
+      <button id="backBtn" class="flex items-center text-blue-500 hover:underline">
+        <i class="fas fa-arrow-left mr-2"></i>Back to Businesses
+      </button>
+
+      <!-- Header Panel -->
+      <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+        <!-- Mobile Share Icon (only on mobile) -->
+        <a class="page-share-btn md:hidden absolute top-4 right-12 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition cursor-pointer">
+          <i class="fas fa-share-alt text-2xl text-gray-600 dark:text-gray-300"></i>
+        </a>
+        <!-- Three-dot menu for mobile (visible only on mobile: md:hidden) -->
+        <div class="absolute top-4 right-4 md:hidden">
+          <div class="relative inline-block">
+            <button id="mobile-menu-btn" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition cursor-pointer">
+              <i class="fas fa-ellipsis-v text-2xl text-gray-600 dark:text-gray-300"></i>
             </button>
-            <div id="socials-menu"
-                 class="invisible opacity-0 transition-opacity duration-200 absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded shadow-lg z-50"></div>
+            <div id="mobile-menu" class="absolute right-0 mt-2 w-32 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow-lg py-2 z-50 hidden">
+              <a id="mobile-report-link" href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700">Report</a>
+            </div>
           </div>
-          <button id="contact-info-btn" type="button"
-                  class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 text-sm font-medium px-3 py-1 rounded">
-            Contact Info
+        </div>
+
+        <!-- Main Flex Container -->
+        <div class="flex flex-col md:flex-row md:items-start md:justify-between md:space-x-6">
+          <!-- Left: Logo + Badge -->
+          <div class="flex-shrink-0 flex justify-center md:justify-start">
+            <div class="relative">
+              <img class="h-24 w-24 object-cover rounded-full border-2 border-gray-200 dark:border-gray-700 details-logo" src="" alt="Logo">
+              <div class="absolute bottom-0 right-0 bg-blue-600 rounded-full w-6 h-6 flex items-center justify-center">
+                <i class="fas fa-check text-white text-xs"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Middle: Title, Subtitle, Social Icons, Tags -->
+          <div class="flex-1 mt-4 md:mt-0 text-center md:text-left">
+            <h1 class="text-2xl sm:text-3xl font-bold details-title truncate"></h1>
+            <p class="text-gray-600 dark:text-gray-400 mt-1 truncate">
+              <span class="details-school font-medium"></span> · 
+              <span class="details-members font-medium"></span> Members
+            </p>
+
+            <!-- Desktop Social Icons (md and up) -->
+            <div id="desktop-social-icons" class="hidden md:flex items-center space-x-4 mt-2">
+              <!-- JavaScript will insert up to 4 icons + "+N" -->
+            </div>
+
+            <!-- Desktop Tags (md and up) -->
+            <div class="hidden md:flex flex-wrap gap-3 mt-4">
+              <span class="details-industry flex items-center bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs font-medium px-3 py-1 rounded-full"></span>
+              <span class="details-businesstype flex items-center bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-200 text-xs font-semibold px-3 py-1 rounded-full"></span>
+              <span class="details-stage flex items-center bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs font-semibold px-3 py-1 rounded-full"></span>
+            </div>
+
+            <!-- Mobile Tags (shown only on mobile) -->
+            <div class="flex flex-wrap gap-3 justify-center mt-4 md:hidden">
+              <span class="details-industry flex items-center bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs font-medium px-3 py-1 rounded-full"></span>
+              <span class="details-businesstype flex items-center bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-200 text-xs font-semibold px-3 py-1 rounded-full"></span>
+              <span class="details-stage flex items-center bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs font-semibold px-3 py-1 rounded-full"></span>
+            </div>
+
+            <!-- Mobile Social Icons (shown only on mobile) -->
+            <div id="visit-icons-container" class="flex items-center justify-center space-x-4 mt-4 md:hidden">
+              <!-- JavaScript will insert up to 4 icons + "+N" -->
+            </div>
+          </div>
+
+          <!-- Right: Buttons (desktop + mobile) -->
+          <div class="flex items-center justify-center md:justify-end space-x-4 mt-6 md:mt-0">
+            <!-- Desktop Share (to the left of Flag) -->
+            <a class="page-share-btn hidden md:inline-block p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition z-10 cursor-pointer">
+              <i class="fas fa-share-alt text-2xl text-gray-600 dark:text-gray-300"></i>
+            </a>
+            <!-- Desktop Flag (opens in new tab) -->
+            <a id="page-flag-btn" class="hidden md:inline-block p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition relative z-20 cursor-pointer" target="_blank">
+              <i class="fas fa-flag text-2xl text-red-500"></i>
+            </a>
+            <a id="page-join-btn" class="relative z-10 md:px-6 md:py-2 px-8 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-center w-full md:w-auto">
+              Join
+            </a>
+          </div>
+        </div>
+
+        <!-- Divider above tabs -->
+        <hr class="border-gray-200 dark:border-gray-700 mt-6">
+
+        <!-- Tab Navigation (centered on mobile, left-aligned on desktop) -->
+        <nav class="flex md:justify-start justify-center space-x-6 pb-2 overflow-x-auto">
+          <button type="button" class="tab-button text-blue-600 dark:text-blue-400 font-medium pb-1 border-b-4 border-blue-600 whitespace-nowrap" data-tab="overview">
+            <i class="fas fa-info-circle mr-1"></i>Overview
           </button>
-        </div>
-        <div class="border-b border-gray-200 dark:border-gray-700 mb-4 relative">
-          <nav id="tab-nav" class="flex space-x-4">
-            <button type="button" class="tab-button pb-2 px-3 text-sm font-medium text-gray-500 dark:text-gray-400 focus:outline-none" data-tab="overview">Overview</button>
-            <button type="button" class="tab-button pb-2 px-3 text-sm font-medium text-gray-500 dark:text-gray-400 focus:outline-none" data-tab="events">Events</button>
-          </nav>
-          <div id="tab-underline" class="absolute bottom-0 h-0.5 bg-blue-600 transition-all"></div>
-        </div>
-        <div id="overview" class="tab-content">
-          <p class="text-gray-700 dark:text-gray-300 mb-4 details-desc"></p>
-          <div class="flex flex-wrap gap-2 mb-4">
-            <span class="details-businesstype bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-200 text-xs font-medium px-2.5 py-0.5 rounded"></span>
-            <span class="details-stage bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs font-medium px-2.5 py-0.5 rounded"></span>
-          </div>
-          <div class="space-y-2 mb-4">
-            <p class="flex items-center"><i class="fas fa-map-marker-alt mr-2 text-gray-600 dark:text-gray-400"></i><span class="details-school"></span></p>
-            <p class="flex items-center"><i class="fas fa-users mr-1 text-gray-600 dark:text-gray-400"></i><span class="details-members mr-1"></span> Members</p>
-          </div>
-          <p class="flex items-center"><i class="fas fa-comments mr-2 text-gray-600 dark:text-gray-400"></i><span class="details-comments">No comments yet</span></p>
-        </div>
-        <div id="events" class="tab-content hidden p-4 text-gray-600 dark:text-gray-400">No events yet</div>
+          <button type="button" class="tab-button text-gray-500 dark:text-gray-400 font-medium pb-1 whitespace-nowrap" data-tab="events">
+            <i class="fas fa-calendar-alt mr-1"></i>Events
+          </button>
+          <button type="button" class="tab-button text-gray-500 dark:text-gray-400 font-medium pb-1 whitespace-nowrap" data-tab="contact">
+            <i class="fas fa-envelope mr-1"></i>Contact Info
+          </button>
+        </nav>
       </div>
-    </div>
-  </template>
 
-  <!-- Contact Modal Template -->
-  <template id="contact-modal-template">
-    <div class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" role="dialog" aria-modal="true">
-      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg max-w-sm w-full p-6 relative">
-        <button type="button" class="absolute top-3 right-3 text-2xl text-gray-500 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white close-contact-modal" aria-label="Close">&times;</button>
-        <h3 class="text-xl font-semibold mb-4">Contact Information</h3>
-        <p><strong>Email:</strong> <a href="#" class="contact-email text-blue-600 dark:text-blue-400 hover:underline"></a></p>
-        <p class="mt-2"><strong>Form:</strong> <a href="#" class="contact-form text-blue-600 dark:text-blue-400 hover:underline" target="_blank"></a></p>
-      </div>
-    </div>
-  </template>
-
-  <!-- Sign In Modal Template -->
-  <template id="signin-modal-template">
-    <div class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" role="dialog" aria-modal="true">
-      <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-lg w-80 p-6">
-        <!-- Loading overlay -->
-        <div id="signin-loading" class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 dark:bg-gray-900 dark:bg-opacity-75 hidden">
-          <div class="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+      <!-- ========== TAB CONTENT: OVERVIEW ========== -->
+      <div id="overview" class="tab-content bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mt-4 space-y-6">
+        <div>
+          <h2 class="text-xl font-semibold mb-2">About Us</h2>
+          <p class="text-gray-700 dark:text-gray-300 details-desc"></p>
         </div>
-        <button id="close-signin" type="button" class="absolute top-3 right-3 text-2xl text-gray-500 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white" aria-label="Close">&times;</button>
-        <h3 class="text-xl font-semibold mb-4">Sign In</h3>
-        <form id="signin-form" class="space-y-4">
-          <div>
-            <label for="signin-email" class="block text-sm font-medium mb-1">Email</label>
-            <input id="signin-email" type="email" required class="w-full px-3 py-2 border rounded dark:bg-gray-700 dark:border-gray-600 focus:outline-none" placeholder="you@example.com"/>
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <h2 class="text-xl font-semibold">Upcoming Events</h2>
+            <a href="#" id="view-all-events" class="text-blue-500 hover:underline text-sm font-medium">View all</a>
           </div>
-          <div>
-            <label for="signin-password" class="block text-sm font-medium mb-1">Password</label>
-            <input id="signin-password" type="password" required class="w-full px-3 py-2 border rounded dark:bg-gray-700 dark:border-gray-600 focus:outline-none" placeholder="••••••••"/>
-          </div>
-          <p id="signin-error" class="text-red-600 text-sm hidden">Invalid email or password.</p>
-          <p id="signin-success" class="text-green-600 text-sm hidden">Login successful!</p>
-          <button type="submit" id="signin-submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50">Sign In</button>
-        </form>
-      </div>
-    </div>
-  </template>
-
-  <!-- Profile Dropdown Template -->
-  <template id="profile-dropdown-template">
-    <div id="profileDropdown" class="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow-lg py-2 z-50 hidden">
-      <a data-key="Profile" href="#" class="block px-4 py-2 text-sm flex items-center hover:bg-gray-100 dark:hover:bg-gray-700">
-        <i class="fas fa-user mr-2"></i>Profile
-      </a>
-      <a data-key="Settings" href="#" class="block px-4 py-2 text-sm flex items-center hover:bg-gray-100 dark:hover:bg-gray-700">
-        <i class="fas fa-cog mr-2"></i>Settings
-      </a>
-      <a data-key="My Activities" href="#" class="block px-4 py-2 text-sm flex items-center hover:bg-gray-100 dark:hover:bg-gray-700">
-        <i class="fas fa-list mr-2"></i>My Activities
-      </a>
-      <a href="#" id="logoutBtn" class="block px-4 py-2 text-sm flex items-center hover:bg-gray-100 dark:hover:bg-gray-700">
-        <i class="fas fa-sign-out-alt mr-2"></i>Logout
-      </a>
-    </div>
-  </template>
-
-  <!-- Profile Modal Template -->
-  <template id="profile-modal-template">
-    <div class="profile-modal-overlay fixed z-30 bg-white dark:bg-gray-800 overflow-auto">
-      <div class="relative h-full w-full p-6">
-        <button type="button" class="close-profile-modal absolute top-4 left-4 bg-blue-600 text-white px-3 py-1 rounded inline-flex items-center hover:bg-blue-700">
-          <i class="fas fa-arrow-left mr-2"></i>Back to Activity Hub
-        </button>
-        <div class="flex flex-col items-center mt-12 space-y-4">
-          <img src="" alt="Profile Picture" class="profile-pic h-24 w-24 rounded-full border-2 border-gray-200 dark:border-gray-700" />
-          <h2 class="profile-name text-2xl font-semibold"></h2>
-          <div class="flex flex-wrap justify-center gap-2">
-            <span class="inline-flex items-center bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 text-xs font-medium px-3 py-1 rounded-full">
-              <i class="fas fa-school mr-1"></i><span class="profile-school"></span>
-            </span>
-            <span class="inline-flex items-center bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs font-medium px-3 py-1 rounded-full">
-              <i class="fas fa-graduation-cap mr-1"></i><span class="profile-major"></span>
+          <div class="border border-gray-300 dark:border-gray-700 rounded-lg h-40 flex justify-center items-center">
+            <span class="text-gray-500 dark:text-gray-400">
+              No events right now, but check back later—something exciting might be coming!
             </span>
           </div>
         </div>
+        <div>
+          <h2 class="text-xl font-semibold mb-2">Comments</h2>
+          <textarea
+            disabled
+            title="Feature coming soon"
+            placeholder="Feature coming soon"
+            class="w-full h-20 bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 resize-none cursor-not-allowed"
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- ========== TAB CONTENT: EVENTS ========== -->
+      <div id="events" class="tab-content hidden bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mt-4 text-gray-700 dark:text-gray-300">
+        <p>No events yet.</p>
+      </div>
+
+      <!-- ========== TAB CONTENT: CONTACT INFO ========== -->
+      <div id="contact" class="tab-content hidden bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mt-4 text-gray-700 dark:text-gray-300 space-y-3">
+        <p><strong>Email:</strong> <a href="#" class="details-contact-email text-blue-600 dark:text-blue-400 hover:underline"></a></p>
+        <p><strong>Form:</strong> <a href="#" class="details-contact-form text-blue-600 dark:text-blue-400 hover:underline" target="_blank"></a></p>
       </div>
     </div>
   </template>
 
-  <!-- Logout Confirmation Template -->
-  <template id="logout-confirmation-template">
-    <div class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-80">
-        <h3 class="text-lg font-semibold mb-4">Confirm Logout</h3>
-        <p class="text-sm text-gray-700 dark:text-gray-300">Are you sure you want to log out?</p>
-        <div class="mt-6 flex justify-end space-x-2">
-          <button id="logout-confirm-cancel" type="button" class="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200">Cancel</button>
-          <button id="logout-confirm-yes" type="button" class="px-4 py-2 rounded bg-red-600 hover:bg-red-700 text-white">Log Out</button>
+  <!-- ========== SHARE MODAL TEMPLATE ========== -->
+  <template id="share-modal-template">
+    <div class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" role="dialog">
+      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg max-w-md w-full p-6 relative">
+        <button type="button" class="absolute top-3 right-3 text-2xl text-gray-500 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white close-share-modal">&times;</button>
+        <h3 class="text-xl font-semibold mb-4">Share</h3>
+        <div class="grid grid-cols-4 gap-6 justify-items-center">
+          <!-- Copy Link -->
+          <div class="relative group cursor-pointer p-2 copy-link-btn" data-share="copy" title="Copy Link">
+            <div class="absolute inset-0 bg-gray-100 dark:bg-gray-700 opacity-50 rounded-xl hidden group-hover:block"></div>
+            <div class="relative flex flex-col items-center">
+              <div id="copy-icon-wrapper"
+                   class="w-16 h-16 flex items-center justify-center rounded-full bg-blue-600 hover:bg-blue-700 transition-shadow shadow-md">
+                <i id="copy-icon" class="fas fa-link fa-2x text-white"></i>
+              </div>
+              <span class="mt-2 text-sm font-medium">Copy Link</span>
+            </div>
+          </div>
+          <!-- QR Code -->
+          <div class="relative group cursor-pointer p-2 qr-code-btn" data-share="qr" title="QR Code">
+            <div class="absolute inset-0 bg-gray-100 dark:bg-gray-700 opacity-50 rounded-xl hidden group-hover:block"></div>
+            <div class="relative flex flex-col items-center">
+              <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
+                <img src="https://i.imgur.com/nWDcvp1.png" alt="QR Code" class="w-full h-full object-cover qr-img"/>
+              </div>
+              <span class="mt-2 text-sm font-medium">QR Code</span>
+            </div>
+          </div>
+          <!-- WhatsApp -->
+          <div class="relative group cursor-pointer p-2" data-share="whatsapp" title="WhatsApp">
+            <div class="absolute inset-0 bg-gray-100 dark:bg-gray-700 opacity-50 rounded-xl hidden group-hover:block"></div>
+            <div class="relative flex flex-col items-center">
+              <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
+                <img src="https://i.imgur.com/qOttODu.png" alt="WhatsApp" class="w-full h-full object-cover"/>
+              </div>
+              <span class="mt-2 text-sm font-medium">WhatsApp</span>
+            </div>
+          </div>
+          <!-- Telegram -->
+          <div class="relative group cursor-pointer p-2" data-share="telegram" title="Telegram">
+            <div class="absolute inset-0 bg-gray-100 dark:bg-gray-700 opacity-50 rounded-xl hidden group-hover:block"></div>
+            <div class="relative flex flex-col items-center">
+              <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
+                <img src="https://i.imgur.com/uU1H4xZ.png" alt="Telegram" class="w-full h-full object-cover"/>
+              </div>
+              <span class="mt-2 text-sm font-medium">Telegram</span>
+            </div>
+          </div>
+          <!-- Reddit -->
+          <div class="relative group cursor-pointer p-2" data-share="reddit" title="Reddit">
+            <div class="absolute inset-0 bg-gray-100 dark:bg-gray-700 opacity-50 rounded-xl hidden group-hover:block"></div>
+            <div class="relative flex flex-col items-center">
+              <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
+                <img src="https://i.imgur.com/zELebxD.png" alt="Reddit" class="w-full h-full object-cover"/>
+              </div>
+              <span class="mt-2 text-sm font-medium">Reddit</span>
+            </div>
+          </div>
+          <!-- LinkedIn -->
+          <div class="relative group cursor-pointer p-2" data-share="linkedin" title="LinkedIn">
+            <div class="absolute inset-0 bg-gray-100 dark:bg-gray-700 opacity-50 rounded-xl hidden group-hover:block"></div>
+            <div class="relative flex flex-col items-center">
+              <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
+                <img src="https://i.imgur.com/PEw6T9z.png" alt="LinkedIn" class="w-full h-full object-cover"/>
+              </div>
+              <span class="mt-2 text-sm font-medium">LinkedIn</span>
+            </div>
+          </div>
+          <!-- X (formerly Twitter) -->
+          <div class="relative group cursor-pointer p-2" data-share="twitter" title="X">
+            <div class="absolute inset-0 bg-gray-100 dark:bg-gray-700 opacity-50 rounded-xl hidden group-hover:block"></div>
+            <div class="relative flex flex-col items-center">
+              <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
+                <img src="https://i.imgur.com/PLQsGra.png" alt="X" class="w-full h-full object-cover"/>
+              </div>
+              <span class="mt-2 text-sm font-medium">X</span>
+            </div>
+          </div>
+          <!-- Email -->
+          <div class="relative group cursor-pointer p-2" data-share="email" title="Email">
+            <div class="absolute inset-0 bg-gray-100 dark:bg-gray-700 opacity-50 rounded-xl hidden group-hover:block"></div>
+            <div class="relative flex flex-col items-center">
+              <div class="w-16 h-16 rounded-full overflow-hidden shadow-md">
+                <img src="https://i.imgur.com/cBOGtrb.png" alt="Email" class="w-full h-full object-cover"/>
+              </div>
+              <span class="mt-2 text-sm font-medium">Email</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </template>
 
+  <!-- ========== QR MODAL TEMPLATE ========== -->
+  <div id="qrModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg max-w-sm w-full p-6 relative">
+      <button id="close-qr-modal" class="absolute top-3 right-3 text-2xl text-gray-500 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white">&times;</button>
+      <h3 class="text-xl font-semibold mb-4">QR Code</h3>
+      <div class="flex flex-col items-center space-y-4">
+        <canvas id="qrCanvas" class="border border-gray-300 dark:border-gray-700 rounded-md"></canvas>
+        <div class="flex space-x-4">
+          <button id="copy-qr-btn" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">
+            Copy QR
+          </button>
+          <a id="download-qr-link" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition" download="qr-code.png">
+            Download QR
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== VISIT-LINKS MODAL TEMPLATE ========== -->
+  <div id="visitLinksModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg max-w-lg w-full p-6 relative">
+      <button id="close-visit-modal" class="absolute top-3 right-3 text-2xl text-gray-500 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white">&times;</button>
+      <h3 class="text-xl font-semibold mb-4">All Project Links</h3>
+      <div id="visit-links-list" class="space-y-2">
+        <!-- JavaScript will populate -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== JAVASCRIPT (combined logic) ========== -->
   <script>
-    const LINK_API  = 'https://sheet2api.com/v1/rhBSJNTTYKgC/hyperlinks';
-    const API       = 'https://sheet2api.com/v1/an4oVvpQR51V/mock-data-new';
-    const AUTH_API  = 'https://sheet2api.com/v1/rkmbUqHQAC3C/submission-form-responses';
-    let linkMap = {};
+    const LINK_API = 'https://sheet2api.com/v1/rhBSJNTTYKgC/hyperlinks';
+    const API      = 'https://sheet2api.com/v1/an4oVvpQR51V/mock-data-new';
+    const AUTH_API = 'https://sheet2api.com/v1/rkmbUqHQAC3C/submission-form-responses';
+    let linkMap   = {};
+    let itemMap   = {};
+
+    // Hardcoded Font Awesome icon mapping
+    const iconMap = {
+      "Academic": "fa-graduation-cap",
+      "Professional Development": "fa-briefcase",
+      "Cultural": "fa-globe",
+      "Special Interest": "fa-star",
+      "Arts & Music": "fa-music",
+      "Sports": "fa-basketball-ball",
+      "Service": "fa-hands-helping",
+      "Religion & Faith": "fa-praying-hands",
+      "Media & Publications": "fa-newspaper",
+      "Idea Stage": "fa-lightbulb",
+      "Beta": "fa-flask",
+      "Launched": "fa-rocket",
+      "Prototype": "fa-cogs",
+      "Scaling": "fa-chart-line",
+      "Tech": "fa-laptop-code",
+      "Healthcare": "fa-heartbeat",
+      "Education": "fa-chalkboard-teacher",
+      "Sustainability": "fa-leaf",
+      "Media": "fa-video",
+      "Gaming": "fa-gamepad",
+      "Finance": "fa-dollar-sign",
+      "Marketing": "fa-bullhorn",
+      "Design": "fa-paint-brush",
+      "Food": "fa-utensils",
+      "STEM": "fa-microscope",
+      "Research": "fa-search",
+      "Social Impact": "fa-hand-holding-heart",
+      "Product Development": "fa-tools",
+      "Passion Project": "fa-fire",
+      "Agency": "fa-building",
+      "Creator Brand": "fa-tag",
+      "Freelance": "fa-pen-nib",
+      "Nonprofit": "fa-handshake",
+      "Side Hustle": "fa-bolt",
+      "Startup": "fa-play",
+      /* Newly added terms */
+      "Health": "fa-heart",
+      "Fashion": "fa-tshirt",
+      "Idea": "fa-lightbulb"
+    };
+
+    function generateSlug(text) {
+      return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+    }
+
+    function renderSkeletons() {
+      const content = document.getElementById('content');
+      content.innerHTML = '<h1 id="page-title" class="text-3xl font-semibold mb-6">Businesses</h1>';
+      const container = document.createElement('div');
+      container.className = 'grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3';
+      for (let i = 0; i < 6; i++) {
+        const skel = document.getElementById('skeleton-card-template').content.cloneNode(true);
+        container.append(skel);
+      }
+      content.append(container);
+    }
+
+    function renderBusinesses(filterTerm = '') {
+      const content = document.getElementById('content');
+      content.innerHTML = '<h1 id="page-title" class="text-3xl font-semibold mb-6">Businesses</h1>';
+      const grid = document.createElement('div');
+      grid.className = 'grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3';
+
+      const businesses = Object.values(itemMap)
+        .filter(i => i["Project Type"] === 'Business')
+        .filter(i => {
+          if (!filterTerm) return true;
+          const term = filterTerm.toLowerCase();
+          return (
+            (i["Project Title"] || '').toLowerCase().includes(term) ||
+            (i.Tagline || '').toLowerCase().includes(term) ||
+            (i.Industry || '').toLowerCase().includes(term)
+          );
+        });
+
+      businesses.forEach(item => {
+        const slug = generateSlug(item["Project Title"]);
+        const card = document.getElementById('card-template').content.cloneNode(true);
+
+        // Populate card fields
+        card.querySelector('img').src = item["Logo URL"];
+        card.querySelector('h3').textContent = item["Project Title"];
+        card.querySelector('.tagline').textContent = item.Tagline;
+
+        // Industry tag
+        const ind = card.querySelector('.industry');
+        if (item.Industry) {
+          const iconClass = iconMap[item.Industry];
+          if (iconClass) {
+            const iEl = document.createElement('i');
+            iEl.className = `fa-solid ${iconClass} mr-1`;
+            ind.append(iEl);
+          }
+          ind.append(document.createTextNode(item.Industry));
+        } else {
+          ind.remove();
+        }
+
+        // Business Type tag if present
+        const bt = card.querySelector('.business-type');
+        if (item["Business Type"]) {
+          const iconClass = iconMap[item["Business Type"]];
+          if (iconClass) {
+            const iEl = document.createElement('i');
+            iEl.className = `fa-solid ${iconClass} mr-1`;
+            bt.append(iEl);
+          }
+          bt.append(document.createTextNode(item["Business Type"]));
+        } else {
+          bt.remove();
+        }
+
+        // Stage tag if present
+        const st = card.querySelector('.stage');
+        if (item.Stage) {
+          const iconClass = iconMap[item.Stage];
+          if (iconClass) {
+            const iEl = document.createElement('i');
+            iEl.className = `fa-solid ${iconClass} mr-1`;
+            st.append(iEl);
+          }
+          st.append(document.createTextNode(item.Stage));
+        } else {
+          st.remove();
+        }
+
+        // Location (college/university) + Members
+        card.querySelector('.school').textContent  = item["College or University Name"];
+        card.querySelector('.members').textContent = item["Number of participants"];
+
+        const cardEl = card.querySelector('.card');
+        cardEl.setAttribute('data-slug', slug);
+        cardEl.addEventListener('click', () => showDetails(item, slug));
+        grid.append(card);
+      });
+
+      content.append(grid);
+    }
+
+    function showDetails(item, slug) {
+      updateHistory(slug);
+      window.scrollTo(0, 0);
+      const main = document.getElementById('main');
+      const detailTpl = document.getElementById('details-page-template').content.cloneNode(true);
+
+      // 1) Fill in the Logo, Title, Company/University, Members, Description
+      detailTpl.querySelector('.details-logo').src = item["Logo URL"];
+      detailTpl.querySelector('.details-title').textContent = item["Project Title"];
+      detailTpl.querySelector('.details-school').textContent = item["College or University Name"];
+      detailTpl.querySelector('.details-members').textContent = item["Number of participants"];
+      detailTpl.querySelector('.details-desc').textContent = item.Description;
+
+      // 2) “Industry”, “Business Type” & “Stage” tags (both desktop & mobile)
+      detailTpl.querySelectorAll('.details-industry').forEach(el => {
+        if (item.Industry) {
+          const iconClass = iconMap[item.Industry];
+          if (iconClass) {
+            const iEl = document.createElement('i');
+            iEl.className = `fa-solid ${iconClass} mr-1`;
+            el.append(iEl);
+          }
+          el.append(document.createTextNode(item.Industry));
+        } else el.remove();
+      });
+      detailTpl.querySelectorAll('.details-businesstype').forEach(el => {
+        if (item["Business Type"]) {
+          const iconClass = iconMap[item["Business Type"]];
+          if (iconClass) {
+            const iEl = document.createElement('i');
+            iEl.className = `fa-solid ${iconClass} mr-1`;
+            el.append(iEl);
+          }
+          el.append(document.createTextNode(item["Business Type"]));
+        } else el.remove();
+      });
+      detailTpl.querySelectorAll('.details-stage').forEach(el => {
+        if (item.Stage) {
+          const iconClass = iconMap[item.Stage];
+          if (iconClass) {
+            const iEl = document.createElement('i');
+            iEl.className = `fa-solid ${iconClass} mr-1`;
+            el.append(iEl);
+          }
+          el.append(document.createTextNode(item.Stage));
+        } else el.remove();
+      });
+
+      // 3) Populate “Visit” / social icons (desktop & mobile)
+      const visitMap = {
+        website:   item.Website,
+        instagram: item.Instagram,
+        linkedin:  item.LinkedIn,
+        youtube:   item.YouTube,
+        tiktok:    item.TikTok,
+        github:    item.GitHub,
+        discord:   item.Discord,
+        twitter:   item.Twitter,
+        linktree:  item.LinkTree
+      };
+      const visitEntries = Object.entries(visitMap).filter(([_, url]) => url);
+
+      // Desktop icons
+      const desktopSocial = detailTpl.querySelector('#desktop-social-icons');
+      if (desktopSocial) {
+        desktopSocial.innerHTML = '';
+        visitEntries.slice(0, 4).forEach(([key, url]) => {
+          const a = document.createElement('a');
+          a.href = url;
+          a.target = '_blank';
+          let iconHTML = '';
+          if (key === 'website') iconHTML = '<i class="fa-solid fa-globe fa-lg text-gray-800 dark:text-gray-200"></i>';
+          else {
+            switch(key) {
+              case 'instagram': iconHTML = '<i class="fa-brands fa-instagram fa-lg text-pink-500"></i>'; break;
+              case 'linkedin': iconHTML = '<i class="fa-brands fa-linkedin fa-lg text-blue-700"></i>'; break;
+              case 'youtube': iconHTML = '<i class="fa-brands fa-youtube fa-lg text-red-600"></i>'; break;
+              case 'tiktok': iconHTML = '<i class="fa-brands fa-tiktok fa-lg text-black"></i>'; break;
+              case 'github': iconHTML = '<i class="fa-brands fa-github fa-lg text-black"></i>'; break;
+              case 'discord': iconHTML = '<i class="fa-brands fa-discord fa-lg text-indigo-500"></i>'; break;
+              case 'twitter': iconHTML = '<i class="fa-brands fa-twitter fa-lg text-blue-400"></i>'; break;
+              case 'linktree': iconHTML = '<i class="fa-solid fa-link fa-lg text-green-500"></i>'; break;
+            }
+          }
+          a.className = 'hover:opacity-80';
+          a.innerHTML = iconHTML;
+          desktopSocial.append(a);
+        });
+        if (visitEntries.length > 4) {
+          const remaining = visitEntries.length - 4;
+          const moreBtn = document.createElement('button');
+          moreBtn.textContent = `+${remaining}`;
+          moreBtn.className = 'text-gray-600 dark:text-gray-300 font-medium hover:text-gray-800 dark:hover:text-white';
+          moreBtn.addEventListener('click', () => openVisitLinksModal(visitEntries));
+          desktopSocial.append(moreBtn);
+        }
+      }
+
+      // Mobile icons
+      const mobileSocial = detailTpl.querySelector('#visit-icons-container');
+      if (mobileSocial) {
+        mobileSocial.innerHTML = '';
+        visitEntries.slice(0, 4).forEach(([key, url]) => {
+          const a = document.createElement('a');
+          a.href = url;
+          a.target = '_blank';
+          let iconHTML = '';
+          if (key === 'website') iconHTML = '<i class="fa-solid fa-globe fa-2x text-gray-800 dark:text-gray-200"></i>';
+          else {
+            switch(key) {
+              case 'instagram': iconHTML = '<i class="fa-brands fa-instagram fa-2x text-pink-500"></i>'; break;
+              case 'linkedin': iconHTML = '<i class="fa-brands fa-linkedin fa-2x text-blue-700"></i>'; break;
+              case 'youtube': iconHTML = '<i class="fa-brands fa-youtube fa-2x text-red-600"></i>'; break;
+              case 'tiktok': iconHTML = '<i class="fa-brands fa-tiktok fa-2x text-black"></i>'; break;
+              case 'github': iconHTML = '<i class="fa-brands fa-github fa-2x text-black"></i>'; break;
+              case 'discord': iconHTML = '<i class="fa-brands fa-discord fa-2x text-indigo-500"></i>'; break;
+              case 'twitter': iconHTML = '<i class="fa-brands fa-twitter fa-2x text-blue-400"></i>'; break;
+              case 'linktree': iconHTML = '<i class="fa-solid fa-link fa-2x text-green-500"></i>'; break;
+            }
+          }
+          a.className = 'hover:opacity-80';
+          a.innerHTML = iconHTML;
+          mobileSocial.append(a);
+        });
+        if (visitEntries.length > 4) {
+          const remaining = visitEntries.length - 4;
+          const moreMobile = document.createElement('button');
+          moreMobile.textContent = `+${remaining}`;
+          moreMobile.className = 'text-2xl text-gray-600 dark:text-gray-300 font-medium hover:text-gray-800 dark:hover:text-white';
+          moreMobile.addEventListener('click', () => openVisitLinksModal(visitEntries));
+          mobileSocial.append(moreMobile);
+        }
+      }
+
+      // Join button
+      const joinBtn = detailTpl.querySelector('#page-join-btn');
+      if (joinBtn) joinBtn.href = item["Join Link"] || '#';
+
+      // Desktop Flag link
+      const desktopFlag = detailTpl.querySelector('#page-flag-btn');
+      if (desktopFlag) {
+        desktopFlag.href = linkMap["Report"] || '#';
+      }
+
+      // Mobile report link
+      const mobileReport = detailTpl.querySelector('#mobile-report-link');
+      if (mobileReport) mobileReport.href = linkMap["Report"] || '#';
+
+      // Toggle mobile menu
+      const mobileMenuBtn = detailTpl.querySelector('#mobile-menu-btn');
+      const mobileMenu    = detailTpl.querySelector('#mobile-menu');
+      if (mobileMenuBtn && mobileMenu) {
+        mobileMenuBtn.addEventListener('click', e => {
+          e.stopPropagation();
+          mobileMenu.classList.toggle('hidden');
+        });
+        document.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+      }
+
+      // “View all” in Upcoming Events navigates to Events tab
+      const viewAll = detailTpl.querySelector('#view-all-events');
+      if (viewAll) {
+        viewAll.addEventListener('click', e => {
+          e.preventDefault();
+          const eventsTab = main.querySelector('.tab-button[data-tab="events"]');
+          if (eventsTab) eventsTab.click();
+        });
+      }
+
+      // Contact info
+      const emailEl = detailTpl.querySelector('.details-contact-email');
+      if (emailEl) {
+        if (item["Project Contact Email"]) {
+          emailEl.href = `mailto:${item["Project Contact Email"]}`;
+          emailEl.textContent = item["Project Contact Email"];
+        } else emailEl.parentElement.classList.add('hidden');
+      }
+      const formEl = detailTpl.querySelector('.details-contact-form');
+      if (formEl) {
+        if (item["Contact Form"]) {
+          formEl.href = item["Contact Form"];
+          formEl.textContent = 'Open Form';
+        } else formEl.parentElement.classList.add('hidden');
+      }
+
+      // Back button
+      const backBtn = detailTpl.querySelector('#backBtn');
+      if (backBtn) {
+        backBtn.addEventListener('click', () => {
+          history.pushState({}, '', window.location.pathname);
+          document.getElementById('main').innerHTML = '<main id="content" class="max-w-7xl mx-auto px-4 py-6"></main>';
+          renderSkeletons();
+          fetchAndRenderBusinesses();
+        });
+      }
+
+      // Inject into DOM
+      main.innerHTML = '';
+      main.append(detailTpl);
+
+      // Bind Share modal
+      const shareButtons = main.querySelectorAll('.page-share-btn');
+      shareButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const fragment = document.getElementById('share-modal-template').content.cloneNode(true);
+          document.body.append(fragment);
+          const modalOverlay = document.querySelector('body > .modal-overlay:last-child');
+
+          // Copy link logic
+          const copyWrapper      = modalOverlay.querySelector('.copy-link-btn');
+          const copyIconWrapper  = modalOverlay.querySelector('#copy-icon-wrapper');
+          const copyIcon         = modalOverlay.querySelector('#copy-icon');
+          const banner           = document.getElementById('copy-success-banner');
+
+          copyWrapper.addEventListener('click', () => {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+              banner.classList.remove('hidden');
+              copyIconWrapper.classList.remove('bg-blue-600','hover:bg-blue-700');
+              copyIconWrapper.classList.add('bg-green-500');
+              copyIcon.classList.replace('fa-link','fa-check');
+              setTimeout(() => {
+                banner.classList.add('hidden');
+              }, 2000);
+              setTimeout(() => {
+                copyIconWrapper.classList.remove('bg-green-500');
+                copyIconWrapper.classList.add('bg-blue-600','hover:bg-blue-700');
+                copyIcon.classList.replace('fa-check','fa-link');
+              }, 1500);
+            });
+          });
+
+          // QR code logic
+          const qrBtn = modalOverlay.querySelector('.qr-code-btn');
+          qrBtn.addEventListener('click', () => {
+            modalOverlay.remove();
+            const qrModal = document.getElementById('qrModal');
+            qrModal.classList.remove('hidden');
+            const canvas = document.getElementById('qrCanvas');
+            canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+            QRCode.toCanvas(canvas, window.location.href, { width: 200 }, err => {
+              if (err) console.error(err);
+              else {
+                const downloadLink = document.getElementById('download-qr-link');
+                downloadLink.href = canvas.toDataURL('image/png');
+              }
+            });
+            const copyQrBtn = document.getElementById('copy-qr-btn');
+            copyQrBtn.addEventListener('click', () => {
+              canvas.toBlob(blob => {
+                const item = new ClipboardItem({ 'image/png': blob });
+                navigator.clipboard.write([item]).then(() => {
+                  const banner2 = document.getElementById('copy-success-banner');
+                  banner2.textContent = 'QR code copied!';
+                  banner2.classList.remove('hidden');
+                  setTimeout(() => {
+                    banner2.classList.add('hidden');
+                    banner2.textContent = 'Link copied successfully!';
+                  }, 2000);
+                });
+              });
+            });
+            document.getElementById('close-qr-modal').addEventListener('click', () => {
+              qrModal.classList.add('hidden');
+              canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+            });
+          });
+
+          // Other share options
+          modalOverlay.querySelectorAll('[data-share]').forEach(el => {
+            const type = el.getAttribute('data-share');
+            if (type !== 'copy' && type !== 'qr') {
+              el.addEventListener('click', () => {
+                const url = window.location.href;
+                switch(type) {
+                  case 'whatsapp': window.open(`https://wa.me/?text=${encodeURIComponent(url)}`, '_blank'); break;
+                  case 'telegram': window.open(`https://t.me/share/url?url=${encodeURIComponent(url)}`, '_blank'); break;
+                  case 'reddit': window.open(`https://www.reddit.com/submit?url=${encodeURIComponent(url)}`, '_blank'); break;
+                  case 'linkedin': window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`, '_blank'); break;
+                  case 'twitter': window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}`, '_blank'); break;
+                  case 'email': window.location.href = `mailto:?subject=${encodeURIComponent(document.title)}&body=${encodeURIComponent(url)}`; break;
+                }
+              });
+            }
+          });
+
+          // Close share modal on ×
+          modalOverlay.querySelectorAll('.close-share-modal').forEach(btnClose => {
+            btnClose.addEventListener('click', () => modalOverlay.remove());
+          });
+        });
+      });
+
+      // Tab navigation
+      const navButtons = main.querySelectorAll('.tab-button');
+      navButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          navButtons.forEach(b => {
+            b.classList.remove('text-blue-600','dark:text-blue-400','border-b-4','border-blue-600');
+            b.classList.add('text-gray-500','dark:text-gray-400');
+          });
+          btn.classList.remove('text-gray-500','dark:text-gray-400');
+          btn.classList.add('text-blue-600','dark:text-blue-400','border-b-4','border-blue-600');
+          const tabId = btn.dataset.tab;
+          main.querySelectorAll('.tab-content').forEach(panel => panel.classList.add('hidden'));
+          main.querySelector('#' + tabId).classList.remove('hidden');
+        });
+      });
+      if (navButtons.length) navButtons[0].click();
+    }
+
+    function fetchAndRenderBusinesses() {
+      renderSkeletons();
+      fetch(API)
+        .then(r => r.json())
+        .then(items => {
+          items.forEach(item => {
+            const slug = generateSlug(item["Project Title"]);
+            itemMap[slug] = item;
+          });
+          const initialHash = location.hash.slice(1);
+          if (initialHash && itemMap[initialHash]) {
+            showDetails(itemMap[initialHash], initialHash);
+          } else {
+            const params = new URLSearchParams(window.location.search);
+            const q = params.get('q') || '';
+            if (q) {
+              document.getElementById('navbar-search').value = q;
+              renderBusinesses(q);
+            } else {
+              renderBusinesses();
+            }
+          }
+        })
+        .catch(console.error);
+    }
+
+    function openVisitLinksModal(entries) {
+      const modal = document.getElementById('visitLinksModal');
+      const listContainer = document.getElementById('visit-links-list');
+      if (!modal || !listContainer) return;
+      listContainer.innerHTML = '';
+      entries.forEach(([key, url]) => {
+        const div = document.createElement('div');
+        div.className = 'flex items-center space-x-2';
+        let iconHTML = '';
+        if (key === 'website') iconHTML = '<i class="fa-solid fa-globe fa-lg text-gray-800 dark:text-gray-200"></i>';
+        else {
+          switch(key) {
+            case 'instagram': iconHTML = '<i class="fa-brands fa-instagram fa-lg text-pink-500"></i>'; break;
+            case 'linkedin': iconHTML = '<i class="fa-brands fa-linkedin fa-lg text-blue-700"></i>'; break;
+            case 'youtube': iconHTML = '<i class="fa-brands fa-youtube fa-lg text-red-600"></i>'; break;
+            case 'tiktok': iconHTML = '<i class="fa-brands fa-tiktok fa-lg text-black"></i>'; break;
+            case 'github': iconHTML = '<i class="fa-brands fa-github fa-lg text-black"></i>'; break;
+            case 'discord': iconHTML = '<i class="fa-brands fa-discord fa-lg text-indigo-500"></i>'; break;
+            case 'twitter': iconHTML = '<i class="fa-brands fa-twitter fa-lg text-blue-400"></i>'; break;
+            case 'linktree': iconHTML = '<i class="fa-solid fa-link fa-lg text-green-500"></i>'; break;
+          }
+        }
+        div.innerHTML = `
+          ${iconHTML}
+          <a href="${url}" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline break-all">${key.charAt(0).toUpperCase() + key.slice(1)}</a>
+        `;
+        listContainer.append(div);
+      });
+      modal.classList.remove('hidden');
+      document.getElementById('close-visit-modal').onclick = () => modal.classList.add('hidden');
+    }
+
+    function updateHistory(slug) {
+      if (history.pushState) {
+        history.pushState({slug}, '', `#${slug}`);
+      }
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
-      // 1) Theme Setup
       const htmlEl     = document.documentElement;
       const themeToggle = document.getElementById('darkToggle');
       const themeIcon   = document.getElementById('darkIcon');
       const storedTheme = localStorage.getItem('theme');
-      if (storedTheme === 'dark') {
-        htmlEl.classList.add('dark');
-        themeToggle.checked = true;
-        themeIcon.classList.replace('fa-moon','fa-sun');
-      } else {
-        htmlEl.classList.remove('dark');
-        themeToggle.checked = false;
-        themeIcon.classList.replace('fa-sun','fa-moon');
+      if (themeToggle && themeIcon) {
+        if (storedTheme === 'dark') {
+          htmlEl.classList.add('dark');
+          themeToggle.checked = true;
+          themeIcon.classList.replace('fa-moon','fa-sun');
+        } else {
+          htmlEl.classList.remove('dark');
+          themeToggle.checked = false;
+          themeIcon.classList.replace('fa-sun','fa-moon');
+        }
+        themeToggle.addEventListener('change', e => {
+          if (e.target.checked) {
+            htmlEl.classList.add('dark');
+            themeIcon.classList.replace('fa-moon','fa-sun');
+            localStorage.setItem('theme','dark');
+          } else {
+            htmlEl.classList.remove('dark');
+            themeIcon.classList.replace('fa-sun','fa-moon');
+            localStorage.setItem('theme','light');
+          }
+        });
+        themeIcon.addEventListener('click', () => {
+          themeToggle.checked = !themeToggle.checked;
+          themeToggle.dispatchEvent(new Event('change'));
+        });
       }
 
-      // 2) Load Nav Links
-      fetch(LINK_API)
-        .then(r => r.json())
-        .then(arr => { linkMap = arr[0]; applyLinks(); })
-        .catch(console.error);
-
-      // 3) Restore Session
+      // Check if user is already logged in before rendering
       const stored = localStorage.getItem('currentUser');
       if (stored) {
-        try { initAuth(JSON.parse(stored)); }
-        catch { localStorage.removeItem('currentUser'); }
+        try {
+          initAuth(JSON.parse(stored));
+        } catch {
+          localStorage.removeItem('currentUser');
+        }
       }
 
-      // 4) Fetch & Render ONLY Businesses Section
-      fetch(API)
+      // Fetch linkMap first
+      fetch(LINK_API)
         .then(r => r.json())
-        .then(items => {
-          const frag = document.getElementById('section-template').content.cloneNode(true);
-          const grid = frag.querySelector('div');
-          items.filter(i => i["Project Type"] === 'Business').forEach(item => {
-            const cardFrag = document.getElementById('card-template').content.cloneNode(true);
-            const cardEl = cardFrag.querySelector('.card');
-            cardEl.querySelector('img').src              = item["Logo URL"];
-            cardEl.querySelector('h3').textContent       = item["Project Title"];
-            cardEl.querySelector('.tagline').textContent = item.Tagline;
-            cardEl.querySelector('.school').textContent  = item["College or University Name"];
-            cardEl.querySelector('.members').textContent = item["Number of participants"];
-            cardEl.addEventListener('click', () => showDetails(item));
-            grid.append(cardEl);
-          });
-          document.getElementById('content').append(frag);
-
-          // 5) Live search filtering
-          const searchInput = document.getElementById('businessSearch');
-          searchInput.addEventListener('input', () => {
-            const term = searchInput.value.trim().toLowerCase();
-            grid.querySelectorAll('.card').forEach(cardEl => {
-              const title = cardEl.querySelector('h3').textContent.toLowerCase();
-              cardEl.style.display = title.includes(term) ? '' : 'none';
-            });
+        .then(arr => {
+          linkMap = arr[0];
+          // Apply links from linkMap except Font Awesome JSON
+          Object.entries(linkMap).forEach(([key, url]) => {
+            if (key !== "Font Awesome") {
+              document.querySelectorAll(`a[data-key="${key}"]`).forEach(a => a.href = url);
+            }
           });
         })
-        .catch(console.error);
+        .catch(console.error)
+        .finally(() => {
+          // Then fetch and render businesses
+          fetchAndRenderBusinesses();
+        });
 
       // Sidebar toggle
-      document.getElementById('toggleBtn').addEventListener('click', () => {
-        const sb       = document.getElementById('sidebar');
-        const mn       = document.getElementById('main');
-        const isMobile = window.innerWidth < 768;
-        if (isMobile) {
-          const hidden = sb.classList.contains('-translate-x-full');
-          sb.classList.toggle('translate-x-0', hidden);
-          sb.classList.toggle('-translate-x-full', !hidden);
+      const toggleBtn = document.getElementById('toggleBtn');
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          const sb = document.getElementById('sidebar');
+          const mn = document.getElementById('main');
+          const isMobile = window.innerWidth < 768;
+          if (sb && mn) {
+            if (isMobile) {
+              const hidden = sb.classList.contains('-translate-x-full');
+              sb.classList.toggle('translate-x-0', hidden);
+              sb.classList.toggle('-translate-x-full', !hidden);
+            } else {
+              if (sb.classList.contains('w-48')) {
+                sb.classList.replace('w-48','w-16');
+                mn.classList.replace('md:ml-48','md:ml-16');
+                document.querySelectorAll('#sidebar span').forEach(s => s.classList.add('hidden'));
+                document.getElementById('darkToggleLabel')?.classList.add('hidden');
+                document.getElementById('darkToggleText')?.classList.add('hidden');
+              } else {
+                sb.classList.replace('w-16','w-48');
+                mn.classList.replace('md:ml-16','md:ml-48');
+                document.querySelectorAll('#sidebar span').forEach(s => s.classList.remove('hidden'));
+                document.getElementById('darkToggleLabel')?.classList.remove('hidden');
+                document.getElementById('darkToggleText')?.classList.remove('hidden');
+              }
+            }
+          }
+        });
+      }
+
+      // Sign-In modal logic
+      const signInBtn = document.getElementById('signInBtn');
+      if (signInBtn) {
+        signInBtn.addEventListener('click', () => {
+          const tpl = document.createElement('template');
+          tpl.innerHTML = `
+          <div class="signin-overlay modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" role="dialog">
+            <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-lg w-80 p-6">
+              <div id="signin-loading" class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 dark:bg-gray-900 dark:bg-opacity-75 hidden">
+                <div class="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+              </div>
+              <button id="close-signin" class="absolute top-3 right-3 text-2xl text-gray-500 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white">&times;</button>
+              <h3 class="text-xl font-semibold mb-4">Sign In</h3>
+              <form id="signin-form" class="space-y-4">
+                <div>
+                  <label for="signin-email" class="block text-sm font-medium mb-1">Email</label>
+                  <input id="signin-email" type="email" required class="w-full px-3 py-2 border rounded dark:bg-gray-700 dark:border-gray-600 focus:outline-none" placeholder="you@example.com"/>
+                </div>
+                <div>
+                  <label for="signin-password" class="block text-sm font-medium mb-1">Password</label>
+                  <input id="signin-password" type="password" required class="w-full px-3 py-2 border rounded dark:bg-gray-700 dark:border-gray-600 focus:outline-none" placeholder="••••••••"/>
+                </div>
+                <p id="signin-error" class="text-red-600 text-sm hidden">Invalid email or password.</p>
+                <p id="signin-success" class="text-green-600 text-sm hidden">Login successful!</p>
+                <button id="signin-submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50">Sign In</button>
+              </form>
+            </div>
+          </div>`;
+          const fragment = tpl.content.cloneNode(true);
+          document.body.append(fragment);
+
+          const overlay = document.querySelector('.signin-overlay');
+          if (!overlay) return;
+
+          const form    = overlay.querySelector('#signin-form');
+          const emailIn = overlay.querySelector('#signin-email');
+          const passIn  = overlay.querySelector('#signin-password');
+          const err     = overlay.querySelector('#signin-error');
+          const ok      = overlay.querySelector('#signin-success');
+          const submit  = overlay.querySelector('#signin-submit');
+          const loader  = overlay.querySelector('#signin-loading');
+          const closeBtn = overlay.querySelector('#close-signin');
+
+          closeBtn.addEventListener('click', () => overlay.remove());
+          overlay.addEventListener('click', e => {
+            if (e.target === overlay) overlay.remove();
+          });
+
+          form.addEventListener('submit', e => {
+            e.preventDefault();
+            err.classList.add('hidden');
+            ok.classList.add('hidden');
+            submit.disabled = true;
+            loader.classList.remove('hidden');
+
+            fetch(AUTH_API)
+              .then(r => r.json())
+              .then(users => {
+                const matched = users.find(u =>
+                  u.Email === emailIn.value.trim() && u.Password === passIn.value
+                );
+                if (!matched) {
+                  err.textContent = 'Invalid email or password.'; 
+                  err.classList.remove('hidden');
+                  submit.disabled = false;
+                  loader.classList.add('hidden');
+                  return;
+                }
+                ok.classList.remove('hidden');
+                setTimeout(() => {
+                  overlay.remove();
+                  initAuth(matched);
+                }, 500);
+              })
+              .catch(() => {
+                err.textContent = 'Network error';
+                err.classList.remove('hidden');
+                submit.disabled = false;
+                loader.classList.add('hidden');
+              });
+          });
+        });
+      }
+
+      // AUTOCOMPLETE show/hide logic + keyboard navigation
+      const searchInput = document.getElementById('navbar-search');
+      const autocomplete = document.getElementById('search-autocomplete');
+      const listItems = document.querySelectorAll('#autocomplete-list li');
+      let currentFocus = -1;
+
+      function removeActive(items) {
+        items.forEach(item => item.classList.remove('autocomplete-active'));
+      }
+
+      function addActive(items, index) {
+        if (!items || items.length === 0) return;
+        removeActive(items);
+        if (index >= items.length) index = 0;
+        if (index < 0) index = items.length - 1;
+        items[index].classList.add('autocomplete-active');
+        return index;
+      }
+
+      searchInput.addEventListener('input', () => {
+        if (searchInput.value.trim().length > 0) {
+          autocomplete.classList.remove('hidden');
         } else {
-          const lbl = document.getElementById('darkToggleLabel');
-          const txt = document.getElementById('darkToggleText');
-          if (sb.classList.contains('w-48')) {
-            sb.classList.replace('w-48','w-16');
-            mn.classList.replace('md:ml-48','md:ml-16');
-            document.querySelectorAll('#sidebar span').forEach(s => s.classList.add('hidden'));
-            lbl.classList.add('hidden'); txt.classList.add('hidden');
+          autocomplete.classList.add('hidden');
+        }
+      });
+
+      searchInput.addEventListener('keydown', e => {
+        const items = document.querySelectorAll('#autocomplete-list li');
+        if (autocomplete.classList.contains('hidden')) return;
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          currentFocus = addActive(items, currentFocus + 1);
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          currentFocus = addActive(items, currentFocus - 1);
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          if (currentFocus > -1) {
+            items[currentFocus].click();
           } else {
-            sb.classList.replace('w-16','w-48');
-            mn.classList.replace('md:ml-16','md:ml-48');
-            document.querySelectorAll('#sidebar span').forEach(s => s.classList.remove('hidden'));
-            lbl.classList.remove('hidden'); txt.classList.remove('hidden');
+            filterAndDeepLink(searchInput.value.trim());
+            autocomplete.classList.add('hidden');
           }
         }
       });
 
-      // Dark mode toggle
-      document.getElementById('darkToggle').addEventListener('change', e => {
-        const htmlEl = document.documentElement;
-        const di     = document.getElementById('darkIcon');
-        if (e.target.checked) {
-          htmlEl.classList.add('dark');
-          di.classList.replace('fa-moon','fa-sun');
-          localStorage.setItem('theme','dark');
-        } else {
-          htmlEl.classList.remove('dark');
-          di.classList.replace('fa-sun','fa-moon');
-          localStorage.setItem('theme','light');
-        }
-      });
-      document.getElementById('darkIcon').addEventListener('click', () => {
-        const inp = document.getElementById('darkToggle');
-        inp.checked = !inp.checked;
-        inp.dispatchEvent(new Event('change'));
-      });
-
-      // Sign-in logic with loading animation
-      document.getElementById('signInBtn').addEventListener('click', () => {
-        const tpl = document.getElementById('signin-modal-template').content.cloneNode(true);
-        const m   = tpl.querySelector('.modal-overlay');
-        document.body.append(m);
-
-        const form    = m.querySelector('#signin-form');
-        const emailIn = m.querySelector('#signin-email');
-        const passIn  = m.querySelector('#signin-password');
-        const err     = m.querySelector('#signin-error');
-        const ok      = m.querySelector('#signin-success');
-        const submit  = m.querySelector('#signin-submit');
-        const loader  = m.querySelector('#signin-loading');
-
-        m.querySelector('#close-signin').onclick = () => m.remove();
-        m.addEventListener('click', e => e.target === m && m.remove());
-
-        form.addEventListener('submit', e => {
-          e.preventDefault();
-          err.classList.add('hidden');
-          ok.classList.add('hidden');
-          submit.disabled = true;
-          loader.classList.remove('hidden');
-
-          fetch(AUTH_API)
-            .then(r => r.json())
-            .then(users => {
-              const u = users.find(u =>
-                u.Email === emailIn.value.trim() && u.Password === passIn.value
-              );
-              if (!u) {
-                err.classList.remove('hidden');
-                return;
-              }
-              ok.classList.remove('hidden');
-              setTimeout(() => {
-                m.remove();
-                initAuth(u);
-              }, 500);
-            })
-            .catch(() => {
-              err.textContent = 'Network error';
-              err.classList.remove('hidden');
-            })
-            .finally(() => {
-              submit.disabled = false;
-              loader.classList.add('hidden');
-            });
+      // Clicking on autocomplete options
+      document.querySelectorAll('#autocomplete-list li').forEach(li => {
+        li.addEventListener('click', () => {
+          const page = li.getAttribute('data-page');
+          const query = encodeURIComponent(searchInput.value.trim());
+          if (page === 'Businesses') {
+            filterAndDeepLink(searchInput.value.trim());
+          } else {
+            window.location.href = `${page}.html${query ? `?q=${query}` : ''}`;
+          }
+          autocomplete.classList.add('hidden');
         });
       });
 
-      // Logout confirmation
       document.addEventListener('click', e => {
-        if (e.target.id === 'logoutBtn') {
-          e.preventDefault();
-          showLogoutConfirmation();
+        if (e.target !== searchInput) {
+          autocomplete.classList.add('hidden');
         }
       });
+      searchInput.addEventListener('blur', () => {
+        setTimeout(() => autocomplete.classList.add('hidden'), 150);
+      });
+
+      // Function: filter businesses live and update URL
+      function filterAndDeepLink(term) {
+        const newUrl = term ? `Businesses.html?q=${encodeURIComponent(term)}` : 'Businesses.html';
+        history.pushState({}, '', newUrl);
+        renderBusinesses(term);
+      }
+    });
+
+    // Handle back/forward navigation: reapply filter or show profile
+    window.addEventListener('popstate', () => {
+      const slug = location.hash.slice(1);
+      if (slug && itemMap[slug]) {
+        showDetails(itemMap[slug], slug);
+      } else {
+        document.getElementById('main').innerHTML = '<main id="content" class="max-w-7xl mx-auto px-4 py-6"></main>';
+        const params = new URLSearchParams(window.location.search);
+        const q = params.get('q') || '';
+        document.getElementById('navbar-search').value = q;
+        renderBusinesses(q);
+      }
     });
 
     function applyLinks() {
-      Object.entries(linkMap).forEach(([key,url]) => {
-        document.querySelectorAll(`a[data-key="${key}"]`).forEach(a => a.href = url);
+      Object.entries(linkMap).forEach(([key, url]) => {
+        if (key !== "Font Awesome") {
+          document.querySelectorAll(`a[data-key="${key}"]`).forEach(a => a.href = url);
+        }
       });
     }
 
@@ -478,13 +1264,15 @@
       window.currentUser = u;
       localStorage.setItem('currentUser', JSON.stringify(u));
       const ac = document.getElementById('authContainer');
-      ac.innerHTML = `
-        <a data-key="Upload Activity" href="#" class="text-gray-600 dark:text-gray-300 mr-4 cursor-pointer">
-          <i class="fas fa-plus-circle fa-lg"></i>
-        </a>
-        <i class="fas fa-bell text-gray-600 dark:text-gray-300 mr-4 cursor-pointer"></i>
-        <span class="font-medium mr-2">${u["First Name"]}</span>
-      `;
+      if (ac) {
+        ac.innerHTML = `
+          <a data-key="Upload Activity" href="#" class="text-gray-600 dark:text-gray-300 mr-4 cursor-pointer">
+            <i class="fas fa-plus-circle fa-lg"></i>
+          </a>
+          <i class="fas fa-bell text-gray-600 dark:text-gray-300 mr-4 cursor-pointer"></i>
+          <span class="font-medium mr-2">${u["First Name"]}</span>
+        `;
+      }
       const pfc = document.createElement('div');
       pfc.id = 'pfpContainer';
       pfc.className = 'relative';
@@ -504,156 +1292,77 @@
         pfpBtn.textContent = initials.toUpperCase();
       }
       pfc.appendChild(pfpBtn);
-      ac.appendChild(pfc);
+      ac?.appendChild(pfc);
 
       applyLinks();
+
       const ddClone = document.getElementById('profile-dropdown-template').content.cloneNode(true);
       pfc.append(ddClone);
 
       const dd = document.getElementById('profileDropdown');
-      document.getElementById('pfpBtn').addEventListener('click', e => {
+      document.getElementById('pfpBtn')?.addEventListener('click', e => {
         e.stopPropagation();
         dd.classList.toggle('hidden');
       });
       document.addEventListener('click', () => dd.classList.add('hidden'));
+
+      document.getElementById('logoutBtn')?.addEventListener('click', e => {
+        e.preventDefault();
+        showLogoutConfirmation();
+      });
     }
 
     function showLogoutConfirmation() {
-      const tpl   = document.getElementById('logout-confirmation-template').content.cloneNode(true);
-      const modal = tpl.querySelector('.modal-overlay');
-      document.body.append(modal);
-      modal.querySelector('#logout-confirm-cancel').addEventListener('click', () => modal.remove());
-      modal.querySelector('#logout-confirm-yes').addEventListener('click', () => {
+      const tpl = document.createElement('template');
+      tpl.innerHTML = `
+        <div class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-80">
+            <h3 class="text-lg font-semibold mb-4">Confirm Logout</h3>
+            <p class="text-sm text-gray-700 dark:text-gray-300">Are you sure you want to log out?</p>
+            <div class="mt-6 flex justify-end space-x-2">
+              <button id="logout-confirm-cancel"
+                      class="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200">
+                Cancel
+              </button>
+              <button id="logout-confirm-yes"
+                      class="px-4 py-2 rounded bg-red-600 hover:bg-red-700 text-white">
+                Log Out
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+      const fragment = tpl.content.cloneNode(true);
+      const overlay = fragment.querySelector('.modal-overlay');
+      document.body.append(overlay);
+
+      document.getElementById('logout-confirm-cancel')?.addEventListener('click', () => {
+        overlay.remove();
+      });
+      document.getElementById('logout-confirm-yes')?.addEventListener('click', () => {
         localStorage.removeItem('currentUser');
+        overlay.remove();
         location.reload();
       });
     }
-
-    function showDetails(item) {
-      const tpl   = document.getElementById('details-modal-template').content.cloneNode(true);
-      const modal = tpl.querySelector('.modal-overlay');
-      modal.querySelector('.details-logo').src            = item["Logo URL"];
-      modal.querySelector('.details-title').textContent   = item["Project Title"];
-      modal.querySelector('.details-industry').textContent= item.Industry;
-      modal.querySelector('.details-tagline').textContent = item.Tagline;
-      modal.querySelector('.details-desc').textContent    = item.Description;
-      modal.querySelector('.details-school').textContent  = item["College or University Name"];
-      modal.querySelector('.details-members').textContent = item["Number of participants"];
-      const bt = modal.querySelector('.details-businesstype');
-      if (item["Business Type"]) bt.textContent=item["Business Type"]; else bt.remove();
-      const ds = modal.querySelector('.details-stage');
-      if (item.Stage) ds.textContent=item.Stage; else ds.remove();
-
-      const socialMap = {
-        website:'Website', instagram:'Instagram', linkedin:'LinkedIn',
-        youtube:'YouTube', tiktok:'TikTok', github:'GitHub',
-        discord:'Discord', groupme:'GroupMe', twitter:'Twitter',
-        linktree:'LinkTree'
-      };
-      const menu = modal.querySelector('#socials-menu');
-      let count = 0;
-      Object.values(socialMap).forEach(label => {
-        const url = item[label];
-        if (url) {
-          const a = document.createElement('a');
-          a.className='block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-sm';
-          a.href=url; a.target='_blank'; a.textContent=label;
-          menu.append(a); count++;
-        }
-      });
-      if (!count) modal.querySelector('#socials-container').style.display='none';
-
-      const jb = modal.querySelector('#modal-join-btn');
-      if (!item["Join Form"]) jb.classList.add('bg-gray-400','cursor-not-allowed');
-
-      const cb = modal.querySelector('#contact-info-btn');
-      if (item["Project Contact Email"]||item["Contact Form"]) {
-        cb.addEventListener('click', e=>{ e.stopPropagation(); showContact(item); });
-      } else {
-        cb.classList.add('opacity-50','cursor-not-allowed');
-      }
-
-      [modal.querySelector('#socials-btn'), menu].forEach(el=>{
-        el.addEventListener('mouseenter', ()=>{
-          clearTimeout(window.__to);
-          menu.classList.remove('invisible','opacity-0');
-        });
-        el.addEventListener('mouseleave', ()=>{
-          window.__to = setTimeout(()=>{
-            menu.classList.add('invisible','opacity-0');
-          }, 300);
-        });
-      });
-
-      document.body.append(modal);
-      modal.querySelector('.close-modal').onclick = ()=> modal.remove();
-
-      const nav=modal.querySelector('#tab-nav'), ul=modal.querySelector('#tab-underline');
-      nav.querySelectorAll('.tab-button').forEach(btn=>{
-        btn.addEventListener('click', ()=>{
-          nav.querySelectorAll('.tab-button').forEach(b=>b.classList.replace('text-blue-600','text-gray-500'));
-          btn.classList.replace('text-gray-500','text-blue-600');
-          ul.style.width=btn.offsetWidth+'px'; ul.style.left=btn.offsetLeft+'px';
-          modal.querySelectorAll('.tab-content').forEach(c=>c.classList.add('hidden'));
-          modal.querySelector('#'+btn.dataset.tab).classList.remove('hidden');
-        });
-      });
-      nav.querySelector('.tab-button').click();
-    }
-
-    function showContact(item) {
-      const tpl = document.getElementById('contact-modal-template').content.cloneNode(true);
-      const cm  = tpl.querySelector('.modal-overlay');
-      const em  = cm.querySelector('.contact-email');
-      const fm  = cm.querySelector('.contact-form');
-      if (item["Project Contact Email"]) {
-        em.href=`mailto:${item["Project Contact Email"]}`; em.textContent=item["Project Contact Email"];
-      }
-      if (item["Contact Form"]) {
-        fm.href=item["Contact Form"]; fm.textContent='Open Form';
-      }
-      document.body.append(cm);
-      cm.querySelector('.close-contact-modal').onclick = ()=> cm.remove();
-    }
-
-    document.addEventListener('click', e => {
-      if (e.target.matches('[data-key="Profile"]')) {
-        e.preventDefault();
-        showProfileModal();
-      }
-    });
-
-    function showProfileModal() {
-      const tpl     = document.getElementById('profile-modal-template').content.cloneNode(true);
-      const modal   = tpl.querySelector('.profile-modal-overlay');
-      const header  = document.querySelector('header');
-      const sidebar = document.getElementById('sidebar');
-      modal.style.top    = header.offsetHeight + 'px';
-      modal.style.left   = sidebar.offsetWidth + 'px';
-      modal.style.right  = '0';
-      modal.style.bottom = '0';
-
-      const picEl = modal.querySelector('.profile-pic');
-      if (currentUser["Profile Picture"]) {
-        picEl.src = currentUser["Profile Picture"];
-      } else {
-        const placeholder = document.createElement('div');
-        placeholder.className = 'h-24 w-24 rounded-full border-2 border-gray-200 dark:border-gray-700 flex items-center justify-center text-white font-medium';
-        const hue = Math.floor(Math.random() * 360);
-        placeholder.style.backgroundColor = `hsl(${hue}, 70%, 40%)`;
-        const initials = ((currentUser["First Name"]||'')[0]||'') + ((currentUser["Last Name"]||'')[0]||'');
-        placeholder.textContent = initials.toUpperCase();
-        picEl.replaceWith(placeholder);
-      }
-
-      modal.querySelector('.profile-name').textContent   = `${currentUser["First Name"]} ${currentUser["Last Name"]}`;
-      modal.querySelector('.profile-school').textContent = currentUser["College or University Name"];
-      modal.querySelector('.profile-major').textContent  = currentUser.Major;
-      modal.querySelector('.close-profile-modal')
-           .addEventListener('click', () => modal.remove());
-
-      document.body.append(modal);
-    }
   </script>
+
+  <!-- ========== PROFILE-DROPDOWN TEMPLATE ========== -->
+  <template id="profile-dropdown-template">
+    <div id="profileDropdown" class="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow-lg py-2 z-50 hidden">
+      <a data-key="Profile" href="#" class="block px-4 py-2 text-sm flex items-center hover:bg-gray-100 dark:hover:bg-gray-700">
+        <i class="fas fa-user mr-2"></i>Profile
+      </a>
+      <a data-key="Settings" href="#" class="block px-4 py-2 text-sm flex items-center hover:bg-gray-100 dark:hover:bg-gray-700">
+        <i class="fas fa-cog mr-2"></i>Settings
+      </a>
+      <a data-key="My Activities" href="#" class="block px-4 py-2 text-sm flex items-center hover:bg-gray-100 dark:hover:bg-gray-700">
+        <i class="fas fa-list mr-2"></i>My Activities
+      </a>
+      <a id="logoutBtn" href="#" class="block px-4 py-2 text-sm flex items-center hover:bg-gray-100 dark:hover:bg-gray-700">
+        <i class="fas fa-sign-out-alt mr-2"></i>Logout
+      </a>
+    </div>
+  </template>
 </body>
 </html>
