@@ -1,0 +1,22 @@
+{
+  "name": "Activity Hub – Explore",
+  "short_name": "Explore",
+  "start_url": "./Explore.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f8ff",
+  "theme_color": "#1e3a8a",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://i.imgur.com/DNoJrbI.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://i.imgur.com/DNoJrbI.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
