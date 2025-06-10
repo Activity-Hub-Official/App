@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activity Hub Mock</title>
+
+  <!-- Favicon -->
+  <link rel="icon" href="https://i.imgur.com/DNoJrbI.png" type="image/png">
+
+  <!-- Font Awesome 6 -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"
+  />
+
+  <!-- Web App Manifest -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Apple Touch Icon -->
+  <link rel="apple-touch-icon" href="https://i.imgur.com/DNoJrbI.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Activity Hub Mock">
+
+  <style>
+    /* Reset & Base */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Helvetica Neue", Arial, sans-serif; background: #f5f8ff; color: #1e293b; }
+    a { text-decoration: none; color: inherit; }
+
+    /* Header */
+    header {
+      background: #1e3a8a;
+      color: #fff;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.25rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    /* Top nav for desktop/browser */
+    nav.top-nav {
+      display: flex;
+      justify-content: center;
+      background: #1e40af;
+      border-bottom: 1px solid #3740ae;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    nav.top-nav a {
+      padding: 1rem 1.5rem;
+      font-size: 0.95rem;
+      color: #fff;
+      transition: background .2s;
+    }
+    nav.top-nav a:hover {
+      background: #3740ae;
+    }
+
+    main {
+      padding: 2rem;
+      max-width: 800px;
+      margin: auto;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    /* Centered FA icon */
+    .logo-center {
+      padding: 2rem 0;
+    }
+    .logo-center .fa-6x {
+      color: #1e40af;
+    }
+
+    /* Bottom nav (PWA mobile only) */
+    nav.bottom-nav {
+      display: none;
+      position: fixed;
+      bottom: 0; left: 0;
+      width: 100%;
+      background: #1e40af;
+      border-top: 1px solid #3740ae;
+      justify-content: space-around;
+      align-items: center;
+      height: 60px;
+      box-shadow: 0 -2px 4px rgba(0,0,0,0.05);
+      z-index: 100;
+    }
+    nav.bottom-nav a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 0.75rem;
+      color: #fff;
+      transition: opacity .2s;
+    }
+    nav.bottom-nav a .fa-lg {
+      margin-bottom: 4px;
+    }
+    nav.bottom-nav a:hover {
+      opacity: 0.8;
+    }
+
+    /* Show bottom-nav only when PWA standalone AND on small screens */
+    @media (max-width: 767px) {
+      .pwa-mode nav.bottom-nav {
+        display: flex;
+      }
+      /* hide top nav in PWA mobile */
+      .pwa-mode nav.top-nav {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>Activity Hub (Mock PWA)</header>
+
+  <!-- Top nav: visible in desktop or normal browser -->
+  <nav class="top-nav">
+    <a href="#"><i class="fas fa-home"></i> Home</a>
+    <a href="#"><i class="fas fa-compass"></i> Explore</a>
+    <a href="#"><i class="fas fa-bell"></i> Alerts</a>
+    <a href="#"><i class="fas fa-user"></i> Profile</a>
+  </nav>
+
+  <main>
+    <!-- Centered FA icon instead of image -->
+    <div class="logo-center">
+      <i class="fas fa-dove fa-6x"></i>
+    </div>
+
+    <h1>Welcome to Activity Hub!</h1>
+    <p>
+      This mock demonstrates switching between a top nav bar in your browser and a bottom tab bar
+      when installed as a PWA on mobile. Add it to your home screen and launch—it’ll feel native.
+    </p>
+  </main>
+
+  <!-- Bottom nav: only in PWA-installed mobile mode -->
+  <nav class="bottom-nav">
+    <a href="#"><i class="fas fa-home fa-lg"></i><span>Home</span></a>
+    <a href="#"><i class="fas fa-search fa-lg"></i><span>Explore</span></a>
+    <a href="#"><i class="fas fa-plus-circle fa-lg"></i><span>New</span></a>
+    <a href="#"><i class="fas fa-inbox fa-lg"></i><span>Inbox</span></a>
+    <a href="#"><i class="fas fa-user fa-lg"></i><span>Profile</span></a>
+  </nav>
+
+  <script>
+    // Detect PWA standalone mode (all modern browsers)
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      document.body.classList.add('pwa-mode');
+    }
+    // iOS Safari fallback
+    if (window.navigator.standalone === true) {
+      document.body.classList.add('pwa-mode');
+    }
+  </script>
+</body>
+</html>
