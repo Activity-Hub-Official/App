@@ -1,7 +1,7 @@
 {
   "name": "Activity Hub Mock",
   "short_name": "Hub",
-  "start_url": "./index.html",
+  "start_url": "./PWA.html",
   "display": "standalone",
   "background_color": "#f5f8ff",
   "theme_color": "#1e3a8a",
