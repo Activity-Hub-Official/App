@@ -1,160 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Activity Hub Mock</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <title>Activity Hub PWA</title>
 
-  <!-- Favicon -->
-  <link rel="icon" href="https://i.imgur.com/DNoJrbI.png" type="image/png">
+  <!-- Tailwind with class-based dark mode -->
+  <script>
+    tailwind.config = { darkMode: 'class' }
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Font Awesome 6 -->
+  <!-- Font Awesome -->
   <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"
   />
 
-  <!-- Web App Manifest -->
-  <link rel="manifest" href="manifest.json">
-
-  <!-- Apple Touch Icon -->
-  <link rel="apple-touch-icon" href="https://i.imgur.com/DNoJrbI.png">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Activity Hub Mock">
-
   <style>
-    /* Reset & Base */
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: "Helvetica Neue", Arial, sans-serif; background: #f5f8ff; color: #1e293b; }
-    a { text-decoration: none; color: inherit; }
-
-    /* Header */
-    header {
-      background: #1e3a8a;
-      color: #fff;
-      padding: 1rem;
-      text-align: center;
-      font-size: 1.25rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      touch-action: manipulation;
     }
-
-    /* Top nav for desktop/browser */
-    nav.top-nav {
-      display: flex;
-      justify-content: center;
-      background: #1e40af;
-      border-bottom: 1px solid #3740ae;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    #sidebar {
+      position: fixed; top: 0; left: 0; bottom: 0; width: 16rem;
+      transform: translateX(-100%); transition: transform .3s ease-in-out;
+      z-index: 60; background: #2d3748;
+      padding: calc(env(safe-area-inset-top) + 1rem) 1rem 1rem;
     }
-    nav.top-nav a {
-      padding: 1rem 1.5rem;
-      font-size: 0.95rem;
-      color: #fff;
-      transition: background .2s;
-    }
-    nav.top-nav a:hover {
-      background: #3740ae;
-    }
-
-    main {
-      padding: 2rem;
-      max-width: 800px;
-      margin: auto;
-      line-height: 1.6;
-      text-align: center;
-    }
-
-    /* Centered FA icon */
-    .logo-center {
-      padding: 2rem 0;
-    }
-    .logo-center .fa-6x {
-      color: #1e40af;
-    }
-
-    /* Bottom nav (PWA mobile only) */
-    nav.bottom-nav {
-      display: none;
-      position: fixed;
-      bottom: 0; left: 0;
-      width: 100%;
-      background: #1e40af;
-      border-top: 1px solid #3740ae;
-      justify-content: space-around;
-      align-items: center;
-      height: 60px;
-      box-shadow: 0 -2px 4px rgba(0,0,0,0.05);
-      z-index: 100;
-    }
-    nav.bottom-nav a {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      font-size: 0.75rem;
-      color: #fff;
-      transition: opacity .2s;
-    }
-    nav.bottom-nav a .fa-lg {
-      margin-bottom: 4px;
-    }
-    nav.bottom-nav a:hover {
-      opacity: 0.8;
-    }
-
-    /* Show bottom-nav only when PWA standalone AND on small screens */
-    @media (max-width: 767px) {
-      .pwa-mode nav.bottom-nav {
-        display: flex;
-      }
-      /* hide top nav in PWA mobile */
-      .pwa-mode nav.top-nav {
-        display: none;
-      }
+    #sidebar.open { transform: translateX(0); }
+    #sidebarOverlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+      z-index: 55; display: none;
     }
   </style>
 </head>
-<body>
-  <header>Activity Hub (Mock PWA)</header>
 
-  <!-- Top nav: visible in desktop or normal browser -->
-  <nav class="top-nav">
-    <a href="#"><i class="fas fa-home"></i> Home</a>
-    <a href="#"><i class="fas fa-compass"></i> Explore</a>
-    <a href="#"><i class="fas fa-bell"></i> Alerts</a>
-    <a href="#"><i class="fas fa-user"></i> Profile</a>
-  </nav>
+<body class="relative h-screen overflow-hidden bg-white dark:bg-black text-black dark:text-white">
 
-  <main>
-    <!-- Centered FA icon instead of image -->
-    <div class="logo-center">
-      <i class="fas fa-dove fa-6x"></i>
+  <!-- Sidebar Overlay -->
+  <div id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="flex flex-col">
+    <div class="flex items-center space-x-3 mb-6">
+      <img src="https://i.imgur.com/zGz4RR3.jpeg" alt="Profile" class="w-10 h-10 rounded-full"/>
+      <p class="text-white font-medium">Saeed Khan</p>
+    </div>
+    <h2 class="text-xl font-semibold mb-4 text-white">Settings</h2>
+    <div class="flex items-center justify-between mb-6 text-white">
+      <span>Dark Mode</span>
+      <label class="inline-flex items-center cursor-pointer">
+        <input id="themeToggle" type="checkbox" class="sr-only">
+        <div class="w-10 h-6 bg-gray-600 rounded-full relative">
+          <span class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition"></span>
+        </div>
+      </label>
+    </div>
+    <button onclick="closeSidebar()" class="mt-4 text-sm text-gray-300 hover:text-white self-start">
+      Close
+    </button>
+  </aside>
+
+  <!-- PWA Shell -->
+  <div id="pwaShell" class="hidden absolute inset-0 flex flex-col items-center justify-center z-40 p-4 h-screen overflow-hidden bg-white dark:bg-black text-black dark:text-white">
+
+    <!-- Top bar: profile pic + search + post button -->
+    <div class="absolute top-0 left-0 right-0 flex items-center space-x-3 bg-white dark:bg-black bg-opacity-80 p-4"
+         style="padding-top: env(safe-area-inset-top);">
+      <!-- Profile Pic -->
+      <img
+        src="https://i.imgur.com/zGz4RR3.jpeg"
+        alt="Profile"
+        class="w-8 h-8 rounded-full cursor-pointer"
+        onclick="openSidebar()"
+      />
+      <!-- Search wrapper -->
+      <div class="relative flex-1">
+        <input
+          type="search"
+          placeholder="Search…"
+          class="w-full pl-10 pr-3 py-2 rounded-full bg-gray-200 dark:bg-gray-800 text-black dark:text-white placeholder-gray-500 focus:outline-none"
+        />
+        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400"></i>
+      </div>
+      <!-- Post Icon Button -->
+      <button
+        class="p-2 bg-blue-600 hover:bg-blue-700 rounded-full transition"
+        title="Create Post"
+      >
+        <i class="fa-solid fa-paper-plane text-white"></i>
+      </button>
     </div>
 
-    <h1>Welcome to Activity Hub!</h1>
-    <p>
-      This mock demonstrates switching between a top nav bar in your browser and a bottom tab bar
-      when installed as a PWA on mobile. Add it to your home screen and launch—it’ll feel native.
-    </p>
-  </main>
+    <!-- Splash -->
+    <img src="https://i.imgur.com/OKI7DUh.png"
+         alt="Splash"
+         class="w-32 h-32 mb-4 animate-pulse"/>
+    <h1 class="text-3xl font-bold mb-2">Activity Hub</h1>
+    <p id="pwaMsg" class="text-lg mb-6">Loading…</p>
+    <div id="pwaIcons" class="flex space-x-4 text-2xl opacity-0 transition-opacity duration-500 mb-24">
+      <i class="fa-brands fa-android"></i>
+      <i class="fa-brands fa-apple"></i>
+      <i class="fa-solid fa-wifi"></i>
+    </div>
 
-  <!-- Bottom nav: only in PWA-installed mobile mode -->
-  <nav class="bottom-nav">
-    <a href="#"><i class="fas fa-home fa-lg"></i><span>Home</span></a>
-    <a href="#"><i class="fas fa-search fa-lg"></i><span>Explore</span></a>
-    <a href="#"><i class="fas fa-plus-circle fa-lg"></i><span>New</span></a>
-    <a href="#"><i class="fas fa-inbox fa-lg"></i><span>Inbox</span></a>
-    <a href="#"><i class="fas fa-user fa-lg"></i><span>Profile</span></a>
-  </nav>
+    <!-- Bottom tabs -->
+    <nav class="absolute bottom-0 left-0 right-0 bg-white dark:bg-black bg-opacity-80 flex justify-around py-3"
+         style="padding-bottom: env(safe-area-inset-bottom)">
+      <a href="#" class="flex flex-col items-center text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white">
+        <i class="fa-solid fa-home text-xl"></i><span class="text-xs mt-1">Home</span>
+      </a>
+      <a href="#" class="flex flex-col items-center text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white">
+        <i class="fa-solid fa-users text-xl"></i><span class="text-xs mt-1">Clubs</span>
+      </a>
+      <a href="#" class="flex flex-col items-center text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white">
+        <i class="fa-solid fa-briefcase text-xl"></i><span class="text-xs mt-1">Businesses</span>
+      </a>
+      <a href="#" class="flex flex-col items-center text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white">
+        <i class="fa-solid fa-folder-open text-xl"></i><span class="text-xs mt-1">Projects</span>
+      </a>
+      <a href="#" class="flex flex-col items-center text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white">
+        <i class="fa-solid fa-calendar-alt text-xl"></i><span class="text-xs mt-1">Events</span>
+      </a>
+    </nav>
+  </div>
+
+  <!-- Main Content -->
+  <div id="mainContent" class="flex flex-col items-center justify-between w-full max-w-sm mx-auto h-screen p-4 overflow-hidden bg-white dark:bg-black text-black dark:text-white">
+    <header class="text-center mt-8">
+      <h1 class="text-3xl font-bold leading-tight">
+        Discover, Connect, & Launch<br/>Your Campus Journey
+      </h1>
+      <p class="mt-3 text-gray-500 dark:text-gray-400 text-sm">
+        Try the new mobile experience of Activity Hub
+      </p>
+    </header>
+    <div class="my-8">
+      <img src="https://via.placeholder.com/250x500?text=Activity+Hub+Preview" alt="App Preview"
+           class="rounded-xl shadow-xl max-w-[250px]"/>
+    </div>
+    <div class="w-full text-center">
+      <button onclick="showOverlay()"
+              class="bg-blue-600 hover:bg-blue-700 transition duration-200 text-white font-semibold py-3 px-6 rounded-full text-lg shadow-lg">
+        Try Activity Hub Now
+      </button>
+      <p class="mt-3 text-sm text-gray-400">No download needed. Works right in your browser.</p>
+    </div>
+    <footer class="mt-12 text-xs text-gray-500 dark:text-gray-400 text-center">
+      &copy; 2025 Activity Hub. All rights reserved.
+    </footer>
+  </div>
+
+  <!-- Install Overlay -->
+  <div id="installOverlay" class="hidden fixed inset-0 flex flex-col justify-between items-center p-6 z-30 h-screen overflow-hidden bg-white dark:bg-black text-black dark:text-white">
+    <div class="max-w-sm text-center mt-16">
+      <i class="fa-solid fa-arrow-up-from-bracket text-4xl mb-4 text-blue-500"></i>
+      <h2 class="text-2xl font-semibold mb-3">Add to Home Screen</h2>
+      <p class="text-sm mb-6 text-gray-500 dark:text-gray-400 leading-relaxed">
+        Tap the <i class="fa-solid fa-arrow-up-from-bracket text-lg"></i> icon at the bottom of your Safari screen.<br/><br/>
+        Then scroll down and tap <strong>"Add to Home Screen"</strong>, then hit <strong>Add</strong>.
+      </p>
+    </div>
+    <div onclick="hideOverlay()" class="cursor-pointer animate-bounce mb-8" title="Close">
+      <i class="fa-solid fa-arrow-up-from-bracket text-3xl"></i>
+    </div>
+  </div>
 
   <script>
-    // Detect PWA standalone mode (all modern browsers)
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-      document.body.classList.add('pwa-mode');
+    // Theme initialization
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const savedTheme = localStorage.theme;
+    const isDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
+    document.documentElement.classList.toggle('dark', isDark);
+
+    const toggle = document.getElementById('themeToggle');
+    toggle.checked = isDark;
+    if (isDark) toggle.nextElementSibling.querySelector('.dot').classList.add('translate-x-4');
+
+    toggle.addEventListener('change', () => {
+      document.documentElement.classList.toggle('dark', toggle.checked);
+      localStorage.theme = toggle.checked ? 'dark' : 'light';
+      toggle.nextElementSibling.querySelector('.dot').classList.toggle('translate-x-4');
+    });
+
+    // Sidebar control
+    function openSidebar() {
+      document.getElementById('sidebar').classList.add('open');
+      document.getElementById('sidebarOverlay').style.display = 'block';
     }
-    // iOS Safari fallback
-    if (window.navigator.standalone === true) {
-      document.body.classList.add('pwa-mode');
+    function closeSidebar() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('sidebarOverlay').style.display = 'none';
     }
+
+    // PWA vs Browser detection
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+    window.addEventListener('load', () => {
+      if (isStandalone) {
+        document.getElementById('mainContent').classList.add('hidden');
+        const shell = document.getElementById('pwaShell');
+        const msg = document.getElementById('pwaMsg');
+        const icons = document.getElementById('pwaIcons');
+        shell.classList.remove('hidden');
+        setTimeout(() => {
+          msg.textContent = 'Coming Soon';
+          icons.classList.add('opacity-100');
+        }, 1000);
+      }
+    });
+
+    // Install overlay
+    function showOverlay() { document.getElementById('installOverlay').classList.remove('hidden'); }
+    function hideOverlay() { document.getElementById('installOverlay').classList.add('hidden'); }
   </script>
 </body>
 </html>
