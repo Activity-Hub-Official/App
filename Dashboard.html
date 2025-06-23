@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Activity Hub Admin Dashboard</title>
+  <link rel="icon" href="https://i.imgur.com/EsNcDyR.png" />
+
+  <!-- TailwindCSS with class-based dark mode -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class' };
+  </script>
+
+  <!-- Font Awesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
+
+  <!-- HEADER -->
+  <header class="fixed inset-x-0 top-0 h-16 bg-white dark:bg-gray-800 shadow flex items-center px-4 z-50">
+    <button id="toggleSidebar" class="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white mr-4">
+      <i class="fas fa-bars fa-lg"></i>
+    </button>
+    <a href="#" class="flex items-center">
+      <img src="https://i.imgur.com/T28QHq2.png" alt="Activity Hub Logo" class="h-10 w-auto"/>
+    </a>
+    <div class="ml-auto flex items-center space-x-4">
+      <i id="darkIcon" class="fas fa-moon text-gray-600 dark:text-gray-300 cursor-pointer"></i>
+      <input id="darkToggle" type="checkbox" class="sr-only"/>
+    </div>
+  </header>
+
+  <div class="flex pt-16">
+    <!-- SIDEBAR (Original Links) -->
+    <aside id="sidebar" class="fixed left-0 top-16 bottom-0 w-48 bg-white dark:bg-gray-800 shadow transition-transform md:translate-x-0 -translate-x-full z-40" aria-label="Main sidebar navigation">
+      <nav class="mt-4 px-2">
+        <ul class="space-y-2">
+          <li>
+            <a data-key="Explore" href="#" class="flex items-center gap-3 p-2 rounded font-semibold bg-gray-200 dark:bg-gray-700">
+              <i class="fas fa-compass w-6 text-center"></i><span>Explore</span>
+            </a>
+          </li>
+          <li><hr class="border-gray-300 dark:border-gray-600 my-2"></li>
+          <li>
+            <a data-key="Clubs" href="Clubs.html" class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
+              <i class="fas fa-users w-6 text-center"></i><span>Clubs</span>
+            </a>
+          </li>
+          <li>
+            <a data-key="Businesses" href="Businesses.html" class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
+              <i class="fas fa-briefcase w-6 text-center"></i><span>Businesses</span>
+            </a>
+          </li>
+          <li>
+            <a data-key="Projects" href="Projects.html" class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
+              <i class="fas fa-project-diagram w-6 text-center"></i><span>Projects</span>
+            </a>
+          </li>
+          <li>
+            <a data-key="People" href="People.html" class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
+              <i class="fas fa-user-friends w-6 text-center"></i><span>People</span>
+            </a>
+          </li>
+          <li>
+            <a data-key="Events" href="Events.html" class="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded font-semibold">
+              <i class="fas fa-calendar-alt w-6 text-center"></i><span>Events</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- Dark mode toggle -->
+      <div class="absolute bottom-4 w-full px-4 flex items-center">
+        <i id="darkIconSidebar" class="fas fa-moon text-gray-600 dark:text-gray-300 cursor-pointer"></i>
+        <span class="ml-2 text-sm font-bold">Dark Mode</span>
+        <label for="darkToggle" class="ml-auto relative inline-block w-10 h-6 cursor-pointer">
+          <input id="darkToggle" type="checkbox" class="sr-only peer"/>
+          <div class="w-10 h-6 bg-gray-300 rounded-full peer-checked:bg-blue-600 transition-colors"></div>
+          <div class="absolute top-1 left-1 w-4 h-4 bg-white rounded-full peer-checked:translate-x-4 transition-transform"></div>
+        </label>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 ml-0 md:ml-48 p-6 transition-all duration-300">
+      <div class="max-w-7xl mx-auto">
+        <!-- Tab Buttons with Icons -->
+        <nav class="flex space-x-6 border-b pb-2">
+          <button data-tab="overview"  class="tab-btn text-blue-600 dark:text-blue-400 font-medium pb-1 border-b-4 border-blue-600">
+            <i class="fas fa-chart-pie mr-1"></i>Overview
+          </button>
+          <button data-tab="analytics" class="tab-btn text-gray-500 dark:text-gray-400 font-medium pb-1">
+            <i class="fas fa-chart-line mr-1"></i>Analytics
+          </button>
+          <button data-tab="edit"      class="tab-btn text-gray-500 dark:text-gray-400 font-medium pb-1">
+            <i class="fas fa-edit mr-1"></i>Edit Page
+          </button>
+          <button data-tab="events"    class="tab-btn text-gray-500 dark:text-gray-400 font-medium pb-1">
+            <i class="fas fa-calendar-alt mr-1"></i>Events
+          </button>
+          <button data-tab="admins"    class="tab-btn text-gray-500 dark:text-gray-400 font-medium pb-1">
+            <i class="fas fa-user-shield mr-1"></i>Admins
+          </button>
+        </nav>
+
+        <!-- Overview Tab -->
+        <section id="overview" class="tab-content mt-6 space-y-8">
+          <!-- Mini Analytics -->
+          <div>
+            <h2 class="text-xl font-semibold mb-4">Quick Stats</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4">
+                <h4 class="text-sm font-semibold text-gray-500 dark:text-gray-400">Page Views</h4>
+                <p class="text-xl font-bold mt-1">12,345</p>
+                <button onclick="switchTab('analytics')" class="text-blue-500 text-sm hover:underline mt-2">See more →</button>
+              </div>
+              <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4">
+                <h4 class="text-sm font-semibold text-gray-500 dark:text-gray-400">Join Clicks</h4>
+                <p class="text-xl font-bold mt-1">1,234</p>
+                <button onclick="switchTab('analytics')" class="text-blue-500 text-sm hover:underline mt-2">See more →</button>
+              </div>
+            </div>
+          </div>
+          <!-- Recent Events -->
+          <div>
+            <div class="flex justify-between items-center mb-4">
+              <h2 class="text-xl font-semibold">Recent Events</h2>
+              <button onclick="switchTab('events')" class="text-blue-500 hover:underline text-sm">See all →</button>
+            </div>
+            <ul class="space-y-3">
+              <li class="bg-white dark:bg-gray-800 rounded-xl shadow p-4 flex justify-between items-center">
+                <div>
+                  <p class="font-medium">Kickoff Meeting</p>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">Jul 1, 2025 • Room 101</p>
+                </div>
+                <span class="text-gray-600 dark:text-gray-300">42 signed up</span>
+              </li>
+              <li class="bg-white dark:bg-gray-800 rounded-xl shadow p-4 flex justify-between items-center">
+                <div>
+                  <p class="font-medium">Workshop: Design Thinking</p>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">Jun 20, 2025 • Lab A</p>
+                </div>
+                <span class="text-gray-600 dark:text-gray-300">27 signed up</span>
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Analytics Tab -->
+        <section id="analytics" class="tab-content hidden mt-6 space-y-6">
+          <!-- Stats -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4">
+              <h4 class="text-sm font-semibold text-gray-500 dark:text-gray-400">Page Views</h4>
+              <p class="text-2xl font-bold mt-2">12,345</p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4">
+              <h4 class="text-sm font-semibold text-gray-500 dark:text-gray-400">Join Clicks</h4>
+              <p class="text-2xl font-bold mt-2">1,234</p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4">
+              <h4 class="text-sm font-semibold text-gray-500 dark:text-gray-400">
+ Social Shares</h4>
+              <p class="text-2xl font-bold mt-2">456</p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4">
+              <h4 class="text-sm font-semibold text-gray-500 dark:text-gray-400">New Members</h4>
+              <p class="text-2xl font-bold mt-2">78</p>
+            </div>
+          </div>
+          <!-- Chart Placeholder -->
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6 h-64 flex items-center justify-center text-gray-500 dark:text-gray-400">
+            Chart goes here
+          </div>
+        </section>
+
+        <!-- Edit Page Tab -->
+        <section id="edit" class="tab-content hidden mt-6">
+          <form class="space-y-6">
+            <div>
+              <label class="block text-sm font-medium mb-1">Title</label>
+              <input type="text" class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:border-gray-600 focus:outline-none" value="Sample Club Title">
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1">Tagline</label>
+              <input type="text" class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:border-gray-600 focus:outline-none" value="Your short tagline">
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1">Description</label>
+              <textarea rows="4" class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:border-gray-600 focus:outline-none">Detailed description here...</textarea>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-medium mb-1">Industry</label>
+                <select class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:border-gray-600">
+                  <option>Technology</option>
+                  <option>Education</option>
+                  <option>Finance</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-1">Stage</label>
+                <select class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:border-gray-600">
+                  <option>Idea</option>
+                  <option>Prototype</option>
+                  <option>Launched</option>
+                </select>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-medium mb-1">Member Count</label>
+                <input type="number" class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:border-gray-600 focus:outline-none" value="42">
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-1">School / Location</label>
+                <input type="text" class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:border-gray-600 focus:outline-none" value="St. John’s University">
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1">Logo Upload</label>
+              <input id="logoInput" type="file" class="w-full text-sm text-gray-500 dark:text-gray-400"/>
+              <img id="logoPreview" class="mt-2 h-24 w-24 object-cover rounded-lg hidden" alt="Logo preview"/>
+            </div>
+            <div id="social-links" class="space-y-4">
+              <label class="block text-sm font-medium mb-1">Social / External Links</label>
+              <div id="social-links-list" class="space-y-2"></div>
+              <button type="button" id="addSocialBtn" class="text-blue-600 hover:underline">
+                <i class="fas fa-plus mr-1"></i>Add Link
+              </button>
+            </div>
+            <div class="text-right">
+              <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Save Changes</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Events Tab -->
+        <section id="events" class="tab-content hidden mt-6">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold">Upcoming Events</h2>
+            <button class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+              <i class="fas fa-plus mr-1"></i>Add Event
+            </button>
+          </div>
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow overflow-x-auto">
+            <table class="w-full text-left">
+              <thead class="border-b border-gray-200 dark:border-gray-700">
+                <tr>
+                  <th class="px-4 py-2">Title</th>
+                  <th class="px-4 py-2">Date</th>
+                  <th class="px-4 py-2">Location</th>
+                  <th class="px-4 py-2">Description</th>
+                  <th class="px-4 py-2">Sign-ups</th>
+                  <th class="px-4 py-2">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b border-gray-100 dark:border-gray-700">
+                  <td class="px-4 py-2">Kickoff Meeting</td>
+                  <td class="px-4 py-2">Jul 1, 2025</td>
+                  <td class="px-4 py-2">Room 101</td>
+                  <td class="px-4 py-2 line-clamp-2">An overview of the semester’s goals and team introductions.</td>
+                  <td class="px-4 py-2">42</td>
+                  <td class="px-4 py-2 space-x-2">
+                    <button class="text-blue-600 hover:underline"><i class="fas fa-pencil-alt mr-1"></i>Edit</button>
+                    <button class="text-red-600 hover:underline"><i class="fas fa-trash mr-1"></i>Delete</button>
+                  </td>
+                </tr>
+                <!-- More event rows… -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Admins Tab -->
+        <section id="admins" class="tab-content hidden mt-6">
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6 space-y-4">
+            <h2 class="text-xl font-semibold">Page Administrators</h2>
+            <ul class="space-y-3">
+              <li class="flex justify-between items-center">
+                <span>Alice Johnson</span>
+                <button class="text-red-600 hover:underline"><i class="fas fa-user-minus mr-1"></i>Remove</button>
+              </li>
+              <li class="flex justify-between items-center">
+                <span>Bob Smith</span>
+                <button class="text-red-600 hover:underline"><i class="fas fa-user-minus mr-1"></i>Remove</button>
+              </li>
+              <!-- More admins… -->
+            </ul>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- SCRIPT -->
+  <script>
+    function switchTab(id) {
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.remove('text-blue-600','dark:text-blue-400','border-b-4','border-blue-600');
+        b.classList.add('text-gray-500','dark:text-gray-400');
+      });
+      document.querySelectorAll('.tab-content').forEach(sec => sec.classList.add('hidden'));
+      const btn = document.querySelector(`.tab-btn[data-tab="${id}"]`);
+      btn.classList.add('text-blue-600','dark:text-blue-400','border-b-4','border-blue-600');
+      document.getElementById(id).classList.remove('hidden');
+    }
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+    });
+    switchTab('overview');
+
+    // Dark mode
+    const toggle = document.getElementById('darkToggle');
+    const icon   = document.getElementById('darkIcon');
+    const htmlEl = document.documentElement;
+    if (localStorage.theme === 'dark') {
+      htmlEl.classList.add('dark');
+      toggle.checked = true;
+      icon.classList.replace('fa-moon','fa-sun');
+    }
+    toggle.addEventListener('change', e => {
+      if (e.target.checked) {
+        htmlEl.classList.add('dark'); localStorage.theme = 'dark';
+        icon.classList.replace('fa-moon','fa-sun');
+      } else {
+        htmlEl.classList.remove('dark'); localStorage.theme = 'light';
+        icon.classList.replace('fa-sun','fa-moon');
+      }
+    });
+
+    // Sidebar toggle
+    document.getElementById('toggleSidebar').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('-translate-x-full');
+    });
+
+    // Logo preview
+    const logoInput = document.getElementById('logoInput');
+    const logoPreview = document.getElementById('logoPreview');
+    logoInput.addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (!file) return logoPreview.hidden = true;
+      logoPreview.src = URL.createObjectURL(file);
+      logoPreview.hidden = false;
+    });
+
+    // Social links management
+    const socialList = document.getElementById('social-links-list');
+    const addSocialBtn = document.getElementById('addSocialBtn');
+    function createSocialEntry(platform = '', url = '') {
+      const div = document.createElement('div');
+      div.className = 'flex items-center space-x-2 social-entry';
+      const select = document.createElement('select');
+      select.className = 'px-3 py-2 border rounded dark:bg-gray-700 dark:border-gray-600 focus:outline-none';
+      ['Website','Instagram','LinkedIn','YouTube','TikTok','GitHub','Discord','Twitter','LinkTree']
+        .forEach(opt => {
+          const o = document.createElement('option');
+          o.value = opt; o.textContent = opt;
+          if (opt === platform) o.selected = true;
+          select.append(o);
+        });
+      const input = document.createElement('input');
+      input.type = 'url'; input.placeholder = 'URL'; input.value = url;
+      input.className = 'flex-1 px-3 py-2 border rounded dark:bg-gray-700 dark:border-gray-600 focus:outline-none';
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.innerHTML = '<i class="fas fa-trash"></i>';
+      removeBtn.className = 'text-red-600 hover:text-red-700';
+      removeBtn.addEventListener('click', () => div.remove());
+      div.append(select, input, removeBtn);
+      return div;
+    }
+    addSocialBtn.addEventListener('click', () => socialList.appendChild(createSocialEntry()));
+    socialList.appendChild(createSocialEntry());
+  </script>
+</body>
+</html>
